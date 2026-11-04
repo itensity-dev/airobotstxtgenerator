@@ -1,0 +1,7 @@
+{
+  "pattern": {
+    "title": "Bloquear {name}: qué es y cómo frenarlo ({operator})",
+    "description": "{summary} User-Agent, token de robots.txt, rangos de IP, verificación y reglas listas para copiar para bloquear o permitir {name}.",
+    "h1": "{name}"
+  }
+}

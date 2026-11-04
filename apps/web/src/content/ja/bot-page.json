@@ -1,0 +1,7 @@
+{
+  "pattern": {
+    "title": "{name}とは？robots.txtでブロックする方法（{operator}）",
+    "description": "{summary}User-Agent、robots.txtトークン、IPアドレス範囲、本物かどうかの確認方法、{name}をブロック・許可するためのコピーして使えるルールを掲載しています。",
+    "h1": "{name}"
+  }
+}

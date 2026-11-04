@@ -1,0 +1,266 @@
+{
+  "gptbot": {
+    "summary": "OpenAIのクローラーです。生成AIの基盤モデルの学習に使われる可能性のある公開ページを収集します。",
+    "details": "GPTBotは、OpenAIがモデルの学習データを集めるために使うクローラーです。OpenAIのほかの2つのボットとは別物で、OAI-SearchBotはChatGPT検索のインデックスを構築し、ChatGPT-UserはユーザーがChatGPTに頼んだときにページを開きます。そのため、GPTBotを`Disallow`すれば、ChatGPTの検索回答から外れることなく、今後の学習データセットからページを除外できます。OpenAIによると、GPTBotが収集するデータからは、有料コンテンツと個人情報を除外しています。",
+    "respectsNote": "OpenAI：GPTBotをDisallowすると、サイトのコンテンツを生成AIの基盤モデルの学習に使うべきでないという意思表示になります。",
+    "note": "GPTBotをブロックしても、ChatGPT検索からは外れません。そちらはOAI-SearchBotで制御します。",
+    "history": {
+      "0": "OpenAIがGPTBotと、robots.txtでのブロック方法をドキュメントで公開。",
+      "1": "ドキュメントで確認したUser-Agentのバージョン：GPTBot/1.4。"
+    }
+  },
+  "oai-searchbot": {
+    "summary": "ChatGPT検索用のOpenAIのクローラーです。ChatGPTが回答の中でページを表示・リンクできるよう、ページを見つけてインデックスします。",
+    "details": "OAI-SearchBotは、ChatGPTが検索回答でページを表示・引用できるようにWebをクロールします。ブロックしたサイトはこれらの回答に表示されなくなりますが、ChatGPTが単なるナビゲーション用のリンクを表示する場合はあります。OpenAIは、OAI-SearchBotが取得したコンテンツは基盤モデルの学習には使わない（学習はGPTBotの役割）と説明しているため、GPTBotをブロックしてOAI-SearchBotを許可するのが、「学習は拒否、表示は維持」の一般的な設定です。ChatGPTの広告主は、ランディングページでOAI-SearchBotを許可するよう求められています。",
+    "respectsNote": "OpenAI：OAI-SearchBotをDisallowしたサイトは、ChatGPTの検索回答に表示されません。robots.txtの変更が反映されるまで約24時間かかります。",
+    "note": "OAI-SearchBotをブロックすると、ChatGPTの検索回答からサイトが外れます（ナビゲーション用のリンクとして表示される場合はあります）。GPTBotとは独立しています。",
+    "history": {
+      "0": "OpenAIがSearchGPTを発表し、OAI-SearchBotが検索結果用のクローラーになる。",
+      "1": "ドキュメントに、OAI-SearchBot/1.4を含むChrome形式のUser-Agentが記載される。"
+    }
+  },
+  "chatgpt-user": {
+    "summary": "ChatGPTのユーザーやカスタムGPTが求めたときにページを取得します。自動クロールには使われません。",
+    "details": "ChatGPT-Userは、自らWebを巡回するクローラーではありません。ChatGPTのユーザー、カスタムGPT、アクションが求めたときに、特定のページを取得します。OpenAIのドキュメントによると、こうしたユーザー起点のリクエストにはrobots.txtのルールが適用されない場合があり、ChatGPT-UserはChatGPT検索に何を表示するかの判断には使われません。確実に締め出す必要がある場合は、robots.txtのルールにサーバー側のブロックを組み合わせ、OpenAIが公開しているIPアドレス一覧でリクエストを検証してください。",
+    "respectsNote": "OpenAI：これらの操作はユーザーが開始するものなので、robots.txtのルールが適用されない場合があります。",
+    "note": "ChatGPT-UserへのDisallowは、OpenAI自身が「適用されない場合がある」としている要望にとどまります。強制するにはサーバー設定を使ってください。"
+  },
+  "oai-adsbot": {
+    "summary": "広告主がChatGPTの広告用に登録したランディングページをチェックします。OpenAIによると、データは生成AIモデルの学習には使われません。",
+    "details": "OAI-AdsBotは、広告主がChatGPTの広告用に登録したランディングページだけを訪れ、OpenAIの広告ポリシーに照らしてチェックし、ページの内容を把握します。OpenAIによると、データは生成モデルの学習には使われません。ChatGPTに広告を出していないサイトには関係ありませんが、広告主がブロックすると広告が配信されなくなる可能性があるため、当サイトのプリセットではブロックしません。",
+    "respectsNote": "OpenAIは広告主に対し、ランディングページでrobots.txtがOAI-AdsBotを許可していることを確認するよう求めています。",
+    "note": "ChatGPTに広告を出している場合にのみ関係します。当サイトのAI向けプリセットでは許可したままです。",
+    "history": {
+      "0": "ChatGPTへの広告導入とともに登場。"
+    }
+  },
+  "claudebot": {
+    "summary": "Anthropicのクローラーです。AIモデルの学習に使われる可能性のある公開Webコンテンツを収集します。",
+    "details": "ClaudeBotは、Claudeのモデルの学習に使われる可能性のある公開Webコンテンツを収集するAnthropicのクローラーです。Anthropicによると、同社のすべてのボットは非標準の`Crawl-delay`を含めてrobots.txtに従い、ログインやCAPTCHAを突破しようとはしません。Anthropicはサブドメインを個別に扱うため、`blog.example.com`には専用のrobots.txtが必要です。2026年10月からはボットのIPアドレス範囲も公開しており、サーバー側での検証が可能になりました。",
+    "respectsNote": "Anthropic：同社のボットは非標準のCrawl-delayを含めてrobots.txtの指示に従い、CAPTCHAを回避しません。",
+    "note": "オプトアウトはサブドメイン単位で機能します。サブドメインごとにrobots.txtが必要です。",
+    "history": {
+      "0": "Anthropicがボット用のIPアドレス一覧（claude.com/crawling/bots.json）を公開。"
+    }
+  },
+  "claude-searchbot": {
+    "summary": "Claudeの検索結果の品質を高めるために、ページをインデックスするAnthropicのクローラーです。",
+    "details": "Claude-SearchBotは、ClaudeがユーザーのためにWebを検索するときにページを見つけて引用できるよう、ページをインデックスします。OAI-SearchBotに相当するAnthropicのボットで、ブロックするとClaudeの回答にサイトが表示される頻度が下がる可能性があります。一方、ClaudeBotだけをブロックした場合に影響するのは学習のみです。IPアドレス一覧とrobots.txtへの対応方針は、Anthropicのほかのボットと共通です。",
+    "respectsNote": "Anthropicの「同社のすべてのボットはrobots.txtに従う」という表明の対象です。",
+    "note": "ブロックすると、Claudeの検索回答にサイトが表示される頻度が下がる可能性があります。"
+  },
+  "claude-user": {
+    "summary": "Claudeのユーザーがページを必要とする質問をしたときに、そのページを取得します。",
+    "details": "Claude-Userは、Claudeのユーザーがページを必要とする質問をしたとき（たとえば会話にURLを貼り付けたとき）にそのページを開きます。OpenAI、Perplexity、Google、Metaのユーザー起点のフェッチャーとは異なり、AnthropicはClaude-Userがrobots.txtに従うと表明しているため、`Disallow`でこうした取得も止められます。ブロックすると、Claudeはユーザーの代わりにページを読めなくなります。",
+    "respectsNote": "Anthropicによると、Claude-Userはrobots.txtに従うため、サイト運営者はユーザー起点のリクエストによるアクセスも制御できます。",
+    "note": "ほとんどのユーザー起点のフェッチャーとは異なり、AnthropicはClaude-Userがrobots.txtに従うと表明しています。"
+  },
+  "anthropic-ai": {
+    "summary": "多くのrobots.txtでいまもブロックされている、Anthropicの古い名前です。現在のAnthropicのドキュメントには記載されていません。",
+    "details": "anthropic-aiは、2023年の初期のAIブロックリストがAnthropicのクローラーとして挙げたため、数千ものrobots.txtに登場します。Anthropicの現在のドキュメントに記載されているのはClaudeBot、Claude-SearchBot、Claude-Userだけなので、anthropic-ai向けのルールだけではAnthropicの学習用クローラーをカバーできません。この行を残しても害はありませんが、ファイルに`ClaudeBot`も入っていることを確認してください。",
+    "note": "anthropic-aiへのDisallowを残しても害はありませんが、ClaudeBotの代わりにはなりません。",
+    "history": {
+      "0": "Anthropicの現在のクローラーに関する記事には記載なし。"
+    }
+  },
+  "google-extended": {
+    "summary": "Googleがクロールしたコンテンツを、Geminiモデルの学習や、GeminiアプリとVertex AIのグラウンディングに使ってよいかを制御するrobots.txtトークンです。",
+    "details": "Google-Extendedはクローラーではなく、robots.txtで使える名前です。ページを取得するのはGoogleの通常のクローラーで、Google-Extendedのルールは、そのコンテンツを今後のGeminiモデルの学習や、GeminiアプリとVertex AIでの回答のグラウンディングに使ってよいかをGoogleに伝えます。Google検索の掲載や順位には影響しません。AI OverviewsとAIモードは検索の一部でGooglebotに依存しているため、Google-Extendedをブロックしてもそこからは外れません。外れるのはGooglebotをブロックした場合だけで、その場合はGoogle検索全体からも外れます。",
+    "respectsNote": "robots.txtの制御用トークンにすぎません。Google-ExtendedというUser-Agentは存在せず、ページはGoogleの既存のクローラーが取得します。",
+    "note": "Google-ExtendedをDisallowしても、Google検索への掲載や順位には影響せず、Googlebotに依存するAI OverviewsやAIモードからもページは外れません。",
+    "history": {
+      "0": "GoogleがGoogle-Extendedを導入。",
+      "1": "Google-Extendedが指定されていない場合、__usage_ai-trainingへのDisallowもGoogle-Extendedのオプトアウトとして扱うとGoogleが発表。"
+    }
+  },
+  "googleother": {
+    "summary": "Googleのプロダクトチームが単発のクロールや社内の研究開発に使う汎用クローラーです。",
+    "details": "GoogleOtherは、Googleのプロダクトチームが検索以外の取得に使う汎用クローラーです。Googleはこれを、社内の研究開発のための単発のクロールと説明しています。特定の製品とは結びつけられていないため、AI関連の用途に使われる可能性も否定できず、多くのAIブロックリストに含まれています。ブロックしてもGoogle検索には影響しません。画像用と動画用の派生版（GoogleOther-Image、GoogleOther-Video）は、個別に指定されていなければGoogleOtherのルールに従います。",
+    "respectsNote": "Google：一般的なクローラーは、自動クロールでは常にrobots.txtのルールに従います。",
+    "note": "GoogleOtherをブロックしてもGoogle検索には影響しません。Googleは特定の製品と結びつけていません。",
+    "history": {
+      "0": "GoogleがGoogleOtherを導入。",
+      "1": "派生版のGoogleOther-ImageとGoogleOther-Videoを追加。"
+    }
+  },
+  "google-cloudvertexbot": {
+    "summary": "サイト所有者の依頼を受けてサイトをクロールし、Vertex AIのエージェントやエンタープライズ検索を構築します。",
+    "details": "Google-CloudVertexBotは、サイト所有者がGoogle Cloudに対して、そのサイトを対象にしたVertex AIエージェントやエンタープライズ検索アプリの構築を依頼したときにサイトをクロールします。Googleによると、Google検索には影響しません。AIの回答にデータを提供するため当サイトではAI検索に分類していますが、ブロックが意味を持つのは主に、他者にVertex AIでインデックスされる可能性のあるサイトです。自分のサイトでそうしたアプリを構築する場合は、許可したままにしてください。",
+    "respectsNote": "Google：一般的なクローラーはrobots.txtに従います。",
+    "note": "Google検索には影響しません。ブロックすると、自分のサイトで構築したVertex AIの検索アプリが動かなくなる可能性があります。"
+  },
+  "google-agent": {
+    "summary": "Googleのインフラ上で動くAIエージェントが、ユーザーの依頼に応じてサイトを閲覧・操作するときに使われます。",
+    "details": "Google-Agentは、Googleのインフラ上で動き、ユーザーのためにWebサイトを閲覧して操作を行うAIエージェントを示す名前で、Project Marinerの実験の後継にあたります。Googleはこれをユーザー起点のフェッチャーに分類しており、ユーザーが訪問を求めたものなので、こうしたフェッチャーは一般にrobots.txtを無視すると説明しています。制限するにはサーバー設定が必要です。GoogleはIPアドレス範囲を別のファイルで公開し、一部のリクエストにWeb Bot Authで署名しているため、本物のリクエストを識別できます。",
+    "respectsNote": "Google：ユーザー起点のフェッチャーは、ユーザーが取得を求めたものなので、一般にrobots.txtのルールを無視します。",
+    "note": "robots.txtでは止められません。一部のリクエストはWeb Bot Authで署名されています（ID：agent.bot.goog、試験運用）。",
+    "history": {
+      "0": "Googleがユーザー起点のフェッチャーの一覧にGoogle-Agentを追加。"
+    }
+  },
+  "google-gemininotebook": {
+    "summary": "ユーザーがGemini Notebook（旧NotebookLM）にソースとして追加したURLを取得します。",
+    "details": "Google-GeminiNotebookは、ユーザーがGemini Notebook（以前の名称はNotebookLM）にソースとして追加したWebページを取得します。旧名称のGoogle-NotebookLMは2026年に廃止されました。ユーザー起点のフェッチャーなので、一般にrobots.txtを無視します。ユーザーが追加したコンテンツは、そのユーザーのノートブックのために処理されます。止めるには、サーバーでこのユーザーエージェントをブロックしてください。",
+    "respectsNote": "Google：ユーザー起点のフェッチャーは一般にrobots.txtを無視します。",
+    "note": "Google-NotebookLMの名前を置き換えたものです。ユーザー起点の取得はrobots.txtでは止められません。",
+    "history": {
+      "0": "Googleのユーザー起点のフェッチャーにGoogle-NotebookLMが追加される。",
+      "1": "NotebookLMがGemini Notebookになったことに伴い、Google-GeminiNotebookに名称変更。"
+    }
+  },
+  "applebot": {
+    "summary": "Siri、Spotlight、Safariの検索機能のためのAppleのWebクローラーです。Applebot-ExtendedをDisallowしない限り、クロールしたページはAppleの基盤モデルの学習にも使われる場合があります。",
+    "details": "Applebotは、Siri、Spotlight、Safariの候補表示などの検索機能のためのAppleの汎用Webクローラーです。Appleによると、Applebot-ExtendedをDisallowしない限り、クロールしたページはAppleの基盤モデルの学習にも使われる場合があります。Applebot自体をブロックするとAppleの検索機能からサイトが外れるため、AI学習のオプトアウトには`User-agent: Applebot-Extended`と`Disallow: /`の組み合わせが正解です。Applebotが指定されておらずGooglebotが指定されている場合、ApplebotはGooglebotのルールに従います。",
+    "respectsNote": "Apple：ApplebotはApplebot向けのrobots.txtのルールに従います。Applebotが指定されておらずGooglebotが指定されている場合は、Googlebotのルールに従います。Crawl-delayには対応していません。",
+    "note": "AI学習を止めるためにApplebotをブロックしないでください。代わりにApplebot-ExtendedをDisallowすれば、Appleの検索機能には残れます。"
+  },
+  "applebot-extended": {
+    "summary": "Applebotがクロールしたページを、Appleの生成基盤モデルの学習に使ってよいかを決めるrobots.txtトークンです。",
+    "details": "Applebot-Extendedがサイトを訪れることはありません。クロールはApplebotが行い、Applebot-Extendedのルールは、そのコンテンツをApple Intelligenceなどの機能のための生成モデルの学習に使ってよいかだけを決めます。Disallowしても、ページはSiri、Spotlight、Safariの結果に残ります。User-Agentとして送信されないため、サーバー設定では対象にできず、この選択を表明する方法はrobots.txtだけです。",
+    "respectsNote": "Apple：Applebot-ExtendedはWebページをクロールせず、Applebotがクロールしたデータの利用方法を決めるだけです。",
+    "note": "Disallowしても、ページはSiri、Spotlight、Safariの結果に残ります。",
+    "history": {
+      "0": "AppleがApple Intelligenceとあわせて、Applebot-Extendedをドキュメントで公開。"
+    }
+  },
+  "perplexitybot": {
+    "summary": "Perplexityの検索結果でWebサイトを見つけてリンクするための、Perplexityのクローラーです。Perplexityによると、AIの基盤モデルのためのコンテンツ収集には使われません。",
+    "details": "PerplexityBotは、情報源を引用・リンクするPerplexityのアンサーエンジンのインデックスを構築します。Perplexityは、robots.txtに従うこと、そしてPerplexityBotはAIの基盤モデルのためのコンテンツ収集には使われないことを表明しています。ブロックすると、Perplexityの回答と引用からページが外れます。Perplexityはクローラーのアドレス範囲を公開しており、ファイアウォールのルールにはこれを正とするよう案内しています。",
+    "respectsNote": "Perplexity：PerplexityBotはrobots.txtに従ってのみクロールします。変更の反映には最大24時間かかります。",
+    "note": "PerplexityBotをブロックすると、Perplexityの回答と引用からサイトが外れます。"
+  },
+  "perplexity-user": {
+    "summary": "Perplexityのユーザーがページを必要とする質問をしたときに、そのページを訪れます。クロールや学習には使われません。",
+    "details": "Perplexity-Userは、Perplexityのユーザーがページを必要とする質問をしたときに、そのページを訪れます。Perplexityによると、ユーザーが取得を求めたものなので、このボットは一般にrobots.txtを無視し、コンテンツはクロールや学習には使われません。こうした訪問を止めたい場合は、Perplexityが公開しているIPアドレス一覧とあわせてサーバー設定を使ってください。",
+    "respectsNote": "Perplexity：ユーザーが取得を求めたものなので、Perplexity-Userは一般にrobots.txtのルールを無視します。",
+    "note": "止める必要がある場合はサーバー設定を使ってください。robots.txtのDisallowは一般に無視されます。"
+  },
+  "meta-externalagent": {
+    "summary": "AIモデルの学習や、コンテンツを直接インデックスすることによる製品の改善などに使われるMetaのクローラーです。",
+    "details": "meta-externalagentは、AIモデルの学習や、コンテンツを直接インデックスすることによる製品の改善などの目的でMetaが使うクローラーです。Metaはサイト運営者に対してrobots.txtのルールでオプトアウトするよう案内しており、robots.txtは最大1日キャッシュされる場合があるとしています。MetaはこのボットのIPアドレス一覧を公開していないため、このUser-Agentを持つリクエストが本物かどうかは証明できません。",
+    "respectsNote": "Meta：robots.txtでこのクローラーをDisallowしてください。robots.txtは最大24時間キャッシュされる場合があります。",
+    "note": "MetaはこのボットのIPアドレス一覧を公開していません。User-Agentによる照合よりIPアドレスの許可リストを推奨していますが、アドレス範囲は示していません。",
+    "history": {
+      "0": "Metaがmeta-externalagentをドキュメントで公開。"
+    }
+  },
+  "meta-webindexer": {
+    "summary": "Meta AIの検索結果を改善するMetaのクローラーです。許可すると、Meta AIがサイトを引用・リンクできるようになります。",
+    "details": "meta-webindexerは、Meta AIの検索結果を改善します。許可すると、Meta AIがページを見つけて引用・リンクできるようになり、ブロックするとそうした回答からページが外れます。meta-externalagentとは別のボットなので、学習を拒否するためにこれをブロックする必要はありません。"
+  },
+  "meta-externalfetcher": {
+    "summary": "ユーザーが求めたときに、Meta AIの製品のために個々のリンクを取得します。",
+    "details": "meta-externalfetcherは、ユーザーが求めたときに（たとえば共有されたページを要約するために）、Meta AIの製品のために個々のリンクを取得します。Metaによると、こうした取得はユーザーが開始するものなので、robots.txtを回避する場合があります。確実に止められるのはサーバー設定だけです。",
+    "respectsNote": "Meta：ユーザーの依頼で個々のリンクを取得し、robots.txtを回避する場合があります。"
+  },
+  "facebookexternalhit": {
+    "summary": "Facebook、Instagram、Messenger、WhatsAppでURLが共有されたときに、リンクプレビューを作成します。AIクローラーではありません。",
+    "details": "facebookexternalhitは、Facebook、Instagram、Messenger、WhatsAppでリンクが共有されたときに、プレビューカード（タイトル、説明、画像）を作成します。AIクローラーではありませんが、公開されているAIブロックリストのいくつかに含まれており、ブロックするとMetaのアプリでページのリンクプレビューが表示されなくなります。Metaによると、セキュリティや整合性のチェックではrobots.txtを回避する場合があります。",
+    "respectsNote": "Meta：セキュリティや整合性のチェックを行う際には、robots.txtを回避する場合があります。",
+    "note": "ブロックすると、Metaのアプリでリンクプレビューが表示されなくなります。それでも、公開されているAIブロックリストのいくつかに含まれています。"
+  },
+  "amazonbot": {
+    "summary": "Amazonの製品やサービスを改善するためのAmazonのクローラーです。Amazonによると、データはAIモデルの学習に使われる場合があります。",
+    "details": "Amazonbotは、Amazonの製品やサービスを改善するためにWebをクロールし、Amazonによると、そのデータはAIモデルの学習に使われる場合があります。Amazonはホストごとにrobots.txtに従い、ページ単位ではrobotsメタタグの`noarchive`を、そのページをモデルの学習に使わないというシグナルとして尊重します。AmazonはクローラーのIPアドレスを、JSONではなくWebページで公開しています。",
+    "respectsNote": "Amazon：ホストごとにrobots.txtを読み込みます。robotsメタタグのnoarchive（モデルの学習に使わない）、noindex、noneを尊重します。",
+    "note": "ページ単位で学習を拒否する場合、Amazonは<meta name=\"robots\" content=\"noarchive\">を尊重します。"
+  },
+  "amzn-searchbot": {
+    "summary": "Alexaを含むAmazon製品の検索機能を支えるボットです。Amazonによると、生成AIの学習には使われません。",
+    "details": "Amzn-SearchBotは、AlexaなどAmazon製品の検索機能を支えており、Amazonによると生成AIの学習には使われません。robots.txtでAmzn-SearchBotが指定されておらず、ほかの検索クローラーが許可されている場合は、それらに与えたルールに従います。つまり、Googlebotに開放しているファイルは、専用のグループを追加しない限りAmzn-SearchBotにも開放されます。",
+    "respectsNote": "Amazon：robots.txtでAmzn-SearchBotが指定されておらず、ほかの検索ボットが許可されている場合は、それらのボットに与えられたルールに従います。"
+  },
+  "amzn-user": {
+    "summary": "ユーザーが質問したときに、Alexaのために最新の情報を取得します。生成AIの学習には使われません。",
+    "details": "Amzn-Userは、Alexaのユーザーがページを必要とする質問をしたときに、最新の情報を取得します。Amazonによると、ユーザーが開始するリクエストなので、robots.txtのすべての指示に従うとは限らず、コンテンツは生成AIの学習には使われません。",
+    "respectsNote": "Amazon：ユーザーが開始するリクエストなので、robots.txtのすべての指示に従うとは限りません。"
+  },
+  "bytespider": {
+    "summary": "ByteDance（TikTokの親会社）が運用するクローラーです。同社のAIモデルの学習用データを収集していると広く報じられています。",
+    "details": "Bytespiderは、TikTokを運営するByteDanceが運用するクローラーです。ByteDanceはこのクローラーについてドキュメントを公開しておらず、第三者からは大量のクロールやrobots.txtの頻繁な無視が報告されています。ByteDanceの言語モデルのためのデータを収集していると広く考えられています。公式な説明が何もないため、robots.txtのルールは最初の一歩と考え、重要な場合はサーバーやCDNでブロックしてください。",
+    "respectsNote": "ByteDanceはドキュメントを公開していません。第三者の報告によると、robots.txtに従わないことが多いとされています。",
+    "note": "公式な説明がないため、robots.txtに頼るのではなく、サーバーやCDNでブロックを強制してください。"
+  },
+  "ccbot": {
+    "summary": "非営利のオープンなWebアーカイブであるCommon Crawlのクローラーです。そのデータセットは大規模言語モデルの学習に広く使われています。",
+    "details": "CCBotは、2008年からWebのスナップショットを無料で公開している非営利団体Common Crawlのクローラーです。そのアーカイブは大規模言語モデルの学習に最も広く使われている情報源の1つで、CCBotへのルール1つが多くのAI開発者に一度に影響します。Common Crawlはrobots.txtと`Crawl-delay`に従い、2026年からは専用のIPアドレス範囲から、crawl.commoncrawl.orgの逆引きDNSを付けてクロールしています。",
+    "respectsNote": "Common Crawl：User-agent: CCBotとDisallow: /でブロックしてください。Crawl-delayに対応しています。",
+    "note": "Common Crawlのデータは多くのAI開発者に使われているため、CCBotのブロックの影響は1社にとどまりません。今後のアーカイブのスナップショットからもサイトが外れます。",
+    "history": {
+      "0": "Common Crawlが専用のIPアドレス範囲と、crawl.commoncrawl.orgの逆引きDNSをドキュメントで公開。"
+    }
+  },
+  "mistralai-training": {
+    "summary": "学習用データセットを構築するMistral AIのクローラーです。Mistralによると、検索やリアルタイムの回答には使われません。",
+    "details": "MistralAI-Trainingは、Mistral AIの学習用データセットのためにページを収集します。Mistralは、学習を拒否してもアシスタントでの露出に影響しないよう、このクローラーを検索用やユーザー用のボットとは別にドキュメント化しています。Mistralによると、同社のクローラーはrobots.txtに従い、ドキュメントから各クローラーのIPアドレス一覧にリンクしています。",
+    "respectsNote": "Mistral：同社のクローラーはrobots.txtに従うよう設計されています。"
+  },
+  "mistralai-index": {
+    "summary": "アシスタントでの検索のためにページをインデックスするMistral AIのクローラーです。Mistralによると、コンテンツは学習には使われません。",
+    "details": "MistralAI-Indexは、Mistral AIのアシスタントが出典つきで質問に答えるために使う検索インデックスを構築します。Mistralによると、取得したコンテンツは学習には使われません。ブロックするとこうした回答からページが外れますが、MistralAI-Trainingだけをブロックすれば、学習には協力せずに表示は維持できます。",
+    "respectsNote": "Mistral：インデックス作成のためだけの自動クロールで、robots.txtに従います。"
+  },
+  "mistralai-user": {
+    "summary": "Mistralのアシスタントでの質問にWeb上の情報源が必要なときに、ページを取得します。自動クロールでも学習でもありません。",
+    "details": "MistralAI-Userは、Mistral AIのアシスタントでの質問にリアルタイムのWeb情報源が必要なときに、ページを取得します。自動クロールでも学習でもありません。Mistralのドキュメントによると、このトークンはユーザー起点のリクエストがどのサイトにアクセスしてよいかを決めるものなので、robots.txtのルールが適用されます。",
+    "respectsNote": "Mistral：このトークンによって、ユーザー起点のリクエストがアクセスできるサイトが決まります。"
+  },
+  "duckassistbot": {
+    "summary": "DuckDuckGoの出典つきAI支援回答のために、ページをリアルタイムで取得します。DuckDuckGoによると、データはAIモデルの学習には使われません。",
+    "details": "DuckAssistBotは、出典を引用するDuckDuckGoのAI支援回答のために、ページをリアルタイムで取得します。DuckDuckGoによると、データはAIモデルの学習には使われず、オプトアウトしても通常の検索順位には影響しません。robots.txtの変更が反映されるまでには約72時間かかります。DuckDuckGoはこのボットのIPアドレスを公開しています。",
+    "respectsNote": "DuckDuckGo：パブリッシャーはrobots.txtでDuckAssistBotをDisallowできます。変更は約72時間後に反映されます。",
+    "note": "オプトアウトしても、DuckDuckGoの通常の検索順位には影響しません。"
+  },
+  "bingbot": {
+    "summary": "Microsoftの検索クローラーです。Copilot専用のクローラーはなく、CopilotはBingのインデックスを使って回答します。",
+    "details": "BingbotはMicrosoftの検索クローラーで、Copilot専用のクローラーは存在しません。CopilotなどのAI機能はBingのインデックスを使います。そのため、Bingbotをブロックすると、Bingだけでなく、Bingの検索結果を使う検索エンジンやアシスタントからもサイトが外れます。代わりにページ単位の制御を使ってください。robotsメタタグの`nocache`と`noarchive`で、Copilotの回答でのコンテンツの使われ方を制限できます。また、2027年2月からは、共通の`__usage_ai-training` robots.txtグループにBingが対応します。",
+    "respectsNote": "Bingの通常の検索クローラーはrobots.txtに従います。コンテンツのAIでの利用は別途制御します。",
+    "note": "bingbotをブロックすると、Bingと、Bingのインデックスを使う検索エンジンからサイトが外れます。NOCACHEとNOARCHIVEのメタタグでCopilotでの利用を制限できます。Bingは2027年2月1日から__usage_ai-trainingに対応すると発表しています。",
+    "history": {
+      "0": "BingがAI TrainingとAI Groundingの設定を発表。2027年2月1日からは、robots.txtの__usage_ai-trainingトークンにも対応。"
+    }
+  },
+  "ai2bot": {
+    "summary": "Allen Institute for AIのクローラーです。収集したコンテンツは、OLMoなどのオープンな言語モデルの学習に使われます。",
+    "details": "AI2Botは、非営利の研究機関であるAllen Institute for AI（Ai2）のクローラーです。収集したコンテンツは、OLMoなどAi2のオープンな言語モデルのためのオープンな学習データセットに使われます。Ai2のクローラーのページでは、サイト運営者はUser-Agentを使ってトラフィックを絞り込んだり拒否したりできると説明されていますが、robots.txtに関する明確な表明は見つかりませんでした。",
+    "respectsNote": "Ai2のクローラーに関する案内では、User-Agentを使ってトラフィックを絞り込んだり拒否したりできるとしていますが、robots.txtに関する明確な表明は見つかりませんでした。"
+  },
+  "yandexadditional": {
+    "summary": "Yandex検索のAI回答（YandexGPT）のためのロボットです。ブロックすると、通常のYandex検索には影響を与えずに、AI回答からコンテンツを外せます。",
+    "details": "YandexAdditionalは、YandexGPTで生成されるYandex検索のAI回答にコンテンツを表示するかどうかを制御します。これ（または別名のYandexAdditionalBot）をDisallowすると、通常のYandex検索に影響を与えずに、AI回答からコンテンツを外せます。Yandexによると、変更の反映には2〜14日かかります。Yandexのロボットの中には`User-agent: *`を無視するものがあるため、名前を明示して指定してください。",
+    "respectsNote": "Yandex：YandexAdditional（またはYandexAdditionalBot）をDisallowすると、Yandex検索のAI回答からコンテンツが外れます。反映には2〜14日かかります。",
+    "note": "Yandexのロボットの中にはUser-agent: *を無視するものがあるため、名前を明示して指定してください。"
+  },
+  "youbot": {
+    "summary": "You.comのクローラーです。そのインデックスは、You.comの検索と、AIアプリケーションが使う検索APIを支えています。",
+    "details": "YouBotはYou.comのクローラーで、その検索インデックスはAPIを通じてAIアプリケーションにも提供されています。You.comによると、YouBotはUser-Agent別のルールや`Crawl-delay`を含めてrobots.txtに完全に従い、ファイルを30分間キャッシュします。リクエストは暗号署名で検証することを推奨しており、search.you.comの逆引きDNSもドキュメントに記載されています。",
+    "respectsNote": "You.com：YouBotはUser-Agent別のルールやCrawl-delayを含めてrobots.txtに完全に従います。robots.txtは30分間キャッシュされます。"
+  },
+  "exasearchbot": {
+    "summary": "AIアプリケーション向けに作られた検索エンジンExaのクローラーです。すべてのリクエストはHTTP Message Signatures（Web Bot Auth）で署名されています。",
+    "details": "ExaSearchBotは、AIアプリケーションやエージェント向けに設計された検索エンジンExaのためにWebをクロールします。すべてのリクエストはHTTP Message Signatures（Web Bot Auth）で署名されているため、本物のリクエストを検証できます。Exaは、`ExaSearchBot`のグループがあればそれを使い、なければ主要な検索エンジン向けのルール、それもなければ`*`を使います。コミュニティリストではExaBotと呼ばれることが多いものの、これは正式名称ではありません。",
+    "respectsNote": "Exa：ExaSearchBotのグループがあればそれを使い、なければ主要な検索エンジン向けのルール、それもなければ * のルールを使います。",
+    "note": "コミュニティリストにある「ExaBot」は正式名称ではありません。"
+  },
+  "firecrawlagent": {
+    "summary": "顧客の依頼でページをAIアプリケーション用のデータに変換するスクレイピングAPI、Firecrawlのrobots.txt上の名前です。",
+    "details": "FirecrawlAgentは、AIアプリケーション向けの人気のスクレイピングAPIであるFirecrawlが、顧客の依頼でページをスクレイピングするときにrobots.txtで探す名前です。Firecrawlはデフォルトでrobots.txtに従います（まず`FirecrawlAgent`グループ、次に`*`）。ただし、エンタープライズの顧客はこれを無効にでき、この名前がUser-Agentとして送信されるとも限らないため、サーバー設定ではこの名前に頼れません。",
+    "respectsNote": "Firecrawl：デフォルトでrobots.txtに従います（FirecrawlAgentグループ、次に *）。Enterpriseプランの顧客はこれを無効にできます。",
+    "note": "FirecrawlAgentはrobots.txtでのみ照合されます。User-Agentヘッダーに含まれるとは限らないため、サーバー設定ではこの名前に頼れません。"
+  },
+  "cohere-ai": {
+    "summary": "多くのAIブロックリストに載っている名前です。Cohere自身のクローラーのページでは、現在は学習のためにWebをクロールしていないと説明しています。",
+    "details": "cohere-aiは多くのAIブロックリストに載っていますが、Cohere自身のクローラーに関するドキュメントによると、同社は現在、学習のためにボットでWebをクロールしておらず、今後クローラーを導入する場合はそのページに記載すると約束しています。この名前は、クローラーではなくCohereのソフトウェアライブラリに由来する可能性があります。ルールを書いても害はありませんが、ブロックの対象としてドキュメントに記載されたものは何もありません。",
+    "note": "ブロックしても害はありません。Cohereは、今後クローラーを導入する場合はドキュメントのページに記載すると約束しています。"
+  },
+  "usage-ai-training": {
+    "summary": "各社のクローラーを1つずつ指定する代わりに、企業をまたいでAI学習をオプトアウトするための共通のrobots.txtグループです。2026年10月に提案されました。",
+    "details": "`__usage_ai-training`は、クローラーを1つずつ指定する代わりに、すべてのAI企業に対して学習拒否を一度で表明するための提案です。通常のrobots.txtのグループとして、`User-agent: __usage_ai-training`に`Disallow: /`と、任意で`Allow`の例外を書きます。`User-agent: *`グループは、こうした意向の表明とはみなされません。2026年10月にInternet-Draftで提案され、Anthropicが対応済み、Microsoftは2027年2月1日から、Googleは2027年初めからの対応を発表しています。対応が行き渡るまでは、GPTBotやGoogle-Extendedなどのベンダー別トークンも残しておいてください。",
+    "respectsNote": "対応を発表済み：Anthropicはすでに対応。Microsoft Bingは2027年2月1日から。Googleは2027年初めから（Google-Extendedが指定されていない場合に、Google-Extendedのオプトアウトとして扱う）。OpenAIは「今後数か月以内」。User-agent: *グループは学習に関する意向の表明とはみなされません。",
+    "note": "GPTBotやGoogle-Extendedなどのベンダー別トークンを補完するものです。対応が行き渡るまでは、それらも残してください。標準ではなく、Internet-Draftの段階です。",
+    "history": {
+      "0": "Internet-Draft「draft-kelley-aipref-training-preference-signal-00」（IETF AIPREFの語彙に基づく）で提案。",
+      "1": "GoogleとMicrosoftが2027年からの対応を発表。Anthropicは対応済み。"
+    }
+  }
+}
