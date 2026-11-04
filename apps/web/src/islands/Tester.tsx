@@ -347,7 +347,11 @@ export default function Tester(props: Props) {
               </label>
               <label class="field">
                 <span class="label">{t('tester.testAgent')}</span>
-                <select value={agent} aria-label={t('tester.testAgent')} onChange={(e) => setAgent(e.currentTarget.value)}>
+                <select
+                  value={agent}
+                  aria-label={t('tester.testAgent')}
+                  onChange={(e) => setAgent(e.currentTarget.value)}
+                >
                   {agentOptions.map((b) => (
                     <option value={crawlerToken(b)}>{b.token}</option>
                   ))}

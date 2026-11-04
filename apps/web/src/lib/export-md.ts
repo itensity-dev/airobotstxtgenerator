@@ -4,7 +4,7 @@ import { t } from '../i18n';
 import { formatDate, type Locale } from '../i18n/locales';
 import { botPath, pathFor, type PageId } from '../i18n/routes';
 import { SITE_URL, BRAND } from '../config/site';
-import { getBotPagePattern, getBotTexts, getPage, fill } from './content';
+import { getBotPagePattern, getBotTexts, getPage, fill, type BotText } from './content';
 import { interpolate } from '../i18n';
 import { resolveHref } from './links';
 import type { SitePage } from './pages';
@@ -69,8 +69,8 @@ function header(title: string, url: string, lead: string, updated: string, local
 function botMarkdown(locale: Locale, botId: string): string {
   const bot = getBot(botId)!;
   const op = getOperator(bot.operator);
-  const texts = getBotTexts(locale)[bot.id] ?? {};
-  const en = getBotTexts('en')[bot.id] ?? { details: '' };
+  const texts: Partial<BotText> = getBotTexts(locale)[bot.id] ?? {};
+  const en: BotText = getBotTexts('en')[bot.id] ?? { details: '' };
   const summary = texts.summary ?? bot.summary;
   const pattern = getBotPagePattern(locale) ?? getBotPagePattern('en')!;
   const url = SITE_URL + botPath(locale, bot.id);

@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const LOCALES = ['en', 'de', 'fr', 'es', 'it', 'nl', 'pl', 'pt-br', 'ja'];
 const only = process.argv.slice(2);
-const targets = (only.length ? only : LOCALES).filter((l) => l !== 'en');
+const targets: string[] = (only.length ? only : LOCALES).filter((l) => l !== 'en');
 
 type Nested = { [k: string]: string | Nested };
 const flatten = (o: Nested, p = '', out: Record<string, string> = {}) => {
@@ -52,6 +52,7 @@ const enBots = JSON.parse(readFileSync(join(root, 'src/content/en/bots.json'), '
 
 function checkLinks(where: string, text: string) {
   for (const l of links(text)) {
+    if (!l) continue;
     const [kind, id] = l.split(':');
     if (kind === 'page' && !pageIds.has(id!)) errors.push(`${where}: unknown page link ${l}`);
     if (kind === 'bot' && !botIds.has(id!)) errors.push(`${where}: unknown bot link ${l}`);

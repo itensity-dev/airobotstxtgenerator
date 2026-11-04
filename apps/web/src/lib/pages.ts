@@ -4,12 +4,12 @@ import { PUBLISHED_LOCALES, type Locale } from '../i18n/locales';
 import { PAGE_IDS, botPath, pathFor, type PageId } from '../i18n/routes';
 import { getPage, getBotTexts } from './content';
 
-export interface SitePage {
+export type SitePage = {
   locale: Locale;
   id: PageId | 'bot';
   botId?: string;
   path: string;
-}
+};
 
 export function pageExists(locale: Locale, id: PageId | 'bot', botId?: string): boolean {
   if (id === 'bot') return !!botId && (locale === 'en' || !!getBotTexts(locale)[botId]);

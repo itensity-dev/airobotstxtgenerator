@@ -1,24 +1,17 @@
 ---
-import {
-  buildServerRules,
-  buildVerificationSnippet,
-  getBot,
-  getOperator,
-  registry,
-} from '@airobots/core';
+import { buildServerRules, buildVerificationSnippet, getBot, getOperator } from '@airobots/core';
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import Code from '../components/Code.astro';
 import { t } from '../i18n';
 import { formatDate } from '../i18n/locales';
 import { botPath, pathFor } from '../i18n/routes';
-import { getBotPagePattern, getBotTexts, getPage } from '../lib/content';
+import { getBotPagePattern, getBotTexts, getPage, type BotText } from '../lib/content';
 import { interpolate } from '../i18n';
 import { renderInline } from '../lib/markdown';
 import { alternatesFor, type SitePage } from '../lib/pages';
 import { breadcrumbList, faqPage } from '../lib/seo';
 import { crumbsFor, mdPath, ogPath } from '../lib/view';
-import { SITE_URL } from '../config/site';
 
 interface Props {
   page: SitePage;
@@ -28,8 +21,8 @@ const { locale } = page;
 const bot = getBot(page.botId!)!;
 const op = getOperator(bot.operator);
 const opName = op?.name ?? bot.operatorName ?? '—';
-const texts = getBotTexts(locale)[bot.id] ?? {};
-const en = getBotTexts('en')[bot.id] ?? { details: '' };
+const texts: Partial<BotText> = getBotTexts(locale)[bot.id] ?? {};
+const en: BotText = getBotTexts('en')[bot.id] ?? { details: '' };
 const summary = texts.summary ?? bot.summary;
 const respectsNote = texts.respectsNote ?? bot.respectsNote;
 const note = texts.note ?? bot.note;

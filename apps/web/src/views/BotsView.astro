@@ -6,7 +6,7 @@ import PageSections from '../components/PageSections.astro';
 import { t } from '../i18n';
 import { formatDate, formatNumber } from '../i18n/locales';
 import { botPath } from '../i18n/routes';
-import { getBotTexts, getPage } from '../lib/content';
+import { getPage } from '../lib/content';
 import { resolveLinksInHtml } from '../lib/links';
 import { alternatesFor, type SitePage } from '../lib/pages';
 import { breadcrumbList, dataset, faqPage } from '../lib/seo';
@@ -22,7 +22,6 @@ const mod = getPage(locale, 'bots')!;
 const fm = mod.frontmatter;
 const body = resolveLinksInHtml(await mod.compiledContent(), locale);
 const crumbs = crumbsFor(locale, 'bots');
-const texts = getBotTexts(locale);
 const order = ['training', 'mixed', 'unknown', 'search', 'user'];
 const bots = [...curatedBots].sort(
   (a, b) =>
