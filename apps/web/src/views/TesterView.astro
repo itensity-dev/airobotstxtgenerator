@@ -23,13 +23,39 @@ const fm = mod.frontmatter;
 const body = resolveLinksInHtml(await mod.compiledContent(), locale);
 const crumbs = crumbsFor(locale, 'tester');
 const operators = Object.fromEntries(registry.operators.map((o) => [o.id, o.name]));
-const jsonLd = [webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale }), breadcrumbList(crumbs), ...(fm.faq?.length ? [faqPage(fm.faq)] : [])];
+const jsonLd = [
+  webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale }),
+  breadcrumbList(crumbs),
+  ...(fm.faq?.length ? [faqPage(fm.faq)] : []),
+];
 const dict = pick(locale, ['tester.', 'lint.', 'common.', 'verdict.', 'purpose.']);
 ---
-<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor('tester')} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent="tester">
+
+<Layout
+  locale={locale}
+  title={fm.title}
+  description={fm.description}
+  path={page.path}
+  alternates={alternatesFor('tester')}
+  ogImage={ogPath(page)}
+  markdown={mdPath(page)}
+  jsonLd={jsonLd}
+  navCurrent="tester"
+>
   <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
-  <noscript><p class="callout small">{t(locale, 'common.noJs')}</p></noscript>
-  <Tester client:load dict={dict} bots={genBots()} operators={operators} communityUrl="/bots.json" communityCount={communityBots.length} botBase={pathFor(locale, 'bots')} apiUrl="/api/robots" />
+  <noscript>
+    <p class="callout small">{t(locale, 'common.noJs')}</p>
+  </noscript>
+  <Tester
+    client:load
+    dict={dict}
+    bots={genBots()}
+    operators={operators}
+    communityUrl="/bots.json"
+    communityCount={communityBots.length}
+    botBase={pathFor(locale, 'bots')}
+    apiUrl="/api/robots"
+  />
   <PageSections locale={locale} fm={fm}>
     <Fragment set:html={body} />
   </PageSections>

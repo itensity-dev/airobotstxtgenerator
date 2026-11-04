@@ -10,39 +10,92 @@ interface Props {
   locale: Locale;
 }
 const { locale } = Astro.props;
-const label = (id: Parameters<typeof pathFor>[1]) => ({ href: pathFor(locale, id), text: getPage(locale, id)?.frontmatter.nav ?? getPage(locale, id)?.frontmatter.h1 ?? id });
-const tools = (['home', 'tester', 'server-rules', 'llms-txt', 'content-signals', 'tdmrep', 'meta-tags'] as const).map(label);
-const reference = (['bots', 'server-nginx', 'server-apache', 'server-caddy', 'server-cloudflare', 'server-frameworks'] as const).map(label);
-const guides = (['guide-training-search', 'guide-syntax', 'guide-eu-ai-act', 'guide-bad-bots'] as const).map(label);
+const label = (id: Parameters<typeof pathFor>[1]) => ({
+  href: pathFor(locale, id),
+  text: getPage(locale, id)?.frontmatter.nav ?? getPage(locale, id)?.frontmatter.h1 ?? id,
+});
+const tools = (
+  ['home', 'tester', 'server-rules', 'llms-txt', 'content-signals', 'tdmrep', 'meta-tags'] as const
+).map(label);
+const reference = (
+  [
+    'bots',
+    'server-nginx',
+    'server-apache',
+    'server-caddy',
+    'server-cloudflare',
+    'server-frameworks',
+  ] as const
+).map(label);
+const guides = (
+  ['guide-training-search', 'guide-syntax', 'guide-eu-ai-act', 'guide-bad-bots'] as const
+).map(label);
 const project = (['about', 'checker-bot', 'privacy', 'terms', 'licenses'] as const).map(label);
 const year = new Date().getUTCFullYear();
 ---
+
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-grid">
       <section>
         <h2>{t(locale, 'footer.tools')}</h2>
-        <ul>{tools.map((l) => <li><a href={l.href}>{l.text}</a></li>)}</ul>
+        <ul>
+          {tools.map((l) => (
+            <li>
+              <a href={l.href}>{l.text}</a>
+            </li>
+          ))}
+        </ul>
       </section>
       <section>
         <h2>{t(locale, 'footer.reference')}</h2>
         <ul>
-          {reference.map((l) => <li><a href={l.href}>{l.text}</a></li>)}
-          <li><a href="/bots.json">{t(locale, 'footer.botsJson')}</a></li>
-          <li><a href={locale === 'en' ? '/llms.txt' : `/${locale}/llms.txt`}>{t(locale, 'footer.llms')}</a></li>
+          {reference.map((l) => (
+            <li>
+              <a href={l.href}>{l.text}</a>
+            </li>
+          ))}
+          <li>
+            <a href="/bots.json">{t(locale, 'footer.botsJson')}</a>
+          </li>
+          <li>
+            <a href={locale === 'en' ? '/llms.txt' : `/${locale}/llms.txt`}>
+              {t(locale, 'footer.llms')}
+            </a>
+          </li>
         </ul>
       </section>
       <section>
         <h2>{t(locale, 'footer.guides')}</h2>
-        <ul>{guides.map((l) => <li><a href={l.href}>{l.text}</a></li>)}</ul>
+        <ul>
+          {guides.map((l) => (
+            <li>
+              <a href={l.href}>{l.text}</a>
+            </li>
+          ))}
+        </ul>
       </section>
       <section>
         <h2>{t(locale, 'footer.project')}</h2>
-        <ul>{project.map((l) => <li><a href={l.href}>{l.text}</a></li>)}</ul>
+        <ul>
+          {project.map((l) => (
+            <li>
+              <a href={l.href}>{l.text}</a>
+            </li>
+          ))}
+        </ul>
       </section>
       <section>
         <h2>{t(locale, 'footer.network')}</h2>
-        <ul>{networkLinks().map((n) => <li><a href={n.href} rel="noopener">{n.domain}</a></li>)}</ul>
+        <ul>
+          {networkLinks().map((n) => (
+            <li>
+              <a href={n.href} rel="noopener">
+                {n.domain}
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
     <p class="footer-legal">

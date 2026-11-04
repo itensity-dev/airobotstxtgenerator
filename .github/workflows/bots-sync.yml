@@ -1,0 +1,57 @@
+name: Weekly bot list sync
+
+on:
+  schedule:
+    - cron: '17 6 * * 1' # Mondays 06:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '26'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Sync community list from ai.robots.txt
+        id: sync
+        run: |
+          set +e
+          SYNC_SUMMARY_FILE=$RUNNER_TEMP/summary.md pnpm --filter @airobots/core bots:sync
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" = "2" ]; then exit 0; fi
+          exit $code
+      - name: Core tests
+        if: steps.sync.outputs.code == '0'
+        run: pnpm --filter @airobots/core test
+      - name: Open pull request
+        if: steps.sync.outputs.code == '0' && steps.sync.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bots/weekly-sync
+          commit-message: 'Sync community bot list with ai.robots.txt'
+          title: 'Weekly bot list sync'
+          body-path: ${{ runner.temp }}/summary.md
+          labels: bots, automated
+          delete-branch: true
+      - name: Report upstream format change
+        if: steps.sync.outputs.code == '2'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'ai.robots.txt changed its robots.json format',
+              body: 'The weekly sync refused to import the upstream list because its structure changed. Update `packages/core/src/sync.ts` (parseUpstream) and its tests. Run: ' + context.serverUrl + '/' + context.repo.owner + '/' + context.repo.repo + '/actions/runs/' + context.runId,
+              labels: ['bots'],
+            });

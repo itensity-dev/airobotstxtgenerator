@@ -5,6 +5,7 @@ import { formatDate, type Locale } from '../i18n/locales';
 import { pathFor, type PageId } from '../i18n/routes';
 import { getPage, type PageFrontmatter } from '../lib/content';
 import { renderInline } from '../lib/markdown';
+import AdSlot from './AdSlot.astro';
 
 interface Props {
   locale: Locale;
@@ -15,16 +16,31 @@ const { locale, fm, hasMethod = true } = Astro.props;
 const related = (fm.related ?? [])
   .map((id: PageId) => ({ id, page: getPage(locale, id) }))
   .filter((r) => r.page)
-  .map((r) => ({ href: pathFor(locale, r.id), name: r.page!.frontmatter.nav ?? r.page!.frontmatter.h1, lead: r.page!.frontmatter.lead }));
-const statusLabel = { yes: t(locale, 'common.yes'), no: t(locale, 'common.no'), partly: t(locale, 'common.partly') };
+  .map((r) => ({
+    href: pathFor(locale, r.id),
+    name: r.page!.frontmatter.nav ?? r.page!.frontmatter.h1,
+    lead: r.page!.frontmatter.lead,
+  }));
+const statusLabel = {
+  yes: t(locale, 'common.yes'),
+  no: t(locale, 'common.no'),
+  partly: t(locale, 'common.partly'),
+};
 const statusClass = { yes: 'stamp--ok', no: 'stamp--no', partly: 'stamp--part' };
 ---
+
 <div class="cols cols--rule">
   <div>
     {fm.steps && fm.steps.length > 0 && (
       <section>
         <h2>{t(locale, 'common.steps')}</h2>
-        <ol class="steps">{fm.steps.map((s) => <li><span set:html={renderInline(s, false, locale)} /></li>)}</ol>
+        <ol class="steps">
+          {fm.steps.map((s) => (
+            <li>
+              <span set:html={renderInline(s, false, locale)} />
+            </li>
+          ))}
+        </ol>
       </section>
     )}
     {fm.capabilities && fm.capabilities.length > 0 && (
@@ -32,10 +48,22 @@ const statusClass = { yes: 'stamp--ok', no: 'stamp--no', partly: 'stamp--part' }
         <h2>{t(locale, 'common.capabilities')}</h2>
         <div class="table-wrap">
           <table class="register">
-            <thead><tr><th scope="col">{t(locale, 'common.capFeature')}</th><th scope="col">{t(locale, 'common.capStatus')}</th><th scope="col">{t(locale, 'common.capNote')}</th></tr></thead>
+            <thead>
+              <tr>
+                <th scope="col">{t(locale, 'common.capFeature')}</th>
+                <th scope="col">{t(locale, 'common.capStatus')}</th>
+                <th scope="col">{t(locale, 'common.capNote')}</th>
+              </tr>
+            </thead>
             <tbody>
               {fm.capabilities.map((c) => (
-                <tr><th scope="row">{c.feature}</th><td><span class={`stamp ${statusClass[c.status]}`}>{statusLabel[c.status]}</span></td><td set:html={renderInline(c.note, false, locale)} /></tr>
+                <tr>
+                  <th scope="row">{c.feature}</th>
+                  <td>
+                    <span class={`stamp ${statusClass[c.status]}`}>{statusLabel[c.status]}</span>
+                  </td>
+                  <td set:html={renderInline(c.note, false, locale)} />
+                </tr>
               ))}
             </tbody>
           </table>
@@ -66,11 +94,18 @@ const statusClass = { yes: 'stamp--ok', no: 'stamp--no', partly: 'stamp--part' }
       <section>
         <h2>{t(locale, 'common.related')}</h2>
         <ul class="related">
-          {related.map((r) => <li><a href={r.href}>{r.name}</a><br /><span class="small muted">{r.lead}</span></li>)}
+          {related.map((r) => (
+            <li>
+              <a href={r.href}>{r.name}</a>
+              <br />
+              <span class="small muted">{r.lead}</span>
+            </li>
+          ))}
         </ul>
       </section>
     )}
     <slot name="aside" />
+    <AdSlot />
   </aside>
 </div>
 <p class="updated">{t(locale, 'common.updated', { date: formatDate(fm.updated, locale) })}</p>

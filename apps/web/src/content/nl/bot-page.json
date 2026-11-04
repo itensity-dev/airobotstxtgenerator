@@ -1,0 +1,7 @@
+{
+  "pattern": {
+    "title": "Wat is {name}? Zo blokkeer je deze bot ({operator})",
+    "description": "{summary} User-Agent, robots.txt-token, IP-bereiken, verificatie en kant-en-klare regels om {name} te blokkeren of toe te staan.",
+    "h1": "{name}"
+  }
+}

@@ -1,0 +1,266 @@
+{
+  "gptbot": {
+    "summary": "Il crawler di OpenAI che raccoglie pagine pubblicamente disponibili che possono essere usate per addestrare i suoi modelli di base di AI generativa.",
+    "details": "GPTBot è il crawler che OpenAI usa per raccogliere dati di addestramento per i propri modelli. È separato dagli altri due agenti di OpenAI: OAI-SearchBot costruisce l'indice alla base della ricerca di ChatGPT, e ChatGPT-User apre le pagine quando una persona lo chiede a ChatGPT. Un `Disallow` per GPTBot tiene quindi le tue pagine fuori dai futuri set di addestramento senza toglierti dalle risposte di ricerca di ChatGPT. OpenAI dichiara di filtrare dai dati raccolti da GPTBot i contenuti a pagamento e le informazioni personali.",
+    "respectsNote": "OpenAI: bloccare GPTBot segnala che i contenuti del sito non devono essere usati per addestrare i suoi modelli di base di AI generativa.",
+    "note": "Bloccare GPTBot non rimuove un sito dalla ricerca di ChatGPT; quella è controllata da OAI-SearchBot.",
+    "history": {
+      "0": "OpenAI documenta GPTBot e come bloccarlo nel robots.txt.",
+      "1": "Versione dello User-Agent osservata nella documentazione: GPTBot/1.4."
+    }
+  },
+  "oai-searchbot": {
+    "summary": "Il crawler di OpenAI per la ricerca di ChatGPT: trova e indicizza le pagine affinché ChatGPT possa mostrarle e linkarle nelle risposte.",
+    "details": "OAI-SearchBot scansiona il web affinché ChatGPT possa mostrare e citare le pagine nelle sue risposte di ricerca. I siti che lo bloccano spariscono da quelle risposte, anche se ChatGPT può comunque mostrare un semplice link di navigazione. OpenAI dichiara che i contenuti recuperati da OAI-SearchBot non vengono usati per addestrare i suoi modelli di base — l'addestramento è compito di GPTBot — quindi bloccare GPTBot e consentire OAI-SearchBot è la configurazione tipica «niente addestramento, ma visibili». Agli inserzionisti su ChatGPT viene chiesto di consentirlo sulle landing page.",
+    "respectsNote": "OpenAI: i siti che bloccano OAI-SearchBot non vengono mostrati nelle risposte di ricerca di ChatGPT; le modifiche al robots.txt richiedono circa 24 ore per essere applicate.",
+    "note": "Bloccare OAI-SearchBot rimuove il sito dalle risposte di ricerca di ChatGPT (può comunque comparire come link di navigazione). È indipendente da GPTBot.",
+    "history": {
+      "0": "OpenAI presenta SearchGPT; OAI-SearchBot diventa il crawler per i risultati di ricerca.",
+      "1": "La documentazione mostra uno User-Agent in stile Chrome con OAI-SearchBot/1.4."
+    }
+  },
+  "chatgpt-user": {
+    "summary": "Recupera una pagina quando un utente di ChatGPT o un GPT personalizzato la richiede; non viene usato per la scansione automatica.",
+    "details": "ChatGPT-User non è un crawler che esplora il web da solo: recupera una pagina specifica quando la chiede un utente di ChatGPT, un GPT personalizzato o un'azione. La documentazione di OpenAI afferma che le regole del robots.txt potrebbero non applicarsi a queste richieste avviate dagli utenti e che ChatGPT-User non viene usato per decidere cosa compare nella ricerca di ChatGPT. Se devi tenerlo fuori, combina la regola robots.txt con un blocco lato server e verifica le richieste con l'elenco IP pubblicato da OpenAI.",
+    "respectsNote": "OpenAI: poiché queste azioni sono avviate da un utente, le regole del robots.txt potrebbero non applicarsi.",
+    "note": "Un Disallow per ChatGPT-User è una richiesta che, secondo OpenAI, potrebbe non essere applicata. Usa regole server per imporla."
+  },
+  "oai-adsbot": {
+    "summary": "Controlla le landing page che gli inserzionisti inviano per gli annunci su ChatGPT; OpenAI dichiara che i dati non vengono usati per addestrare modelli di AI generativa.",
+    "details": "OAI-AdsBot visita solo le landing page che gli inserzionisti inviano per gli annunci su ChatGPT, per verificarle rispetto alle norme pubblicitarie di OpenAI e capire cosa mostrano. OpenAI dichiara che i dati non vengono usati per addestrare modelli generativi. Per un sito che non fa pubblicità su ChatGPT è irrilevante; per un inserzionista, bloccarlo può impedire la pubblicazione degli annunci, ed è per questo che i preset di questo sito non lo bloccano mai.",
+    "respectsNote": "OpenAI chiede agli inserzionisti di assicurarsi che il robots.txt consenta OAI-AdsBot sulle loro landing page.",
+    "note": "Rilevante solo se fai pubblicità su ChatGPT. I preset AI di questo sito lo lasciano consentito.",
+    "history": {
+      "0": "Introdotto con gli annunci su ChatGPT."
+    }
+  },
+  "claudebot": {
+    "summary": "Il crawler di Anthropic che raccoglie contenuti web pubblici che possono essere usati per addestrare i suoi modelli AI.",
+    "details": "ClaudeBot è il crawler di Anthropic che raccoglie contenuti web pubblici che possono essere usati per addestrare i modelli Claude. Anthropic dichiara che tutti i suoi bot rispettano robots.txt, compresa la direttiva non standard `Crawl-delay`, e non cercano di aggirare login o CAPTCHA. Poiché Anthropic tratta ogni sottodominio separatamente, `blog.example.com` ha bisogno di un proprio robots.txt. Da ottobre 2026 Anthropic pubblica anche gli intervalli IP dei suoi bot, rendendo possibile la verifica lato server.",
+    "respectsNote": "Anthropic: i suoi bot rispettano le direttive del robots.txt, compresa la direttiva non standard Crawl-delay, e non aggirano i CAPTCHA.",
+    "note": "L'opt-out funziona per sottodominio: ogni sottodominio ha bisogno di un proprio robots.txt.",
+    "history": {
+      "0": "Anthropic pubblica un elenco IP per i suoi bot (claude.com/crawling/bots.json)."
+    }
+  },
+  "claude-searchbot": {
+    "summary": "Il crawler di Anthropic che indicizza le pagine per migliorare la qualità dei risultati di ricerca in Claude.",
+    "details": "Claude-SearchBot indicizza le pagine affinché Claude possa trovarle e citarle quando cerca sul web per un utente. È l'equivalente di Anthropic di OAI-SearchBot: bloccarlo può far comparire il tuo sito meno spesso nelle risposte di Claude, mentre bloccare solo ClaudeBot riguarda unicamente l'addestramento. Condivide l'elenco IP e gli impegni su robots.txt degli altri agenti di Anthropic.",
+    "respectsNote": "Rientra nella dichiarazione di Anthropic secondo cui tutti i suoi bot rispettano robots.txt.",
+    "note": "Bloccarlo può ridurre la frequenza con cui il sito compare nelle risposte di ricerca di Claude."
+  },
+  "claude-user": {
+    "summary": "Recupera una pagina quando un utente di Claude fa una domanda che la richiede.",
+    "details": "Claude-User apre una pagina quando un utente di Claude fa una domanda che la richiede, ad esempio quando qualcuno incolla il tuo URL in una conversazione. A differenza dei fetcher attivati dagli utenti di OpenAI, Perplexity, Google e Meta, Anthropic dichiara che Claude-User rispetta robots.txt, quindi un `Disallow` ferma anche questi recuperi. Bloccarlo significa che Claude non può leggere le tue pagine per conto di un utente.",
+    "respectsNote": "Anthropic dichiara che Claude-User rispetta robots.txt, il che permette ai gestori dei siti di controllare l'accesso da parte delle richieste avviate dagli utenti.",
+    "note": "A differenza della maggior parte dei fetcher attivati dagli utenti, Anthropic dichiara che Claude-User rispetta robots.txt."
+  },
+  "anthropic-ai": {
+    "summary": "Un vecchio nome di Anthropic che molti file robots.txt bloccano ancora; non compare più nella documentazione di Anthropic.",
+    "details": "anthropic-ai compare in migliaia di file robots.txt perché le prime blocklist per l'AI del 2023 lo indicavano come crawler di Anthropic. La documentazione attuale di Anthropic elenca solo ClaudeBot, Claude-SearchBot e Claude-User, quindi una regola per anthropic-ai da sola non copre più il crawler di addestramento di Anthropic. Mantenere la riga non fa danni; assicurati però che nel file ci sia anche `ClaudeBot`.",
+    "note": "Mantenere un Disallow per anthropic-ai è innocuo, ma non sostituisce ClaudeBot.",
+    "history": {
+      "0": "Assente dall'attuale articolo di Anthropic sui crawler."
+    }
+  },
+  "google-extended": {
+    "summary": "Un token robots.txt che stabilisce se i contenuti scansionati da Google possono essere usati per addestrare i modelli Gemini e per il grounding delle app Gemini e di Vertex AI.",
+    "details": "Google-Extended è un nome da usare nel robots.txt, non un crawler: i crawler abituali di Google recuperano le pagine, e la regola per Google-Extended dice a Google se quei contenuti possono essere usati per addestrare i futuri modelli Gemini e per il grounding delle risposte nelle app Gemini e in Vertex AI. Non influisce sul posizionamento né sull'inclusione nella Ricerca Google. AI Overview e AI Mode fanno parte della Ricerca e si basano su Googlebot, quindi bloccare Google-Extended non ti toglie da lì: lo farebbe solo il blocco di Googlebot, insieme a tutto il resto della Ricerca Google.",
+    "respectsNote": "Solo un token di controllo robots.txt: non esiste uno User-Agent Google-Extended; le pagine vengono recuperate dai crawler esistenti di Google.",
+    "note": "Bloccare Google-Extended non influisce sull'inclusione né sul posizionamento nella Ricerca Google e non rimuove le pagine da AI Overview o AI Mode, che si basano su Googlebot.",
+    "history": {
+      "0": "Google introduce Google-Extended.",
+      "1": "Google annuncia che leggerà anche un Disallow sotto __usage_ai-training come opt-out di Google-Extended quando Google-Extended non è nominato."
+    }
+  },
+  "googleother": {
+    "summary": "Un crawler generico di Google usato dai team di prodotto per scansioni occasionali e per attività interne di ricerca e sviluppo.",
+    "details": "GoogleOther è un crawler generico di Google che i team di prodotto usano per recuperi che non fanno parte della Ricerca: Google li descrive come scansioni occasionali per attività interne di ricerca e sviluppo. Google non lo collega a un prodotto specifico, quindi non si può escludere un suo uso per l'AI, ed è per questo che molte blocklist per l'AI lo includono. Bloccarlo non ha alcun effetto sulla Ricerca Google. Le varianti per immagini e video (GoogleOther-Image, GoogleOther-Video) seguono le regole di GoogleOther, se non sono nominate esplicitamente.",
+    "respectsNote": "Google: i crawler comuni rispettano sempre le regole del robots.txt nelle scansioni automatiche.",
+    "note": "Bloccare GoogleOther non influisce sulla Ricerca Google. Google non lo collega a un prodotto specifico.",
+    "history": {
+      "0": "Google introduce GoogleOther.",
+      "1": "Aggiunte le varianti GoogleOther-Image e GoogleOther-Video."
+    }
+  },
+  "google-cloudvertexbot": {
+    "summary": "Scansiona i siti su richiesta dei loro proprietari per creare agenti Vertex AI e ricerca aziendale.",
+    "details": "Google-CloudVertexBot scansiona un sito quando il suo proprietario chiede a Google Cloud di costruirci sopra un agente Vertex AI o un'app di ricerca aziendale. Google dichiara che non ha alcun effetto sulla Ricerca Google. Qui è classificato come ricerca AI perché alimenta risposte AI, ma bloccarlo ha senso soprattutto per i siti che qualcun altro potrebbe indicizzare con Vertex AI; se crei un'app di questo tipo per il tuo sito, lascialo consentito.",
+    "respectsNote": "Google: i crawler comuni rispettano robots.txt.",
+    "note": "Non ha alcun effetto sulla Ricerca Google. Bloccarlo può compromettere un'app di ricerca Vertex AI costruita sul tuo sito."
+  },
+  "google-agent": {
+    "summary": "Usato dagli agenti AI in esecuzione sull'infrastruttura di Google per navigare nei siti e agire su richiesta di un utente.",
+    "details": "Google-Agent identifica gli agenti AI in esecuzione sull'infrastruttura di Google che navigano nei siti web e compiono azioni per un utente, eredi degli esperimenti di Project Mariner. Google lo classifica come fetcher attivato dall'utente e dichiara che questi fetcher in genere ignorano robots.txt, perché la visita è stata chiesta da una persona. Per limitarlo servono regole server; Google pubblica i relativi intervalli IP in un file separato e firma alcune richieste con Web Bot Auth, così da poter riconoscere quelle autentiche.",
+    "respectsNote": "Google: i fetcher attivati dagli utenti in genere ignorano le regole del robots.txt perché il recupero è stato richiesto da un utente.",
+    "note": "robots.txt non può fermarlo. Alcune richieste sono firmate con Web Bot Auth (identità agent.bot.goog, sperimentale).",
+    "history": {
+      "0": "Google aggiunge Google-Agent al suo elenco di fetcher attivati dagli utenti."
+    }
+  },
+  "google-gemininotebook": {
+    "summary": "Recupera gli URL che un utente aggiunge come fonti in Gemini Notebook (in precedenza NotebookLM).",
+    "details": "Google-GeminiNotebook recupera le pagine web che un utente aggiunge come fonti in Gemini Notebook, il prodotto che in precedenza si chiamava NotebookLM; il vecchio nome Google-NotebookLM è stato ritirato nel 2026. Come fetcher attivato dall'utente, in genere ignora robots.txt. I contenuti aggiunti da un utente vengono elaborati per il notebook di quell'utente; per fermarlo, blocca lo user agent sul tuo server.",
+    "respectsNote": "Google: i fetcher attivati dagli utenti in genere ignorano robots.txt.",
+    "note": "Ha sostituito il nome Google-NotebookLM. robots.txt non ferma i recuperi attivati dagli utenti.",
+    "history": {
+      "0": "Google-NotebookLM aggiunto ai fetcher di Google attivati dagli utenti.",
+      "1": "Rinominato Google-GeminiNotebook quando NotebookLM è diventato Gemini Notebook."
+    }
+  },
+  "applebot": {
+    "summary": "Il crawler web di Apple per Siri, Spotlight e la ricerca di Safari. Le pagine che scansiona possono essere usate anche per addestrare i modelli di base di Apple, a meno che Applebot-Extended non sia bloccato.",
+    "details": "Applebot è il crawler web generico di Apple per Siri, Spotlight, i suggerimenti di Safari e altre funzioni di ricerca. Apple dichiara che le pagine che scansiona possono essere usate anche per addestrare i suoi modelli di base, a meno che tu non blocchi Applebot-Extended. Bloccare Applebot stesso rimuove il tuo sito dalle funzioni di ricerca di Apple, quindi per un opt-out dall'addestramento AI la regola giusta è `User-agent: Applebot-Extended` con `Disallow: /`. Se Applebot non è nominato ma Googlebot sì, Applebot segue le regole di Googlebot.",
+    "respectsNote": "Apple: Applebot segue le regole del robots.txt rivolte ad Applebot; se Applebot non è nominato ma Googlebot sì, segue le regole di Googlebot. Non supporta Crawl-delay.",
+    "note": "Non bloccare Applebot per fermare l'addestramento AI: blocca invece Applebot-Extended e resta nelle funzioni di ricerca di Apple."
+  },
+  "applebot-extended": {
+    "summary": "Un token robots.txt che decide se le pagine scansionate da Applebot possono essere usate per addestrare i modelli di base generativi di Apple.",
+    "details": "Applebot-Extended non visita mai il tuo sito. La scansione la fa Applebot; la regola per Applebot-Extended decide solo se quei contenuti possono essere usati per addestrare i modelli generativi di Apple per Apple Intelligence e altre funzioni. Bloccarlo mantiene le tue pagine nei risultati di Siri, Spotlight e Safari. Poiché non viene inviato come User-Agent, le regole server non possono intercettarlo: il robots.txt è l'unico modo per esprimere questa scelta.",
+    "respectsNote": "Apple: Applebot-Extended non scansiona le pagine web; stabilisce solo come possono essere usati i dati scansionati da Applebot.",
+    "note": "Bloccarlo mantiene le pagine nei risultati di Siri, Spotlight e Safari.",
+    "history": {
+      "0": "Apple documenta Applebot-Extended insieme ad Apple Intelligence."
+    }
+  },
+  "perplexitybot": {
+    "summary": "Il crawler di Perplexity che trova e linka i siti web nei risultati di ricerca di Perplexity. Perplexity dichiara che non viene usato per raccogliere contenuti per modelli di base AI.",
+    "details": "PerplexityBot costruisce l'indice alla base del motore di risposta di Perplexity, che cita e linka le proprie fonti. Perplexity dichiara di rispettare robots.txt e che PerplexityBot non viene usato per raccogliere contenuti per modelli di base AI. Bloccarlo rimuove le tue pagine dalle risposte e dalle citazioni di Perplexity. Perplexity pubblica gli intervalli IP dei suoi crawler e li indica come fonte di riferimento per le regole del firewall.",
+    "respectsNote": "Perplexity: PerplexityBot scansiona solo nel rispetto di robots.txt; le modifiche possono richiedere fino a 24 ore.",
+    "note": "Bloccare PerplexityBot rimuove il sito dalle risposte e dalle citazioni di Perplexity."
+  },
+  "perplexity-user": {
+    "summary": "Visita una pagina quando un utente di Perplexity fa una domanda che la richiede; non viene usato per la scansione né per l'addestramento.",
+    "details": "Perplexity-User visita una pagina quando un utente di Perplexity fa una domanda che la richiede. Perplexity dichiara che, poiché il recupero è stato chiesto da una persona, questo agente in genere ignora robots.txt, e che i contenuti non vengono usati per la scansione né per l'addestramento. Se vuoi fermare queste visite, usa regole server insieme all'elenco IP pubblicato da Perplexity.",
+    "respectsNote": "Perplexity: poiché il recupero è stato richiesto da un utente, Perplexity-User in genere ignora le regole del robots.txt.",
+    "note": "Usa regole server se devi fermarlo; un Disallow nel robots.txt viene in genere ignorato."
+  },
+  "meta-externalagent": {
+    "summary": "Il crawler di Meta per usi come l'addestramento di modelli AI o il miglioramento dei prodotti tramite l'indicizzazione diretta dei contenuti.",
+    "details": "meta-externalagent è il crawler che Meta usa per scopi come l'addestramento di modelli AI o il miglioramento dei prodotti tramite l'indicizzazione diretta dei contenuti. Meta chiede ai gestori dei siti di fare opt-out con una regola robots.txt e precisa che il robots.txt può essere tenuto in cache fino a un giorno. Meta non pubblica alcun elenco IP per questo crawler, quindi una richiesta con questo User-Agent non può essere dimostrata autentica.",
+    "respectsNote": "Meta: aggiungi un Disallow per il crawler nel robots.txt; il robots.txt può essere tenuto in cache fino a 24 ore.",
+    "note": "Meta non pubblica alcun elenco IP per questo crawler; raccomanda una allowlist di IP anziché il confronto sullo User-Agent, ma non indica gli intervalli.",
+    "history": {
+      "0": "Meta documenta meta-externalagent."
+    }
+  },
+  "meta-webindexer": {
+    "summary": "Il crawler di Meta che migliora i risultati di ricerca in Meta AI; consentirlo permette a Meta AI di citare e linkare il sito.",
+    "details": "meta-webindexer migliora i risultati di ricerca in Meta AI. Consentirlo permette a Meta AI di trovare, citare e linkare le tue pagine; bloccarlo le tiene fuori da quelle risposte. È separato da meta-externalagent, quindi un opt-out dall'addestramento non richiede di bloccarlo."
+  },
+  "meta-externalfetcher": {
+    "summary": "Recupera singoli link per i prodotti Meta AI quando un utente li richiede.",
+    "details": "meta-externalfetcher recupera singoli link per i prodotti Meta AI quando un utente li richiede, ad esempio per riassumere una pagina condivisa. Meta dichiara che, poiché questi recuperi sono avviati dagli utenti, possono aggirare robots.txt. Le regole server sono l'unico modo affidabile per fermarli.",
+    "respectsNote": "Meta: recupera singoli link su richiesta di un utente e può aggirare robots.txt."
+  },
+  "facebookexternalhit": {
+    "summary": "Crea le anteprime dei link quando un URL viene condiviso su Facebook, Instagram, Messenger o WhatsApp. Non è un crawler AI.",
+    "details": "facebookexternalhit crea la scheda di anteprima — titolo, descrizione, immagine — quando qualcuno condivide un link su Facebook, Instagram, Messenger o WhatsApp. Non è un crawler AI, ma diverse blocklist pubbliche per l'AI lo includono, e bloccarlo rompe le anteprime dei link alle tue pagine nelle app di Meta. Meta precisa che può aggirare robots.txt per controlli di sicurezza e integrità.",
+    "respectsNote": "Meta: potrebbe aggirare robots.txt quando esegue controlli di sicurezza o integrità.",
+    "note": "Bloccarlo rompe le anteprime dei link nelle app di Meta. Diverse blocklist pubbliche per l'AI lo includono comunque."
+  },
+  "amazonbot": {
+    "summary": "Il crawler di Amazon che migliora i prodotti e i servizi Amazon; Amazon dichiara che i dati possono essere usati per addestrare i suoi modelli AI.",
+    "details": "Amazonbot scansiona il web per migliorare i prodotti e i servizi di Amazon, e Amazon dichiara che i dati possono essere usati per addestrare i suoi modelli AI. Amazon rispetta il robots.txt per ogni host e, a livello di pagina, il meta tag robots `noarchive` come segnale per non usare una pagina per l'addestramento dei modelli. Amazon pubblica gli indirizzi IP del suo crawler in una pagina web anziché in formato JSON.",
+    "respectsNote": "Amazon: legge il robots.txt di ogni host; rispetta i meta tag robots noarchive (non usare per l'addestramento dei modelli), noindex e none.",
+    "note": "Per un opt-out dall'addestramento a livello di pagina Amazon rispetta <meta name=\"robots\" content=\"noarchive\">."
+  },
+  "amzn-searchbot": {
+    "summary": "Alimenta le funzioni di ricerca nei prodotti Amazon, compresa Alexa; Amazon dichiara che non viene usato per l'addestramento di AI generativa.",
+    "details": "Amzn-SearchBot alimenta le funzioni di ricerca nei prodotti Amazon come Alexa, e Amazon dichiara che non viene usato per l'addestramento di AI generativa. Se il tuo robots.txt non lo nomina ma consente altri crawler di ricerca, segue le regole che dai a loro: un file aperto a Googlebot è quindi aperto anche ad Amzn-SearchBot, a meno che tu non aggiunga un gruppo apposito.",
+    "respectsNote": "Amazon: se il robots.txt non nomina Amzn-SearchBot ma consente altri bot di ricerca, segue le regole date a quei bot."
+  },
+  "amzn-user": {
+    "summary": "Recupera informazioni in tempo reale per Alexa quando un utente fa una domanda; non viene usato per l'addestramento di AI generativa.",
+    "details": "Amzn-User recupera informazioni in tempo reale quando un utente di Alexa fa una domanda che richiede la tua pagina. Amazon dichiara che, poiché la richiesta è avviata da un utente, potrebbe non rispettare tutte le direttive del robots.txt, e che i contenuti non vengono usati per l'addestramento di AI generativa.",
+    "respectsNote": "Amazon: poiché queste richieste sono avviate da un utente, potrebbe non rispettare tutte le direttive del robots.txt."
+  },
+  "bytespider": {
+    "summary": "Un crawler gestito da ByteDance (la società madre di TikTok) che, secondo numerose segnalazioni, raccoglie dati per addestrare i suoi modelli AI.",
+    "details": "Bytespider è un crawler gestito da ByteDance, l'azienda dietro TikTok. ByteDance non pubblica alcuna documentazione su di esso, e osservatori indipendenti hanno segnalato scansioni intense e frequenti violazioni del robots.txt; si ritiene diffusamente che raccolga dati per i modelli linguistici di ByteDance. Poiché non c'è nulla di ufficiale, considera una regola robots.txt solo un primo passo e bloccalo a livello di server o CDN se per te è importante.",
+    "respectsNote": "ByteDance non pubblica alcuna documentazione. Segnalazioni indipendenti indicano che spesso non rispetta robots.txt.",
+    "note": "In assenza di una dichiarazione ufficiale, imponi il blocco sul server o sulla CDN invece di affidarti al robots.txt."
+  },
+  "ccbot": {
+    "summary": "Il crawler di Common Crawl, un archivio web aperto senza scopo di lucro i cui dataset sono ampiamente usati per addestrare i grandi modelli linguistici.",
+    "details": "CCBot è il crawler di Common Crawl, un'organizzazione senza scopo di lucro che dal 2008 pubblica snapshot gratuiti del web. Questi archivi sono tra le fonti più usate per addestrare i grandi modelli linguistici, quindi una sola regola per CCBot riguarda molti sviluppatori AI contemporaneamente. Common Crawl rispetta robots.txt e `Crawl-delay`, e dal 2026 scansiona da intervalli IP dedicati con DNS inverso sotto crawl.commoncrawl.org.",
+    "respectsNote": "Common Crawl: bloccalo con User-agent: CCBot e Disallow: /; supporta Crawl-delay.",
+    "note": "I dati di Common Crawl sono usati da molti sviluppatori AI, quindi bloccare CCBot va oltre una singola azienda. Il blocco rimuove inoltre il sito dai futuri snapshot dell'archivio.",
+    "history": {
+      "0": "Common Crawl documenta intervalli IP dedicati e il DNS inverso sotto crawl.commoncrawl.org."
+    }
+  },
+  "mistralai-training": {
+    "summary": "Il crawler di Mistral AI che costruisce dataset di addestramento; Mistral dichiara che non viene usato per la ricerca né per le risposte in tempo reale.",
+    "details": "MistralAI-Training raccoglie pagine per i dataset di addestramento di Mistral AI. Mistral lo documenta separatamente dai suoi agenti di ricerca e utente, così che un opt-out dall'addestramento non influisca sulla visibilità nel suo assistente. Mistral dichiara che i suoi crawler rispettano robots.txt e, dalla sua documentazione, rimanda agli elenchi IP di ciascun crawler.",
+    "respectsNote": "Mistral: i suoi crawler sono progettati per rispettare robots.txt."
+  },
+  "mistralai-index": {
+    "summary": "Il crawler di Mistral AI che indicizza le pagine per la ricerca nel suo assistente; Mistral dichiara che i contenuti non vengono usati per l'addestramento.",
+    "details": "MistralAI-Index costruisce l'indice di ricerca che l'assistente di Mistral AI usa per rispondere alle domande citando le fonti. Mistral dichiara che i contenuti recuperati non vengono usati per l'addestramento. Bloccarlo rimuove le tue pagine da quelle risposte; bloccare solo MistralAI-Training ti mantiene visibile senza contribuire all'addestramento.",
+    "respectsNote": "Mistral: scansione automatica solo per l'indicizzazione; robots.txt viene rispettato."
+  },
+  "mistralai-user": {
+    "summary": "Recupera una pagina quando una domanda nell'assistente di Mistral richiede una fonte web; non è scansione automatica né addestramento.",
+    "details": "MistralAI-User recupera una pagina quando una domanda nell'assistente di Mistral AI richiede una fonte web in tempo reale. Non è scansione automatica né addestramento. La documentazione di Mistral afferma che il token stabilisce a quali siti possono accedere queste richieste avviate dagli utenti, quindi una regola robots.txt si applica anche a lui.",
+    "respectsNote": "Mistral: il token stabilisce a quali siti possono accedere le richieste avviate dagli utenti."
+  },
+  "duckassistbot": {
+    "summary": "Recupera pagine in tempo reale per le risposte assistite dall'AI di DuckDuckGo, con citazioni; DuckDuckGo dichiara che i dati non vengono usati per addestrare modelli AI.",
+    "details": "DuckAssistBot recupera pagine in tempo reale per le risposte assistite dall'AI di DuckDuckGo, che citano le proprie fonti. DuckDuckGo dichiara che i dati non vengono usati per addestrare modelli AI e che l'opt-out non influisce sul posizionamento organico; una modifica al robots.txt richiede circa 72 ore per essere applicata. DuckDuckGo pubblica gli indirizzi IP del bot.",
+    "respectsNote": "DuckDuckGo: gli editori possono bloccare DuckAssistBot nel robots.txt; le modifiche hanno effetto dopo circa 72 ore.",
+    "note": "L'opt-out non influisce sul posizionamento organico in DuckDuckGo."
+  },
+  "bingbot": {
+    "summary": "Il crawler di ricerca di Microsoft. Non esiste un crawler separato per Copilot: le risposte di Copilot usano l'indice di Bing.",
+    "details": "Bingbot è il crawler di ricerca di Microsoft, e non esiste un crawler separato per Copilot: Copilot e le altre funzioni AI usano l'indice di Bing. Bloccare Bingbot rimuove quindi il tuo sito da Bing e dai motori di ricerca e assistenti che usano i risultati di Bing. Usa invece i controlli a livello di pagina — i meta tag robots `nocache` e `noarchive` limitano l'uso dei contenuti nelle risposte di Copilot — e, da febbraio 2027, il supporto di Bing per il gruppo robots.txt condiviso `__usage_ai-training`.",
+    "respectsNote": "Il crawler di ricerca standard di Bing rispetta robots.txt. L'uso dei contenuti per l'AI è controllato separatamente.",
+    "note": "Bloccare bingbot rimuove il sito da Bing e dai motori di ricerca che usano l'indice di Bing. I meta tag NOCACHE e NOARCHIVE limitano l'uso in Copilot; Bing ha annunciato il supporto per __usage_ai-training dal 1° febbraio 2027.",
+    "history": {
+      "0": "Bing annuncia le preferenze AI Training e AI Grounding, compreso il token robots.txt __usage_ai-training dal 1° febbraio 2027."
+    }
+  },
+  "ai2bot": {
+    "summary": "Il crawler dell'Allen Institute for AI; i contenuti vengono usati per addestrare modelli linguistici aperti come OLMo.",
+    "details": "AI2Bot è il crawler dell'Allen Institute for AI (Ai2), un istituto di ricerca senza scopo di lucro. I contenuti che raccoglie confluiscono in dataset di addestramento aperti per i modelli linguistici aperti di Ai2, come OLMo. La pagina di Ai2 dedicata al crawler afferma che i gestori dei siti possono usare lo User-Agent per filtrare o rifiutare il suo traffico; non è stata trovata alcuna dichiarazione esplicita su robots.txt.",
+    "respectsNote": "L'avviso di Ai2 sul crawler afferma che lo User-Agent può essere usato per filtrare o rifiutare il suo traffico; non è stata trovata alcuna dichiarazione esplicita su robots.txt."
+  },
+  "yandexadditional": {
+    "summary": "Il robot di Yandex per le risposte AI nella ricerca (YandexGPT); bloccarlo tiene i contenuti fuori da quelle risposte senza influire sulla normale ricerca di Yandex.",
+    "details": "YandexAdditional stabilisce se i tuoi contenuti compaiono nelle risposte AI della ricerca di Yandex, generate con YandexGPT. Bloccarlo — o bloccare il suo nome alternativo YandexAdditionalBot — tiene i contenuti fuori da quelle risposte senza influire sulla normale ricerca di Yandex; Yandex dichiara che la modifica richiede da due a quattordici giorni. Alcuni robot di Yandex ignorano `User-agent: *`, quindi nominalo esplicitamente.",
+    "respectsNote": "Yandex: bloccare YandexAdditional (o YandexAdditionalBot) tiene i contenuti fuori dalle risposte AI della ricerca di Yandex; servono 2–14 giorni.",
+    "note": "Alcuni robot di Yandex ignorano User-agent: *, quindi nominalo esplicitamente."
+  },
+  "youbot": {
+    "summary": "Il crawler di You.com; il suo indice alimenta la ricerca di You.com e l'API di ricerca usata dalle applicazioni AI.",
+    "details": "YouBot è il crawler di You.com, il cui indice di ricerca serve anche le applicazioni AI tramite un'API. You.com dichiara che YouBot rispetta pienamente robots.txt, comprese le regole specifiche per User-Agent e `Crawl-delay`, e tiene il file in cache per 30 minuti. Raccomanda di verificare le richieste tramite le loro firme crittografiche; è documentato anche il DNS inverso sotto search.you.com.",
+    "respectsNote": "You.com: YouBot rispetta pienamente robots.txt, comprese le regole specifiche per User-Agent e Crawl-delay; il robots.txt viene tenuto in cache per 30 minuti."
+  },
+  "exasearchbot": {
+    "summary": "Il crawler di Exa, un motore di ricerca pensato per le applicazioni AI; ogni richiesta è firmata con HTTP Message Signatures (Web Bot Auth).",
+    "details": "ExaSearchBot scansiona il web per Exa, un motore di ricerca progettato per applicazioni e agenti AI. Ogni richiesta è firmata con HTTP Message Signatures (Web Bot Auth), quindi le richieste autentiche possono essere verificate. Exa usa un gruppo `ExaSearchBot`, se presente; altrimenti le regole che dai ai principali motori di ricerca; altrimenti `*`. Le liste community lo chiamano spesso ExaBot, che non è il nome ufficiale.",
+    "respectsNote": "Exa: usa un gruppo ExaSearchBot se presente, altrimenti le regole per i principali motori di ricerca, altrimenti *.",
+    "note": "«ExaBot» nelle liste community non è il nome ufficiale."
+  },
+  "firecrawlagent": {
+    "summary": "Il nome robots.txt di Firecrawl, un'API di scraping che trasforma le pagine in dati per applicazioni AI per conto dei suoi clienti.",
+    "details": "FirecrawlAgent è il nome che Firecrawl, una diffusa API di scraping per applicazioni AI, cerca nel robots.txt quando i suoi clienti fanno scraping delle tue pagine. Firecrawl rispetta robots.txt per impostazione predefinita — prima un gruppo `FirecrawlAgent`, poi `*` — ma i clienti enterprise possono disattivare questo comportamento, e il nome non viene necessariamente inviato come User-Agent, quindi le regole server non possono farvi affidamento.",
+    "respectsNote": "Firecrawl: robots.txt viene rispettato per impostazione predefinita (gruppo FirecrawlAgent, poi *); i clienti Enterprise possono disattivarlo.",
+    "note": "FirecrawlAgent viene confrontato solo nel robots.txt; non è necessariamente presente nell'header User-Agent, quindi le regole server non possono farvi affidamento."
+  },
+  "cohere-ai": {
+    "summary": "Un nome presente in molte blocklist per l'AI. La pagina di Cohere dedicata ai crawler afferma che attualmente non scansiona il web per l'addestramento.",
+    "details": "cohere-ai compare in molte blocklist per l'AI, ma la documentazione di Cohere sui crawler afferma che l'azienda attualmente non usa bot per scansionare il web a fini di addestramento e promette di elencarvi qualsiasi crawler futuro. Il nome potrebbe derivare dalle librerie software di Cohere piuttosto che da un crawler. Una regola per questo nome è innocua; semplicemente non c'è nulla di documentato da bloccare.",
+    "note": "Bloccarlo è innocuo; Cohere promette di elencare qualsiasi crawler futuro nella sua pagina di documentazione."
+  },
+  "usage-ai-training": {
+    "summary": "Un gruppo robots.txt condiviso per fare opt-out dall'addestramento AI presso più aziende, proposto nell'ottobre 2026, invece di nominare il crawler di ogni azienda.",
+    "details": "`__usage_ai-training` è una proposta per esprimere un opt-out dall'addestramento una volta sola per tutte le aziende AI, invece di nominare ogni crawler. Si scrive come un normale gruppo robots.txt — `User-agent: __usage_ai-training` con `Disallow: /` ed eventuali eccezioni `Allow` — e un gruppo `User-agent: *` non vale come preferenza di questo tipo. È stato proposto in un Internet-Draft nell'ottobre 2026; Anthropic lo supporta, Microsoft ha annunciato il supporto dal 1° febbraio 2027 e Google per l'inizio del 2027. Mantieni i token dei fornitori come GPTBot e Google-Extended finché il supporto non sarà universale.",
+    "respectsNote": "Supporto annunciato: Anthropic lo rispetta già; Microsoft Bing dal 1° febbraio 2027; Google all'inizio del 2027 (come opt-out di Google-Extended quando Google-Extended non è nominato); OpenAI «nei prossimi mesi». Un gruppo User-agent: * non vale come preferenza sull'addestramento.",
+    "note": "Integra i token dei fornitori come GPTBot o Google-Extended; mantieni anche quelli finché il supporto non sarà universale. È un Internet-Draft, non uno standard.",
+    "history": {
+      "0": "Proposto nell'Internet-Draft draft-kelley-aipref-training-preference-signal-00 (basato sul vocabolario IETF AIPREF).",
+      "1": "Google e Microsoft annunciano il supporto a partire dal 2027; Anthropic lo supporta."
+    }
+  }
+}

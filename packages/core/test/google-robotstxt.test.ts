@@ -13,7 +13,8 @@ import {
   type RobotsLine,
 } from '../src/index.js';
 
-const allowed = (robotstxt: string | Uint8Array, ua: string, url: string) => isAllowed(robotstxt, ua, url);
+const allowed = (robotstxt: string | Uint8Array, ua: string, url: string) =>
+  isAllowed(robotstxt, ua, url);
 
 describe('google/robotstxt robots_test.cc', () => {
   it('GoogleOnly_SystemTest', () => {
@@ -71,13 +72,15 @@ describe('google/robotstxt robots_test.cc', () => {
 
   it('ID_LineSyntax_Groups_OtherRules', () => {
     {
-      const robotstxt = 'User-agent: BarBot\nSitemap: https://foo.bar/sitemap\nUser-agent: *\nDisallow: /\n';
+      const robotstxt =
+        'User-agent: BarBot\nSitemap: https://foo.bar/sitemap\nUser-agent: *\nDisallow: /\n';
       const url = 'http://foo.bar/';
       expect(allowed(robotstxt, 'FooBot', url)).toBe(false);
       expect(allowed(robotstxt, 'BarBot', url)).toBe(false);
     }
     {
-      const robotstxt = 'User-agent: FooBot\nInvalid-Unknown-Line: unknown\nUser-agent: *\nDisallow: /\n';
+      const robotstxt =
+        'User-agent: FooBot\nInvalid-Unknown-Line: unknown\nUser-agent: *\nDisallow: /\n';
       const url = 'http://foo.bar/';
       expect(allowed(robotstxt, 'FooBot', url)).toBe(false);
       expect(allowed(robotstxt, 'BarBot', url)).toBe(false);
@@ -152,7 +155,9 @@ describe('google/robotstxt robots_test.cc', () => {
 
   it('ID_LongestMatch', () => {
     const url = 'http://foo.bar/x/page.html';
-    expect(allowed('user-agent: FooBot\ndisallow: /x/page.html\nallow: /x/\n', 'FooBot', url)).toBe(false);
+    expect(allowed('user-agent: FooBot\ndisallow: /x/page.html\nallow: /x/\n', 'FooBot', url)).toBe(
+      false,
+    );
     {
       const r = 'user-agent: FooBot\nallow: /x/page.html\ndisallow: /x/\n';
       expect(allowed(r, 'FooBot', url)).toBe(true);
@@ -165,9 +170,9 @@ describe('google/robotstxt robots_test.cc', () => {
       expect(allowed(r, 'FooBot', 'http://foo.bar/x')).toBe(false);
       expect(allowed(r, 'FooBot', 'http://foo.bar/x/')).toBe(true);
     }
-    expect(allowed('user-agent: FooBot\ndisallow: /x/page.html\nallow: /x/page.html\n', 'FooBot', url)).toBe(
-      true,
-    );
+    expect(
+      allowed('user-agent: FooBot\ndisallow: /x/page.html\nallow: /x/page.html\n', 'FooBot', url),
+    ).toBe(true);
     {
       const r = 'user-agent: FooBot\nallow: /page\ndisallow: /*.html\n';
       expect(allowed(r, 'FooBot', 'http://foo.bar/page.html')).toBe(false);
@@ -187,8 +192,11 @@ describe('google/robotstxt robots_test.cc', () => {
 
   it('ID_Encoding', () => {
     {
-      const r = 'User-agent: FooBot\nDisallow: /\nAllow: /foo/bar?qux=taz&baz=http://foo.bar?tar&par\n';
-      expect(allowed(r, 'FooBot', 'http://foo.bar/foo/bar?qux=taz&baz=http://foo.bar?tar&par')).toBe(true);
+      const r =
+        'User-agent: FooBot\nDisallow: /\nAllow: /foo/bar?qux=taz&baz=http://foo.bar?tar&par\n';
+      expect(
+        allowed(r, 'FooBot', 'http://foo.bar/foo/bar?qux=taz&baz=http://foo.bar?tar&par'),
+      ).toBe(true);
     }
     {
       const r = 'User-agent: FooBot\nDisallow: /\nAllow: /foo/bar/ツ\n';
@@ -340,13 +348,23 @@ describe('google/robotstxt robots_test.cc', () => {
       expect(allowed(r, 'FooBot', 'http://foo.bar/fishheads/catfish.php?parameters')).toBe(true);
       expect(allowed(r, 'FooBot', 'http://foo.bar/Fish.PHP')).toBe(false);
     }
-    expect(allowed('user-agent: FooBot\nallow: /p\ndisallow: /\n', 'FooBot', 'http://example.com/page')).toBe(true);
     expect(
-      allowed('user-agent: FooBot\nallow: /folder\ndisallow: /folder\n', 'FooBot', 'http://example.com/folder/page'),
+      allowed('user-agent: FooBot\nallow: /p\ndisallow: /\n', 'FooBot', 'http://example.com/page'),
     ).toBe(true);
-    expect(allowed('user-agent: FooBot\nallow: /page\ndisallow: /*.htm\n', 'FooBot', 'http://example.com/page.htm')).toBe(
-      false,
-    );
+    expect(
+      allowed(
+        'user-agent: FooBot\nallow: /folder\ndisallow: /folder\n',
+        'FooBot',
+        'http://example.com/folder/page',
+      ),
+    ).toBe(true);
+    expect(
+      allowed(
+        'user-agent: FooBot\nallow: /page\ndisallow: /*.htm\n',
+        'FooBot',
+        'http://example.com/page.htm',
+      ),
+    ).toBe(false);
     {
       const r = 'user-agent: FooBot\nallow: /$\ndisallow: /\n';
       expect(allowed(r, 'FooBot', 'http://example.com/')).toBe(true);
@@ -357,7 +375,9 @@ describe('google/robotstxt robots_test.cc', () => {
   /** RobotsStatsReporter equivalent. */
   function stats(input: string | Uint8Array) {
     const { lines } = parseLines(input);
-    const directives = lines.filter((l): l is RobotsLine & { type: string } => l.kind === 'directive');
+    const directives = lines.filter(
+      (l): l is RobotsLine & { type: string } => l.kind === 'directive',
+    );
     let lastLineSeen = 0;
     for (const l of lines) if (l.kind === 'directive') lastLineSeen = l.line;
     return {

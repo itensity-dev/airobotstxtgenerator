@@ -1,0 +1,7 @@
+{
+  "pattern": {
+    "title": "Bloccare {name}: cos'è e come fare ({operator})",
+    "description": "{summary} User-Agent, token robots.txt, intervalli IP, verifica e regole pronte da copiare per bloccare o consentire {name}.",
+    "h1": "{name}"
+  }
+}

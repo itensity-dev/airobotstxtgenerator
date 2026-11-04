@@ -31,18 +31,58 @@ const targetFor: Record<string, ServerTarget> = {
   'server-cloudflare': 'cloudflare',
   'server-frameworks': 'express',
 };
-const targets: ServerTarget[] | undefined = id === 'server-frameworks' ? ['express', 'nextjs', 'django', 'php'] : id === 'server-rules' ? undefined : [targetFor[id]!];
-const verifiable = curatedBots.filter((b) => b.verification !== 'none' && (b.ipRanges || b.verifyHosts));
-const jsonLd = [webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale }), breadcrumbList(crumbs), ...(fm.faq?.length ? [faqPage(fm.faq)] : [])];
+const targets: ServerTarget[] | undefined =
+  id === 'server-frameworks'
+    ? ['express', 'nextjs', 'django', 'php']
+    : id === 'server-rules'
+      ? undefined
+      : [targetFor[id]!];
+const verifiable = curatedBots.filter(
+  (b) => b.verification !== 'none' && (b.ipRanges || b.verifyHosts),
+);
+const jsonLd = [
+  webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale }),
+  breadcrumbList(crumbs),
+  ...(fm.faq?.length ? [faqPage(fm.faq)] : []),
+];
 const dict = pick(locale, ['server.', 'common.', 'purpose.']);
-const subpages: PageId[] = ['server-nginx', 'server-apache', 'server-caddy', 'server-cloudflare', 'server-frameworks'];
+const subpages: PageId[] = [
+  'server-nginx',
+  'server-apache',
+  'server-caddy',
+  'server-cloudflare',
+  'server-frameworks',
+];
 ---
-<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor(id)} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent="server-rules">
+
+<Layout
+  locale={locale}
+  title={fm.title}
+  description={fm.description}
+  path={page.path}
+  alternates={alternatesFor(id)}
+  ogImage={ogPath(page)}
+  markdown={mdPath(page)}
+  jsonLd={jsonLd}
+  navCurrent="server-rules"
+>
   <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
   <p class="small row">
-    {subpages.map((s) => (s === id ? <strong>{getPage(locale, s)?.frontmatter.nav}</strong> : <a href={pathFor(locale, s)}>{getPage(locale, s)?.frontmatter.nav}</a>))}
+    {subpages.map((s) =>
+      s === id ? (
+        <strong>{getPage(locale, s)?.frontmatter.nav}</strong>
+      ) : (
+        <a href={pathFor(locale, s)}>{getPage(locale, s)?.frontmatter.nav}</a>
+      ),
+    )}
   </p>
-  <ServerRules client:visible dict={dict} bots={genBots()} initialTarget={targetFor[id]!} targets={targets} />
+  <ServerRules
+    client:visible
+    dict={dict}
+    bots={genBots()}
+    initialTarget={targetFor[id]!}
+    targets={targets}
+  />
   <PageSections locale={locale} fm={fm}>
     <Fragment set:html={body} />
     {id === 'server-rules' && (
@@ -50,13 +90,29 @@ const subpages: PageId[] = ['server-nginx', 'server-apache', 'server-caddy', 'se
         <h2 id="verify">{t(locale, 'server.ipTitle')}</h2>
         <div class="table-wrap">
           <table class="register">
-            <thead><tr><th scope="col">{t(locale, 'bots.colName')}</th><th scope="col">{t(locale, 'bots.colOperator')}</th><th scope="col">{t(locale, 'bots.colVerify')}</th></tr></thead>
+            <thead>
+              <tr>
+                <th scope="col">{t(locale, 'bots.colName')}</th>
+                <th scope="col">{t(locale, 'bots.colOperator')}</th>
+                <th scope="col">{t(locale, 'bots.colVerify')}</th>
+              </tr>
+            </thead>
             <tbody>
               {verifiable.map((b) => (
                 <tr>
-                  <th scope="row" class="mono">{b.page ? <a href={botPath(locale, b.id)}>{b.token}</a> : b.token}</th>
+                  <th scope="row" class="mono">
+                    {b.page ? <a href={botPath(locale, b.id)}>{b.token}</a> : b.token}
+                  </th>
                   <td>{getOperator(b.operator)?.name}</td>
-                  <td class="small">{b.ipRanges ? <a href={b.ipRanges} rel="noopener nofollow">{b.ipRanges.replace(/^https:\/\//, '')}</a> : null}{b.ipRanges && b.verifyHosts ? ' · ' : ''}{b.verifyHosts ? b.verifyHosts.map((h) => <code>{h}</code>) : null}</td>
+                  <td class="small">
+                    {b.ipRanges ? (
+                      <a href={b.ipRanges} rel="noopener nofollow">
+                        {b.ipRanges.replace(/^https:\/\//, '')}
+                      </a>
+                    ) : null}
+                    {b.ipRanges && b.verifyHosts ? ' · ' : ''}
+                    {b.verifyHosts ? b.verifyHosts.map((h) => <code>{h}</code>) : null}
+                  </td>
                 </tr>
               ))}
             </tbody>

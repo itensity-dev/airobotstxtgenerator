@@ -7,9 +7,29 @@ import { getBotTexts, getPage } from './content';
 import { allPages } from './pages';
 import { pageMarkdown } from './export-md';
 
-const TOOLS: PageId[] = ['home', 'tester', 'server-rules', 'llms-txt', 'content-signals', 'tdmrep', 'meta-tags'];
-const REFERENCE: PageId[] = ['bots', 'server-nginx', 'server-apache', 'server-caddy', 'server-cloudflare', 'server-frameworks'];
-const GUIDES: PageId[] = ['guide-training-search', 'guide-syntax', 'guide-eu-ai-act', 'guide-bad-bots'];
+const TOOLS: PageId[] = [
+  'home',
+  'tester',
+  'server-rules',
+  'llms-txt',
+  'content-signals',
+  'tdmrep',
+  'meta-tags',
+];
+const REFERENCE: PageId[] = [
+  'bots',
+  'server-nginx',
+  'server-apache',
+  'server-caddy',
+  'server-cloudflare',
+  'server-frameworks',
+];
+const GUIDES: PageId[] = [
+  'guide-training-search',
+  'guide-syntax',
+  'guide-eu-ai-act',
+  'guide-bad-bots',
+];
 const OPTIONAL: PageId[] = ['about', 'checker-bot', 'privacy', 'terms', 'licenses'];
 
 function link(locale: Locale, id: PageId): string | null {
@@ -40,7 +60,10 @@ export function llmsTxt(locale: Locale): string {
     '',
     ...pageBots()
       .filter((b) => locale === 'en' || botTexts[b.id])
-      .map((b) => `- [${b.name}](${SITE_URL}${markdownPath(botPath(locale, b.id))}): ${botTexts[b.id]?.summary ?? b.summary}`),
+      .map(
+        (b) =>
+          `- [${b.name}](${SITE_URL}${markdownPath(botPath(locale, b.id))}): ${botTexts[b.id]?.summary ?? b.summary}`,
+      ),
     '',
     `## ${t(locale, 'footer.guides')}`,
     '',
@@ -56,11 +79,28 @@ export function llmsTxt(locale: Locale): string {
 }
 
 export async function llmsFullTxt(locale: Locale): Promise<string> {
-  const order: (PageId | 'bot')[] = [...TOOLS, ...GUIDES, ...REFERENCE, 'bot', 'about', 'checker-bot'];
+  const order: (PageId | 'bot')[] = [
+    ...TOOLS,
+    ...GUIDES,
+    ...REFERENCE,
+    'bot',
+    'about',
+    'checker-bot',
+  ];
   const pages = allPages().filter((p) => p.locale === locale);
-  const parts: string[] = [`# ${BRAND} — full text`, '', `> ${getPage(locale, 'home')!.frontmatter.description}`, ''];
+  const parts: string[] = [
+    `# ${BRAND} — full text`,
+    '',
+    `> ${getPage(locale, 'home')!.frontmatter.description}`,
+    '',
+  ];
   for (const id of order) {
-    for (const p of pages.filter((x) => x.id === id)) parts.push((await pageMarkdown(p)).replace(/^# /gm, '## ').replace(/^## (?=\S)/, '# '), '---', '');
+    for (const p of pages.filter((x) => x.id === id))
+      parts.push(
+        (await pageMarkdown(p)).replace(/^# /gm, '## ').replace(/^## (?=\S)/, '# '),
+        '---',
+        '',
+      );
   }
   return parts.join('\n');
 }

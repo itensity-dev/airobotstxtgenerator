@@ -1,0 +1,15 @@
+# Edge Caddy for a VPS: automatic HTTPS (Let's Encrypt / ZeroSSL), redirects, proxy to the web container.
+# Used by the `edge` service in docker-compose.yml (profile "vps"). Set SITE_DOMAIN and ACME_EMAIL in .env.
+{
+	email {$ACME_EMAIL}
+}
+
+{$SITE_DOMAIN:airobotstxtgenerator.com} {
+	encode zstd gzip
+	reverse_proxy web:8080
+}
+
+# www and the second domain redirect permanently to the main domain, keeping the path.
+www.{$SITE_DOMAIN:airobotstxtgenerator.com}, {$ALT_DOMAIN:aicrawlerblocker.com}, www.{$ALT_DOMAIN:aicrawlerblocker.com} {
+	redir https://{$SITE_DOMAIN:airobotstxtgenerator.com}{uri} permanent
+}

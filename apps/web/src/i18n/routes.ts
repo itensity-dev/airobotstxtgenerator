@@ -34,7 +34,8 @@ interface RouteDef {
   slug: Record<Locale, string>;
 }
 
-const same = (s: string): Record<Locale, string> => Object.fromEntries(LOCALES.map((l) => [l, s])) as Record<Locale, string>;
+const same = (s: string): Record<Locale, string> =>
+  Object.fromEntries(LOCALES.map((l) => [l, s])) as Record<Locale, string>;
 
 export const ROUTES: Record<PageId, RouteDef> = {
   home: { kind: 'tool', slug: same('') },

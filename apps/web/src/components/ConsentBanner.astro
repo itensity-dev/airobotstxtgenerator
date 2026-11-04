@@ -1,0 +1,57 @@
+---
+/** Consent prompt for GA4 (only rendered when ANALYTICS_PROVIDER=ga4). Plausible needs no consent. */
+import { ANALYTICS_PROVIDER, GA4_ID } from '../config/site';
+const enabled = ANALYTICS_PROVIDER === 'ga4' && !!GA4_ID;
+---
+
+{enabled && (
+  <div class="consent" data-consent hidden role="dialog" aria-label="Analytics consent">
+    <p class="small">
+      We would like to measure visits with Google Analytics. No content you enter is sent. Allow?
+    </p>
+    <span class="row">
+      <button type="button" class="btn btn--small" data-consent-yes>
+        Allow
+      </button>
+      <button type="button" class="btn btn--small btn--ghost" data-consent-no>
+        Decline
+      </button>
+    </span>
+  </div>
+)}
+{enabled && <script>
+  const box = document.querySelector<HTMLElement>('[data-consent]');
+  const id = document.querySelector<HTMLMetaElement>('meta[name="ga4-id"]')?.content;
+  const load = () => {
+    if (!id) return;
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+    document.head.appendChild(s);
+    const w = window as unknown as { dataLayer: unknown[]; gtag: (...a: unknown[]) => void };
+    w.dataLayer = w.dataLayer || [];
+    w.gtag = function () {
+      // eslint-disable-next-line prefer-rest-params
+      w.dataLayer.push(arguments);
+    };
+    w.gtag('js', new Date());
+    w.gtag('config', id, { anonymize_ip: true });
+  };
+  let choice: string | null = null;
+  try {
+    choice = localStorage.getItem('analytics-consent');
+  } catch {}
+  if (choice === 'yes') load();
+  else if (choice !== 'no' && box) box.hidden = false;
+  box?.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const yes = t.closest('[data-consent-yes]');
+    const no = t.closest('[data-consent-no]');
+    if (!yes && !no) return;
+    try {
+      localStorage.setItem('analytics-consent', yes ? 'yes' : 'no');
+    } catch {}
+    box.hidden = true;
+    if (yes) load();
+  });
+</script>}

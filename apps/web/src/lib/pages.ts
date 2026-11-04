@@ -33,7 +33,8 @@ export function allPages(): SitePage[] {
     }
     if (pageExists(locale, 'bots')) {
       for (const b of pageBots()) {
-        if (pageExists(locale, 'bot', b.id)) out.push({ locale, id: 'bot', botId: b.id, path: botPath(locale, b.id) });
+        if (pageExists(locale, 'bot', b.id))
+          out.push({ locale, id: 'bot', botId: b.id, path: botPath(locale, b.id) });
       }
     }
   }

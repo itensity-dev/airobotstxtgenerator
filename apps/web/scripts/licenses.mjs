@@ -8,11 +8,22 @@ const out = fileURLToPath(new URL('../src/generated/licenses.json', import.meta.
 const root = fileURLToPath(new URL('../../..', import.meta.url));
 
 function list(args) {
-  const raw = execFileSync('pnpm', ['licenses', 'list', '--json', ...args], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+  const raw = execFileSync('pnpm', ['licenses', 'list', '--json', ...args], {
+    cwd: root,
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'ignore'],
+  });
   const data = JSON.parse(raw);
   const pkgs = [];
   for (const [license, entries] of Object.entries(data)) {
-    for (const e of entries) pkgs.push({ name: e.name, version: e.versions.join(', '), license, homepage: e.homepage ?? null, author: typeof e.author === 'string' ? e.author : null });
+    for (const e of entries)
+      pkgs.push({
+        name: e.name,
+        version: e.versions.join(', '),
+        license,
+        homepage: e.homepage ?? null,
+        author: typeof e.author === 'string' ? e.author : null,
+      });
   }
   return pkgs.sort((a, b) => a.name.localeCompare(b.name));
 }
@@ -27,8 +38,24 @@ try {
   const build = all.filter((p) => !shippedNames.has(p.name) && !p.name.startsWith('@fontsource'));
   const byLicense = {};
   for (const p of build) byLicense[p.license] = (byLicense[p.license] ?? 0) + 1;
-  writeFileSync(out, JSON.stringify({ generated: new Date().toISOString().slice(0, 10), webVersion: pkgJson.version, shipped, api, build, byLicense }, null, 1) + '\n');
-  console.log(`licenses: ${shipped.length} shipped, ${api.length} api, ${build.length} build-time packages`);
+  writeFileSync(
+    out,
+    JSON.stringify(
+      {
+        generated: new Date().toISOString().slice(0, 10),
+        webVersion: pkgJson.version,
+        shipped,
+        api,
+        build,
+        byLicense,
+      },
+      null,
+      1,
+    ) + '\n',
+  );
+  console.log(
+    `licenses: ${shipped.length} shipped, ${api.length} api, ${build.length} build-time packages`,
+  );
 } catch (e) {
   console.warn('licenses: pnpm licenses failed, keeping the existing file', e?.message ?? e);
 }

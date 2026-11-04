@@ -21,5 +21,8 @@ export function localeFromFile(path: string): Locale {
 
 /** Rewrite href="page:…" / href="bot:…" in rendered HTML. */
 export function resolveLinksInHtml(html: string, locale: Locale): string {
-  return html.replace(/href="((?:page|bot):[a-z0-9-]+(?:#[\w-]+)?)"/g, (_m, href: string) => `href="${resolveHref(href, locale)}"`);
+  return html.replace(
+    /href="((?:page|bot):[a-z0-9-]+(?:#[\w-]+)?)"/g,
+    (_m, href: string) => `href="${resolveHref(href, locale)}"`,
+  );
 }

@@ -22,43 +22,209 @@ const crumbs = crumbsFor(locale, 'licenses');
 type Pkg = { name: string; version: string; license: string; homepage: string | null };
 const table = (rows: Pkg[]) => rows;
 const fonts = [
-  { name: 'Old Standard TT', license: 'OFL-1.1', by: 'Alexey Kryukov', url: 'https://github.com/akryukov/oldstand' },
-  { name: 'Libre Franklin', license: 'OFL-1.1', by: 'Impallari Type', url: 'https://github.com/impallari/Libre-Franklin' },
+  {
+    name: 'Old Standard TT',
+    license: 'OFL-1.1',
+    by: 'Alexey Kryukov',
+    url: 'https://github.com/akryukov/oldstand',
+  },
+  {
+    name: 'Libre Franklin',
+    license: 'OFL-1.1',
+    by: 'Impallari Type',
+    url: 'https://github.com/impallari/Libre-Franklin',
+  },
   { name: 'IBM Plex Mono', license: 'OFL-1.1', by: 'IBM', url: 'https://github.com/IBM/plex' },
 ];
 const sources = [
-  { name: 'ai.robots.txt (community agent list)', license: 'MIT', url: 'https://github.com/ai-robots-txt/ai.robots.txt' },
-  { name: 'google/robotstxt — test cases ported to our test suite', license: 'Apache-2.0', url: 'https://github.com/google/robotstxt' },
-  { name: 'samber/the-great-gpt-firewall — robots.txt snapshots used as test fixtures', license: 'MIT', url: 'https://github.com/samber/the-great-gpt-firewall' },
+  {
+    name: 'ai.robots.txt (community agent list)',
+    license: 'MIT',
+    url: 'https://github.com/ai-robots-txt/ai.robots.txt',
+  },
+  {
+    name: 'google/robotstxt — test cases ported to our test suite',
+    license: 'Apache-2.0',
+    url: 'https://github.com/google/robotstxt',
+  },
+  {
+    name: 'samber/the-great-gpt-firewall — robots.txt snapshots used as test fixtures',
+    license: 'MIT',
+    url: 'https://github.com/samber/the-great-gpt-firewall',
+  },
 ];
 ---
-<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor('licenses')} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={[breadcrumbList(crumbs)]}>
+
+<Layout
+  locale={locale}
+  title={fm.title}
+  description={fm.description}
+  path={page.path}
+  alternates={alternatesFor('licenses')}
+  ogImage={ogPath(page)}
+  markdown={mdPath(page)}
+  jsonLd={[breadcrumbList(crumbs)]}
+>
   <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
-  <div class="prose"><Fragment set:html={body} /></div>
+  <div class="prose">
+    <Fragment set:html={body} />
+  </div>
   <h2 id="fonts">{t(locale, 'licenses.fonts')}</h2>
-  <div class="table-wrap"><table class="register"><thead><tr><th>{t(locale, 'licenses.colFont')}</th><th>{t(locale, 'licenses.colLicense')}</th><th>{t(locale, 'licenses.colAuthor')}</th></tr></thead><tbody>
-    {fonts.map((f) => <tr><th scope="row"><a href={f.url} rel="noopener">{f.name}</a></th><td>{f.license}</td><td>{f.by}</td></tr>)}
-  </tbody></table></div>
+  <div class="table-wrap">
+    <table class="register">
+      <thead>
+        <tr>
+          <th>{t(locale, 'licenses.colFont')}</th>
+          <th>{t(locale, 'licenses.colLicense')}</th>
+          <th>{t(locale, 'licenses.colAuthor')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {fonts.map((f) => (
+          <tr>
+            <th scope="row">
+              <a href={f.url} rel="noopener">
+                {f.name}
+              </a>
+            </th>
+            <td>{f.license}</td>
+            <td>{f.by}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   <h2 id="data">{t(locale, 'licenses.data')}</h2>
-  <div class="table-wrap"><table class="register"><thead><tr><th>{t(locale, 'licenses.colSource')}</th><th>{t(locale, 'licenses.colLicense')}</th></tr></thead><tbody>
-    {sources.map((s) => <tr><th scope="row"><a href={s.url} rel="noopener">{s.name}</a></th><td>{s.license}</td></tr>)}
-  </tbody></table></div>
+  <div class="table-wrap">
+    <table class="register">
+      <thead>
+        <tr>
+          <th>{t(locale, 'licenses.colSource')}</th>
+          <th>{t(locale, 'licenses.colLicense')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sources.map((s) => (
+          <tr>
+            <th scope="row">
+              <a href={s.url} rel="noopener">
+                {s.name}
+              </a>
+            </th>
+            <td>{s.license}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   <h2 id="browser">{t(locale, 'licenses.browser')}</h2>
-  <div class="table-wrap"><table class="register"><thead><tr><th>{t(locale, 'licenses.colPackage')}</th><th>{t(locale, 'licenses.colVersion')}</th><th>{t(locale, 'licenses.colLicense')}</th></tr></thead><tbody>
-    <tr><th scope="row">@airobots/core</th><td>1.0.0</td><td>MIT</td></tr>
-    {table(data.shipped as Pkg[]).map((p) => <tr><th scope="row">{p.homepage ? <a href={p.homepage} rel="noopener">{p.name}</a> : p.name}</th><td class="num">{p.version}</td><td>{p.license}</td></tr>)}
-  </tbody></table></div>
+  <div class="table-wrap">
+    <table class="register">
+      <thead>
+        <tr>
+          <th>{t(locale, 'licenses.colPackage')}</th>
+          <th>{t(locale, 'licenses.colVersion')}</th>
+          <th>{t(locale, 'licenses.colLicense')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">@airobots/core</th>
+          <td>1.0.0</td>
+          <td>MIT</td>
+        </tr>
+        {table(data.shipped as Pkg[]).map((p) => (
+          <tr>
+            <th scope="row">
+              {p.homepage ? (
+                <a href={p.homepage} rel="noopener">
+                  {p.name}
+                </a>
+              ) : (
+                p.name
+              )}
+            </th>
+            <td class="num">{p.version}</td>
+            <td>{p.license}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   <h2 id="server">{t(locale, 'licenses.server')}</h2>
-  <div class="table-wrap"><table class="register"><thead><tr><th>{t(locale, 'licenses.colPackage')}</th><th>{t(locale, 'licenses.colVersion')}</th><th>{t(locale, 'licenses.colLicense')}</th></tr></thead><tbody>
-    <tr><th scope="row"><a href="https://caddyserver.com" rel="noopener">Caddy</a></th><td>2</td><td>Apache-2.0</td></tr>
-    <tr><th scope="row"><a href="https://nodejs.org" rel="noopener">Node.js</a></th><td>LTS</td><td>MIT</td></tr>
-    {table(data.api as Pkg[]).map((p) => <tr><th scope="row">{p.homepage ? <a href={p.homepage} rel="noopener">{p.name}</a> : p.name}</th><td class="num">{p.version}</td><td>{p.license}</td></tr>)}
-  </tbody></table></div>
+  <div class="table-wrap">
+    <table class="register">
+      <thead>
+        <tr>
+          <th>{t(locale, 'licenses.colPackage')}</th>
+          <th>{t(locale, 'licenses.colVersion')}</th>
+          <th>{t(locale, 'licenses.colLicense')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">
+            <a href="https://caddyserver.com" rel="noopener">
+              Caddy
+            </a>
+          </th>
+          <td>2</td>
+          <td>Apache-2.0</td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <a href="https://nodejs.org" rel="noopener">
+              Node.js
+            </a>
+          </th>
+          <td>LTS</td>
+          <td>MIT</td>
+        </tr>
+        {table(data.api as Pkg[]).map((p) => (
+          <tr>
+            <th scope="row">
+              {p.homepage ? (
+                <a href={p.homepage} rel="noopener">
+                  {p.name}
+                </a>
+              ) : (
+                p.name
+              )}
+            </th>
+            <td class="num">{p.version}</td>
+            <td>{p.license}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
   <details>
-    <summary><strong>{t(locale, 'licenses.build', { count: (data.build as Pkg[]).length })}</strong> — {Object.entries(data.byLicense as Record<string, number>).map(([l, n]) => `${l}: ${n}`).join(' · ')}</summary>
-    <div class="table-wrap"><table class="register"><thead><tr><th>{t(locale, 'licenses.colPackage')}</th><th>{t(locale, 'licenses.colVersion')}</th><th>{t(locale, 'licenses.colLicense')}</th></tr></thead><tbody>
-      {(data.build as Pkg[]).map((p) => <tr><td class="mono small">{p.name}</td><td class="num small">{p.version}</td><td class="small">{p.license}</td></tr>)}
-    </tbody></table></div>
+    <summary>
+      <strong>{t(locale, 'licenses.build', { count: (data.build as Pkg[]).length })}</strong> —{' '}
+      {Object.entries(data.byLicense as Record<string, number>)
+        .map(([l, n]) => `${l}: ${n}`)
+        .join(' · ')}
+    </summary>
+    <div class="table-wrap">
+      <table class="register">
+        <thead>
+          <tr>
+            <th>{t(locale, 'licenses.colPackage')}</th>
+            <th>{t(locale, 'licenses.colVersion')}</th>
+            <th>{t(locale, 'licenses.colLicense')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {(data.build as Pkg[]).map((p) => (
+            <tr>
+              <td class="mono small">{p.name}</td>
+              <td class="num small">{p.version}</td>
+              <td class="small">{p.license}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </details>
   <p class="updated">{t(locale, 'common.updated', { date: formatDate(data.generated, locale) })}</p>
 </Layout>

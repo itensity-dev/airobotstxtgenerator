@@ -20,7 +20,10 @@ beforeAll(async () => {
     const route = url.searchParams.get('r') ?? req.headers.host?.split('.')[0] ?? '';
     switch (route) {
       case 'ok':
-        res.writeHead(200, { 'content-type': 'text/plain', 'x-ua': String(req.headers['user-agent']) });
+        res.writeHead(200, {
+          'content-type': 'text/plain',
+          'x-ua': String(req.headers['user-agent']),
+        });
         res.end(`User-agent: *\nDisallow: /private/\n# ua=${req.headers['user-agent']}\n`);
         return;
       case 'big':
@@ -81,7 +84,11 @@ afterAll(() => server.close());
 // Map *.robots-check-test.dev to the local server; "rebind" resolves to a private address.
 const resolver: Resolver = async (host) => {
   if (host.startsWith('rebind.')) return [{ address: '10.0.0.7', family: 4 }];
-  if (host.startsWith('mixed.')) return [{ address: '93.184.216.34', family: 4 }, { address: '127.0.0.1', family: 4 }];
+  if (host.startsWith('mixed.'))
+    return [
+      { address: '93.184.216.34', family: 4 },
+      { address: '127.0.0.1', family: 4 },
+    ];
   return [{ address: '127.0.0.1', family: 4 }];
 };
 const testPolicy = (a: string) => a === '127.0.0.1';
@@ -100,7 +107,11 @@ describe('fetcher', () => {
 
   it('refuses non-default ports by default', async () => {
     await expect(
-      fetchRobotsTxt(new URL(`${base()}/robots.txt?r=ok`), { userAgent: ua, resolve: resolver, isAllowedAddress: testPolicy }),
+      fetchRobotsTxt(new URL(`${base()}/robots.txt?r=ok`), {
+        userAgent: ua,
+        resolve: resolver,
+        isAllowedAddress: testPolicy,
+      }),
     ).rejects.toMatchObject({ code: 'port-not-allowed' });
   });
 
@@ -119,12 +130,16 @@ describe('fetcher', () => {
 
   it('times out on a hanging server', async () => {
     const t = Date.now();
-    await expect(run(`${base()}/robots.txt?r=hang`, { timeoutMs: 300 })).rejects.toMatchObject({ code: 'timeout' });
+    await expect(run(`${base()}/robots.txt?r=hang`, { timeoutMs: 300 })).rejects.toMatchObject({
+      code: 'timeout',
+    });
     expect(Date.now() - t).toBeLessThan(2000);
   });
 
   it('times out on a slow body', async () => {
-    await expect(run(`${base()}/robots.txt?r=slow`, { timeoutMs: 300 })).rejects.toBeInstanceOf(FetchError);
+    await expect(run(`${base()}/robots.txt?r=slow`, { timeoutMs: 300 })).rejects.toBeInstanceOf(
+      FetchError,
+    );
   });
 
   it('follows up to 5 redirects', async () => {
@@ -134,31 +149,43 @@ describe('fetcher', () => {
   });
 
   it('refuses a 6th redirect', async () => {
-    await expect(run(`${base()}/robots.txt?r=loop`)).rejects.toMatchObject({ code: 'too-many-redirects' });
+    await expect(run(`${base()}/robots.txt?r=loop`)).rejects.toMatchObject({
+      code: 'too-many-redirects',
+    });
   });
 
   it('refuses a redirect to localhost', async () => {
     const before = hits;
-    await expect(run(`${base()}/robots.txt?r=tolocal`)).rejects.toMatchObject({ code: 'host-not-allowed' });
+    await expect(run(`${base()}/robots.txt?r=tolocal`)).rejects.toMatchObject({
+      code: 'host-not-allowed',
+    });
     expect(hits - before).toBe(1);
   });
 
   it('refuses a redirect to the cloud metadata address', async () => {
-    await expect(run(`${base()}/robots.txt?r=tometa`)).rejects.toMatchObject({ code: 'ip-not-public' });
+    await expect(run(`${base()}/robots.txt?r=tometa`)).rejects.toMatchObject({
+      code: 'ip-not-public',
+    });
   });
 
   it('refuses a redirect to file://', async () => {
-    await expect(run(`${base()}/robots.txt?r=tofile`)).rejects.toMatchObject({ code: 'scheme-not-allowed' });
+    await expect(run(`${base()}/robots.txt?r=tofile`)).rejects.toMatchObject({
+      code: 'scheme-not-allowed',
+    });
   });
 
   it('refuses a redirect to a host that resolves to a private address (DNS rebinding)', async () => {
     const before = hits;
-    await expect(run(`${base()}/robots.txt?r=torebind`)).rejects.toMatchObject({ code: 'address-not-public' });
+    await expect(run(`${base()}/robots.txt?r=torebind`)).rejects.toMatchObject({
+      code: 'address-not-public',
+    });
     expect(hits - before).toBe(1);
   });
 
   it('refuses hosts with mixed public and private records', async () => {
-    await expect(run(`http://mixed.robots-check-test.dev:${port}/robots.txt?r=ok`)).rejects.toMatchObject({ code: 'address-not-public' });
+    await expect(
+      run(`http://mixed.robots-check-test.dev:${port}/robots.txt?r=ok`),
+    ).rejects.toMatchObject({ code: 'address-not-public' });
   });
 
   it('with the real address policy never connects to loopback', async () => {
@@ -173,7 +200,9 @@ describe('fetcher', () => {
     let calls = 0;
     const flipping: Resolver = async () => {
       calls++;
-      return calls === 1 ? [{ address: '127.0.0.1', family: 4 }] : [{ address: '10.0.0.1', family: 4 }];
+      return calls === 1
+        ? [{ address: '127.0.0.1', family: 4 }]
+        : [{ address: '10.0.0.1', family: 4 }];
     };
     const r = await run(`${base()}/robots.txt?r=ok`, { resolve: flipping });
     expect(r.status).toBe(200);

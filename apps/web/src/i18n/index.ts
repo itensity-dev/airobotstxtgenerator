@@ -22,7 +22,9 @@ for (const [path, mod] of Object.entries(modules)) {
 
 export function interpolate(template: string, params?: Record<string, string | number>): string {
   if (!params) return template;
-  return template.replace(/\{(\w+)\}/g, (m, k: string) => (params[k] !== undefined ? String(params[k]) : m));
+  return template.replace(/\{(\w+)\}/g, (m, k: string) =>
+    params[k] !== undefined ? String(params[k]) : m,
+  );
 }
 
 export function t(locale: Locale, key: string, params?: Record<string, string | number>): string {

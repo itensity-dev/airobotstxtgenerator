@@ -1,0 +1,82 @@
+# Local and production stack. `docker compose up` starts web (port 8080) and api.
+# On a VPS: `docker compose --profile vps up -d` adds the edge Caddy with automatic HTTPS on 80/443.
+name: airobotstxtgenerator
+
+services:
+  web:
+    image: ${WEB_IMAGE:-ghcr.io/itensity-dev/airobotstxtgenerator-web:latest}
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:26-alpine}
+        CADDY_IMAGE: ${CADDY_IMAGE:-caddy:2-alpine}
+        ALPINE_IMAGE: ${ALPINE_IMAGE:-alpine:3.22}
+        SITE_URL: ${SITE_URL:-https://airobotstxtgenerator.com}
+        ANALYTICS_PROVIDER: ${ANALYTICS_PROVIDER:-none}
+        PLAUSIBLE_DOMAIN: ${PLAUSIBLE_DOMAIN:-}
+        PLAUSIBLE_SRC: ${PLAUSIBLE_SRC:-}
+        GA4_ID: ${GA4_ID:-}
+        ADS_ENABLED: ${ADS_ENABLED:-false}
+        ADSENSE_CLIENT: ${ADSENSE_CLIENT:-}
+        GSC_VERIFICATION: ${GSC_VERIFICATION:-}
+        BING_VERIFICATION: ${BING_VERIFICATION:-}
+        INDEXNOW_KEY: ${INDEXNOW_KEY:-}
+        CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+        AUTHOR_NAME: ${AUTHOR_NAME:-}
+    environment:
+      API_UPSTREAM: api:8081
+    ports:
+      - '${WEB_PORT:-8080}:8080'
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /data
+      - /config
+    security_opt:
+      - no-new-privileges:true
+
+  api:
+    image: ${API_IMAGE:-ghcr.io/itensity-dev/airobotstxtgenerator-api:latest}
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:26-alpine}
+    environment:
+      API_RATE_LIMIT: ${API_RATE_LIMIT:-30/min}
+      API_USER_AGENT: ${API_USER_AGENT:-}
+      API_CACHE_TTL_SECONDS: ${API_CACHE_TTL_SECONDS:-600}
+      TRUST_PROXY: 'true'
+    expose:
+      - '8081'
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+
+  edge:
+    profiles: ['vps']
+    image: ${CADDY_IMAGE:-caddy:2-alpine}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-airobotstxtgenerator.com}
+      ALT_DOMAIN: ${ALT_DOMAIN:-aicrawlerblocker.com}
+      ACME_EMAIL: ${ACME_EMAIL:-}
+    volumes:
+      - ./deploy/Caddyfile.vps:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+    restart: unless-stopped
+
+volumes:
+  caddy_data:
+  caddy_config:

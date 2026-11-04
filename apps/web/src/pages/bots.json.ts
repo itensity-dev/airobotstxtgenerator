@@ -11,11 +11,14 @@ export const GET: APIRoute = () => {
       'AI crawlers, AI agents and robots.txt control tokens with operator, purpose, robots.txt compliance (operator statement), IP ranges, verification method, primary source and date of last check.',
     url: `${SITE_URL}/bots/`,
     updated: registry.updated,
-    license: 'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — attribution: airobotstxtgenerator.com. Community entries: MIT License, ai.robots.txt.',
+    license:
+      'CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) — attribution: airobotstxtgenerator.com. Community entries: MIT License, ai.robots.txt.',
     sources: registry.sources,
     operators: registry.operators,
     bots: curatedBots.map((b) => ({ ...b, url: b.page ? SITE_URL + botPath('en', b.id) : null })),
     community: communityList,
   };
-  return new Response(JSON.stringify(body, null, 1), { headers: { 'content-type': 'application/json; charset=utf-8' } });
+  return new Response(JSON.stringify(body, null, 1), {
+    headers: { 'content-type': 'application/json; charset=utf-8' },
+  });
 };

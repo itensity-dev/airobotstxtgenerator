@@ -18,7 +18,10 @@ import { matchUrl } from './matcher.js';
 import { parseRobots, type ParsedRobots } from './parser.js';
 import type { Bot } from './types.js';
 
-export interface MergeOptions extends Omit<GeneratorOptions, 'includeGlobalGroup' | 'globalRulesToRepeat' | 'globalDisallow' | 'sitemaps'> {
+export interface MergeOptions extends Omit<
+  GeneratorOptions,
+  'includeGlobalGroup' | 'globalRulesToRepeat' | 'globalDisallow' | 'sitemaps'
+> {
   /**
    * What to do with AI bots that already have their own group in the file:
    * `keep` leaves them as they are, `replace` removes their User-agent lines so the new
@@ -100,11 +103,15 @@ export function compareBehaviour(
 /** Agent used to represent "any crawler not named in the file". */
 export const UNNAMED_AGENT = 'SomeOtherCrawler';
 
-export function mergeIntoExisting(existing: string, bots: Bot[], options: MergeOptions): MergeResult {
+export function mergeIntoExisting(
+  existing: string,
+  bots: Bot[],
+  options: MergeOptions,
+): MergeResult {
   const strategy = options.existingBots ?? 'keep';
   const parsed = parseRobots(existing);
   const eol = /\r\n/.test(existing) ? '\r\n' : '\n';
-  const lines = existing.replace(/^﻿/, '').split(/\r\n|\r|\n/);
+  const lines = existing.replace(/^\uFEFF/, '').split(/\r\n|\r|\n/);
   if (lines.length > 0 && lines[lines.length - 1] === '') lines.pop();
 
   // Bots already named in the file.
@@ -184,16 +191,23 @@ export function mergeIntoExisting(existing: string, bots: Bot[], options: MergeO
     for (const u of g.userAgents) {
       if (u.isGlobal || u.token === '') continue;
       if (removeLines.has(u.line)) continue;
-      if (targetBots.some((b) => crawlerToken(b.token).toLowerCase() === u.token.toLowerCase())) continue;
+      if (targetBots.some((b) => crawlerToken(b.token).toLowerCase() === u.token.toLowerCase()))
+        continue;
       previousAgents.add(u.token);
     }
   }
   const agents = [...previousAgents, UNNAMED_AGENT, 'Googlebot', 'Bingbot'].filter(
-    (a, i, arr) => arr.findIndex((x) => x.toLowerCase() === a.toLowerCase()) === i &&
+    (a, i, arr) =>
+      arr.findIndex((x) => x.toLowerCase() === a.toLowerCase()) === i &&
       !targetBots.some((b) => crawlerToken(b.token).toLowerCase() === a.toLowerCase()),
   );
   const exceptionPaths = (options.exceptions ?? []).map((e) => e.path);
-  const equivalence = compareBehaviour(existing, text, agents, samplePathsFor(parsed, exceptionPaths));
+  const equivalence = compareBehaviour(
+    existing,
+    text,
+    agents,
+    samplePathsFor(parsed, exceptionPaths),
+  );
 
   const access = new Map<string, Access>();
   for (const b of targetBots) access.set(b.id, decideAccess(b, options.goal, options.custom));
@@ -204,7 +218,7 @@ export function mergeIntoExisting(existing: string, bots: Bot[], options: MergeO
   });
   return {
     text,
-    diff: diffLines(existing.replace(/^﻿/, ''), text),
+    diff: diffLines(existing.replace(/^\uFEFF/, ''), text),
     section,
     conflicts,
     equivalence,

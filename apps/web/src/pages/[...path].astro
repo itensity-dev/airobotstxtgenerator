@@ -19,9 +19,17 @@ export const getStaticPaths = (() =>
 
 const page = Astro.props as SitePage;
 const { id } = page;
-const serverIds = ['server-rules', 'server-nginx', 'server-apache', 'server-caddy', 'server-cloudflare', 'server-frameworks'];
+const serverIds = [
+  'server-rules',
+  'server-nginx',
+  'server-apache',
+  'server-caddy',
+  'server-cloudflare',
+  'server-frameworks',
+];
 const toolIds = ['llms-txt', 'content-signals', 'tdmrep', 'meta-tags'];
 ---
+
 {id === 'home' && <HomeView page={page} />}
 {id === 'tester' && <TesterView page={page} />}
 {id === 'bots' && <BotsView page={page} />}
@@ -29,5 +37,7 @@ const toolIds = ['llms-txt', 'content-signals', 'tdmrep', 'meta-tags'];
 {serverIds.includes(id) && <ServerRulesView page={page} />}
 {toolIds.includes(id) && <ToolView page={page} />}
 {id === 'guides' && <GuidesView page={page} />}
-{(id.startsWith('guide-') || ['about', 'checker-bot', 'privacy', 'terms'].includes(id)) && <ArticleView page={page} />}
+{(id.startsWith('guide-') || ['about', 'checker-bot', 'privacy', 'terms'].includes(id)) && (
+  <ArticleView page={page} />
+)}
 {id === 'licenses' && <LicensesView page={page} />}

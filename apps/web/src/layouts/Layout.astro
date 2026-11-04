@@ -7,6 +7,7 @@ import Masthead from '../components/Masthead.astro';
 import Footer from '../components/Footer.astro';
 import LangBanner from '../components/LangBanner.astro';
 import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 import { LOCALE_INFO, PUBLISHED_LOCALES, type Locale } from '../i18n/locales';
 import { t } from '../i18n';
 import { BRAND, SITE_URL, GSC_VERIFICATION, BING_VERIFICATION } from '../config/site';
@@ -26,14 +27,30 @@ export interface Props {
   navCurrent?: string;
   ogType?: 'website' | 'article';
 }
-const { locale, title, description, path, alternates = {}, ogImage, markdown, jsonLd = [], noindex = false, navCurrent, ogType = 'website' } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  path,
+  alternates = {},
+  ogImage,
+  markdown,
+  jsonLd = [],
+  noindex = false,
+  navCurrent,
+  ogType = 'website',
+} = Astro.props;
 const info = LOCALE_INFO[locale];
 const canonical = SITE_URL + path;
 const fullTitle = title.includes(BRAND) ? title : `${title} | ${BRAND}`;
-const alts = PUBLISHED_LOCALES.filter((l) => alternates[l]).map((l) => ({ l, href: SITE_URL + alternates[l] }));
+const alts = PUBLISHED_LOCALES.filter((l) => alternates[l]).map((l) => ({
+  l,
+  href: SITE_URL + alternates[l],
+}));
 const xDefault = alternates.en ? SITE_URL + alternates.en : null;
 const ogUrl = ogImage ? SITE_URL + ogImage : undefined;
 ---
+
 <!doctype html>
 <html lang={info.hreflang} dir="ltr">
   <head>
@@ -43,7 +60,10 @@ const ogUrl = ogImage ? SITE_URL + ogImage : undefined;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, follow" />}
-    {!noindex && alts.map(({ l, href }) => <link rel="alternate" hreflang={LOCALE_INFO[l].hreflang} href={href} />)}
+    {!noindex &&
+      alts.map(({ l, href }) => (
+        <link rel="alternate" hreflang={LOCALE_INFO[l].hreflang} href={href} />
+      ))}
     {!noindex && xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
     {markdown && <link rel="alternate" type="text/markdown" href={markdown} title="Markdown" />}
     <link rel="preload" href={franklinLatin} as="font" type="font/woff2" crossorigin />
@@ -68,16 +88,22 @@ const ogUrl = ogImage ? SITE_URL + ogImage : undefined;
     <script is:inline>
       (function () {
         try {
-          var t = localStorage.getItem('theme');
+          const t = localStorage.getItem('theme');
           if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
-        } catch (e) {}
+        } catch {
+          /* storage unavailable */
+        }
       })();
     </script>
-    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />)}
+    {jsonLd.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />
+    ))}
     <Analytics />
   </head>
   <body>
-    <a class="skip-link" href="#main">{t(locale, 'site.skip')}</a>
+    <a class="skip-link" href="#main">
+      {t(locale, 'site.skip')}
+    </a>
     <div class="wrap">
       <Masthead locale={locale} alternates={alternates} current={navCurrent} />
       <LangBanner locale={locale} alternates={alternates} />
@@ -86,5 +112,13 @@ const ogUrl = ogImage ? SITE_URL + ogImage : undefined;
       </main>
     </div>
     <Footer locale={locale} />
+    <ConsentBanner />
+    <script>
+      if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

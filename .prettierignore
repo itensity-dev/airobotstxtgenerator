@@ -10,3 +10,8 @@ docs/screenshots
 **/*.md
 **/*.mdx
 apps/web/src/content
+apps/web/src/i18n/ui
+apps/web/src/generated
+packages/core/src/data
+docs
+.github

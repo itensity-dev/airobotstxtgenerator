@@ -1,0 +1,22 @@
+---
+/**
+ * Reserved advertising slot: fixed size (no layout shift), never inside a tool's working area.
+ * Renders nothing unless ADS_ENABLED=true and ADSENSE_CLIENT is set.
+ */
+import { ADS_ENABLED, ADSENSE_CLIENT } from '../config/site';
+interface Props {
+  slot?: string;
+}
+const { slot = 'auto' } = Astro.props;
+---
+
+{ADS_ENABLED && ADSENSE_CLIENT && (
+  <aside class="ad-slot" aria-label="Advertisement">
+    <ins
+      class="adsbygoogle ad-slot__ins"
+      data-ad-client={ADSENSE_CLIENT}
+      data-ad-slot={slot}
+      data-ad-format="rectangle"
+    ></ins>
+  </aside>
+)}

@@ -16,14 +16,24 @@ const options = PUBLISHED_LOCALES.filter((l) => l !== locale && alternates[l]).m
   no: t(l, 'site.langBannerDismiss'),
 }));
 ---
+
 {options.length > 0 && (
   <div data-lang-banners hidden>
     {options.map((o) => (
-      <aside class="lang-banner" data-lang={LOCALE_INFO[o.l].hreflang.toLowerCase()} lang={LOCALE_INFO[o.l].hreflang} hidden>
+      <aside
+        class="lang-banner"
+        data-lang={LOCALE_INFO[o.l].hreflang.toLowerCase()}
+        lang={LOCALE_INFO[o.l].hreflang}
+        hidden
+      >
         <span>{o.text}</span>
         <span class="row">
-          <a class="btn btn--small" href={o.href} hreflang={LOCALE_INFO[o.l].hreflang}>{o.go}</a>
-          <button type="button" class="btn btn--ghost btn--small" data-dismiss>{o.no}</button>
+          <a class="btn btn--small" href={o.href} hreflang={LOCALE_INFO[o.l].hreflang}>
+            {o.go}
+          </a>
+          <button type="button" class="btn btn--ghost btn--small" data-dismiss>
+            {o.no}
+          </button>
         </span>
       </aside>
     ))}

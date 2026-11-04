@@ -42,7 +42,14 @@ describe('api app', () => {
 
   it('rejects unsafe input with 400', async () => {
     const a = app();
-    for (const url of ['localhost', 'http://127.0.0.1', 'http://169.254.169.254', 'file:///etc/passwd', '', 'http://[::1]']) {
+    for (const url of [
+      'localhost',
+      'http://127.0.0.1',
+      'http://169.254.169.254',
+      'file:///etc/passwd',
+      '',
+      'http://[::1]',
+    ]) {
       const res = await a.request(`/api/robots?url=${encodeURIComponent(url)}`);
       expect(res.status, url).toBe(400);
     }
@@ -51,15 +58,24 @@ describe('api app', () => {
   it('fetches, returns bytes as base64 and caches for the TTL', async () => {
     const a = app();
     const before = hits;
-    const r1 = await a.request(`/api/robots?url=${encodeURIComponent(`http://site.robots-check-test.dev:${port}/page`)}`);
+    const r1 = await a.request(
+      `/api/robots?url=${encodeURIComponent(`http://site.robots-check-test.dev:${port}/page`)}`,
+    );
     expect(r1.status).toBe(200);
-    const j = (await r1.json()) as { status: number; bodyBase64: string; cached: boolean; requestedUrl: string };
+    const j = (await r1.json()) as {
+      status: number;
+      bodyBase64: string;
+      cached: boolean;
+      requestedUrl: string;
+    };
     expect(j.status).toBe(200);
     expect(j.cached).toBe(false);
     expect(j.requestedUrl).toBe(`http://site.robots-check-test.dev:${port}/robots.txt`);
     const bytes = Buffer.from(j.bodyBase64, 'base64');
     expect([...bytes.subarray(0, 3)]).toEqual([0xef, 0xbb, 0xbf]);
-    const r2 = await a.request(`/api/robots?url=${encodeURIComponent(`http://site.robots-check-test.dev:${port}/`)}`);
+    const r2 = await a.request(
+      `/api/robots?url=${encodeURIComponent(`http://site.robots-check-test.dev:${port}/`)}`,
+    );
     expect(((await r2.json()) as { cached: boolean }).cached).toBe(true);
     expect(hits - before).toBe(1);
     expect(r2.headers.get('cache-control')).toBe('no-store');
@@ -68,9 +84,12 @@ describe('api app', () => {
   it('rate-limits per client IP', async () => {
     const a = app('2/min');
     const call = (ip: string, n: number) =>
-      a.request(`/api/robots?url=${encodeURIComponent(`http://r${n}.robots-check-test.dev:${port}/`)}`, {
-        headers: { 'x-forwarded-for': ip },
-      });
+      a.request(
+        `/api/robots?url=${encodeURIComponent(`http://r${n}.robots-check-test.dev:${port}/`)}`,
+        {
+          headers: { 'x-forwarded-for': ip },
+        },
+      );
     expect((await call('203.0.113.9', 1)).status).toBe(200);
     expect((await call('203.0.113.9', 2)).status).toBe(200);
     const third = await call('203.0.113.9', 3);

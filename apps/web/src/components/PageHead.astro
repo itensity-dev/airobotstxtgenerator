@@ -8,6 +8,7 @@ interface Props {
 }
 const { h1, lead, crumbs, kicker } = Astro.props;
 ---
+
 {crumbs && crumbs.length > 1 && <Breadcrumbs items={crumbs} />}
 <div class="page-head">
   {kicker && <p class="kicker">{kicker}</p>}

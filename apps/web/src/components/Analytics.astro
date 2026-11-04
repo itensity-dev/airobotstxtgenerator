@@ -1,5 +1,23 @@
 ---
-import { ANALYTICS_PROVIDER, PLAUSIBLE_DOMAIN, PLAUSIBLE_SRC } from '../config/site';
-// GA4 is loaded only after consent by the consent script (not shipped while ANALYTICS_PROVIDER is not ga4).
+import {
+  ADS_ENABLED,
+  ADSENSE_CLIENT,
+  ANALYTICS_PROVIDER,
+  GA4_ID,
+  PLAUSIBLE_DOMAIN,
+  PLAUSIBLE_SRC,
+} from '../config/site';
+// Plausible: cookie-free, loaded directly. GA4: loaded only after the visitor consents (see ConsentBanner).
 ---
-{ANALYTICS_PROVIDER === 'plausible' && <script defer data-domain={PLAUSIBLE_DOMAIN} src={PLAUSIBLE_SRC}></script>}
+
+{ANALYTICS_PROVIDER === 'plausible' && (
+  <script defer data-domain={PLAUSIBLE_DOMAIN} src={PLAUSIBLE_SRC}></script>
+)}
+{ANALYTICS_PROVIDER === 'ga4' && GA4_ID && <meta name="ga4-id" content={GA4_ID} />}
+{ADS_ENABLED && ADSENSE_CLIENT && (
+  <script
+    async
+    src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+    crossorigin="anonymous"
+  ></script>
+)}

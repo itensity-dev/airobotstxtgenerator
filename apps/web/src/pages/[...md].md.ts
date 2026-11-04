@@ -11,4 +11,6 @@ export const getStaticPaths = (() =>
   })) satisfies GetStaticPaths;
 
 export const GET: APIRoute = async ({ props }) =>
-  new Response(await pageMarkdown(props as SitePage), { headers: { 'content-type': 'text/markdown; charset=utf-8' } });
+  new Response(await pageMarkdown(props as SitePage), {
+    headers: { 'content-type': 'text/markdown; charset=utf-8' },
+  });

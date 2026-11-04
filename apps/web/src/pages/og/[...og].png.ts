@@ -8,7 +8,10 @@ import { formatDate } from '../../i18n/locales';
 import type { PageId } from '../../i18n/routes';
 
 export const getStaticPaths = (() =>
-  allPages().map((p) => ({ params: { og: `${p.locale}/${p.id === 'bot' ? `bot-${p.botId}` : p.id}` }, props: p }))) satisfies GetStaticPaths;
+  allPages().map((p) => ({
+    params: { og: `${p.locale}/${p.id === 'bot' ? `bot-${p.botId}` : p.id}` },
+    props: p,
+  }))) satisfies GetStaticPaths;
 
 export const GET: APIRoute = async ({ props }) => {
   const p = props as SitePage;
@@ -18,8 +21,17 @@ export const GET: APIRoute = async ({ props }) => {
   if (p.id === 'bot') {
     const b = getBot(p.botId!)!;
     const op = getOperator(b.operator)?.name ?? '';
-    const purpose = b.general ? t(locale, 'purpose.general') : b.kind === 'token' ? t(locale, 'purpose.token') : t(locale, `purpose.${b.purpose}`);
-    const colors = { yes: '#2d6a3d', no: '#b0251b', partial: '#8a5a00', unknown: '#4b463e' } as const;
+    const purpose = b.general
+      ? t(locale, 'purpose.general')
+      : b.kind === 'token'
+        ? t(locale, 'purpose.token')
+        : t(locale, `purpose.${b.purpose}`);
+    const colors = {
+      yes: '#2d6a3d',
+      no: '#b0251b',
+      partial: '#8a5a00',
+      unknown: '#4b463e',
+    } as const;
     input = {
       kicker: `${op} · ${purpose}`,
       title: b.name,
@@ -30,7 +42,13 @@ export const GET: APIRoute = async ({ props }) => {
     };
   } else {
     const fm = getPage(locale, p.id as PageId)!.frontmatter;
-    input = { kicker: fm.nav ?? '', title: fm.og ?? fm.h1, lead: fm.lead, footer: t(locale, 'common.updated', { date: formatDate(fm.updated, locale) }), japanese };
+    input = {
+      kicker: fm.nav ?? '',
+      title: fm.og ?? fm.h1,
+      lead: fm.lead,
+      footer: t(locale, 'common.updated', { date: formatDate(fm.updated, locale) }),
+      japanese,
+    };
   }
   const png = await renderOg(input);
   return new Response(new Uint8Array(png), { headers: { 'content-type': 'image/png' } });

@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { buildServerRules, buildVerificationSnippet, curatedBots, communityBots, getBot, SERVER_TARGETS, userAgentPatterns } from '../src/index.js';
+import {
+  buildServerRules,
+  buildVerificationSnippet,
+  curatedBots,
+  communityBots,
+  getBot,
+  SERVER_TARGETS,
+  userAgentPatterns,
+} from '../src/index.js';
 
 const training = curatedBots.filter((b) => b.purpose === 'training');
 
@@ -12,26 +20,35 @@ describe('server rules', () => {
   });
 
   it('collapses patterns covered by a shorter one', () => {
-    const { patterns } = userAgentPatterns([getBot('yandexadditional')!, getBot('yandexadditionalbot')!]);
+    const { patterns } = userAgentPatterns([
+      getBot('yandexadditional')!,
+      getBot('yandexadditionalbot')!,
+    ]);
     expect(patterns).toEqual(['YandexAdditional']);
   });
 
   for (const target of SERVER_TARGETS) {
     it(`${target}: contains every pattern and keeps robots.txt reachable`, () => {
       const r = buildServerRules(target, training);
-      for (const p of r.patterns) expect(r.code.toLowerCase()).toContain(p.toLowerCase().replace(/[.]/g, ''));
+      for (const p of r.patterns)
+        expect(r.code.toLowerCase()).toContain(p.toLowerCase().replace(/[.]/g, ''));
       expect(r.code).toContain('robots');
     });
   }
 
   it('builds regexes that match real User-Agent strings', () => {
-    const r = buildServerRules('express', curatedBots.filter((b) => !b.general));
+    const r = buildServerRules(
+      'express',
+      curatedBots.filter((b) => !b.general),
+    );
     const m = /const AI_BOTS = \/(.*)\/i;/.exec(r.code)!;
     const re = new RegExp(m[1]!, 'i');
     for (const b of curatedBots.filter((x) => !x.general && x.kind === 'crawler' && x.userAgent)) {
       expect(re.test(b.userAgent!), b.id).toBe(true);
     }
-    expect(re.test('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)')).toBe(false);
+    expect(
+      re.test('Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'),
+    ).toBe(false);
     expect(re.test('facebookexternalhit/1.1')).toBe(false);
   });
 
@@ -57,7 +74,9 @@ describe('server rules', () => {
   });
 
   it('builds verification snippets', () => {
-    expect(buildVerificationSnippet(getBot('gptbot')!).code).toContain('https://openai.com/gptbot.json');
+    expect(buildVerificationSnippet(getBot('gptbot')!).code).toContain(
+      'https://openai.com/gptbot.json',
+    );
     expect(buildVerificationSnippet(getBot('googlebot')!).code).toContain('googlebot.com');
     expect(buildVerificationSnippet(getBot('google-extended')!).code).toBe('');
   });

@@ -31,7 +31,11 @@ export function genBots(): GenBot[] {
   });
 }
 
-export function crumbsFor(locale: Locale, id: PageId | 'bot', extra?: { name: string; href: string }): { name: string; href: string }[] {
+export function crumbsFor(
+  locale: Locale,
+  id: PageId | 'bot',
+  extra?: { name: string; href: string },
+): { name: string; href: string }[] {
   const items = [{ name: t(locale, 'common.home'), href: pathFor(locale, 'home') }];
   const chain: PageId[] = [];
   const parents: Partial<Record<PageId, PageId>> = {

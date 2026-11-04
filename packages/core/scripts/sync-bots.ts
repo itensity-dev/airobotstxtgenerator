@@ -23,18 +23,27 @@ async function main() {
   const date = process.env.SYNC_DATE ?? new Date().toISOString().slice(0, 10);
   const source = process.env.AI_ROBOTS_TXT_FILE
     ? await readFile(process.env.AI_ROBOTS_TXT_FILE, 'utf8')
-    : await (await fetch(AI_ROBOTS_TXT_URL, { headers: { 'user-agent': 'airobotstxtgenerator-sync (+https://airobotstxtgenerator.com/about)' } })).text();
+    : await (
+        await fetch(AI_ROBOTS_TXT_URL, {
+          headers: {
+            'user-agent': 'airobotstxtgenerator-sync (+https://airobotstxtgenerator.com/about)',
+          },
+        })
+      ).text();
   let commit: string | undefined;
   try {
-    const r = await fetch('https://api.github.com/repos/ai-robots-txt/ai.robots.txt/commits?path=robots.json&per_page=1', {
-      headers: { accept: 'application/vnd.github+json' },
-    });
+    const r = await fetch(
+      'https://api.github.com/repos/ai-robots-txt/ai.robots.txt/commits?path=robots.json&per_page=1',
+      {
+        headers: { accept: 'application/vnd.github+json' },
+      },
+    );
     if (r.ok) commit = ((await r.json()) as { sha: string }[])[0]?.sha;
   } catch {
     /* commit id is optional */
   }
   const registry = JSON.parse(await readFile(registryPath, 'utf8')) as BotRegistry;
-  let before: CommunityBotList | null = null;
+  let before: CommunityBotList | null;
   try {
     before = JSON.parse(await readFile(communityPath, 'utf8')) as CommunityBotList;
   } catch {
@@ -56,7 +65,9 @@ async function main() {
   const changed = diff.added.length + diff.removed.length + diff.changed.length > 0;
   // Keep the previous date when nothing changed, so the file stays byte-identical.
   if (!changed && before) after.updated = before.updated;
-  if (!changed && before) for (const b of after.bots) b.lastVerified = before.bots.find((x) => x.name === b.name)?.lastVerified ?? b.lastVerified;
+  if (!changed && before)
+    for (const b of after.bots)
+      b.lastVerified = before.bots.find((x) => x.name === b.name)?.lastVerified ?? b.lastVerified;
   await writeFile(communityPath, JSON.stringify(after, null, 2) + '\n');
   const missingCurated = registry.bots
     .filter((b) => b.aiRobotsTxtKey && !upstream.has(b.aiRobotsTxtKey))
@@ -69,7 +80,9 @@ async function main() {
     `- Added: ${diff.added.length ? diff.added.map((n) => `\`${n}\``).join(', ') : 'none'}`,
     `- Removed: ${diff.removed.length ? diff.removed.map((n) => `\`${n}\``).join(', ') : 'none'}`,
     `- Changed: ${diff.changed.length ? diff.changed.map((n) => `\`${n}\``).join(', ') : 'none'}`,
-    missingCurated.length ? `- Curated bots no longer listed upstream (review): ${missingCurated.map((n) => `\`${n}\``).join(', ')}` : '',
+    missingCurated.length
+      ? `- Curated bots no longer listed upstream (review): ${missingCurated.map((n) => `\`${n}\``).join(', ')}`
+      : '',
     '',
     'Curated entries in `data/bots.json` are not changed automatically: new upstream agents with official documentation should be reviewed and promoted by hand.',
   ]

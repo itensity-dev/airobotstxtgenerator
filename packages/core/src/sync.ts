@@ -6,7 +6,8 @@
 import { extractUserAgent } from './parser.js';
 import type { Bot, BotPurpose, CommunityBotList, RobotsCompliance } from './types.js';
 
-export const AI_ROBOTS_TXT_URL = 'https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/main/robots.json';
+export const AI_ROBOTS_TXT_URL =
+  'https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/main/robots.json';
 
 export interface UpstreamEntry {
   operator: string;
@@ -23,7 +24,13 @@ export class UpstreamFormatError extends Error {
   }
 }
 
-const FIELDS: (keyof UpstreamEntry)[] = ['operator', 'respect', 'function', 'frequency', 'description'];
+const FIELDS: (keyof UpstreamEntry)[] = [
+  'operator',
+  'respect',
+  'function',
+  'frequency',
+  'description',
+];
 
 /** Validate the upstream JSON strictly; any structural change throws UpstreamFormatError. */
 export function parseUpstream(json: unknown): Map<string, UpstreamEntry> {
@@ -31,7 +38,8 @@ export function parseUpstream(json: unknown): Map<string, UpstreamEntry> {
     throw new UpstreamFormatError('expected a JSON object keyed by user-agent name');
   }
   const entries = Object.entries(json as Record<string, unknown>);
-  if (entries.length < 20) throw new UpstreamFormatError(`only ${entries.length} entries (expected at least 20)`);
+  if (entries.length < 20)
+    throw new UpstreamFormatError(`only ${entries.length} entries (expected at least 20)`);
   const out = new Map<string, UpstreamEntry>();
   for (const [name, value] of entries) {
     if (name.trim() === '') throw new UpstreamFormatError('empty user-agent name');
@@ -40,7 +48,8 @@ export function parseUpstream(json: unknown): Map<string, UpstreamEntry> {
     }
     const v = value as Record<string, unknown>;
     for (const f of FIELDS) {
-      if (typeof v[f] !== 'string') throw new UpstreamFormatError(`entry "${name}" has no string field "${f}"`);
+      if (typeof v[f] !== 'string')
+        throw new UpstreamFormatError(`entry "${name}" has no string field "${f}"`);
     }
     out.set(name, v as unknown as UpstreamEntry);
   }
@@ -87,14 +96,50 @@ export function slugify(name: string): string {
 const UNCLEAR = /^unclear|^no information|^unknown/i;
 
 /** Names that are ordinary words or would match unrelated User-Agents as substrings. */
-const GENERIC_NAMES = new Set(
-  ['code', 'codex', 'spider', 'dot', 'lcc', 'muse', 'cursor', 'trae', 'devin', 'instinct', 'yak', 'openai', 'operator', 'nbot', 'opencode', 'useai', 'spider'],
-);
+const GENERIC_NAMES = new Set([
+  'code',
+  'codex',
+  'spider',
+  'dot',
+  'lcc',
+  'muse',
+  'cursor',
+  'trae',
+  'devin',
+  'instinct',
+  'yak',
+  'openai',
+  'operator',
+  'nbot',
+  'opencode',
+  'useai',
+  'spider',
+]);
 /** Tokens of general crawlers that a community substring must never match. */
 const PROTECTED_AGENTS = [
-  'Googlebot', 'bingbot', 'Applebot', 'Amazonbot', 'Baiduspider', 'YandexBot', 'DuckDuckBot', 'Slurp',
-  'facebookexternalhit', 'Twitterbot', 'LinkedInBot', 'Pinterestbot', 'Slackbot', 'Discordbot', 'TelegramBot',
-  'WhatsApp', 'PetalBot', 'Kagibot', 'SeznamBot', 'Qwantbot', 'OAI-SearchBot', 'ChatGPT-User', 'GPTBot',
+  'Googlebot',
+  'bingbot',
+  'Applebot',
+  'Amazonbot',
+  'Baiduspider',
+  'YandexBot',
+  'DuckDuckBot',
+  'Slurp',
+  'facebookexternalhit',
+  'Twitterbot',
+  'LinkedInBot',
+  'Pinterestbot',
+  'Slackbot',
+  'Discordbot',
+  'TelegramBot',
+  'WhatsApp',
+  'PetalBot',
+  'Kagibot',
+  'SeznamBot',
+  'Qwantbot',
+  'OAI-SearchBot',
+  'ChatGPT-User',
+  'GPTBot',
 ];
 
 /** True if blocking this name by User-Agent substring could hit unrelated traffic. */
@@ -155,7 +200,8 @@ export function buildCommunityList(
     }
     if (!UNCLEAR.test(op.name)) bot.operatorName = op.name;
     if (op.url) bot.operatorUrl = op.url;
-    if (!UNCLEAR.test(respectNote) && bot.respectsRobots !== 'unknown') bot.respectsNote = respectNote;
+    if (!UNCLEAR.test(respectNote) && bot.respectsRobots !== 'unknown')
+      bot.respectsNote = respectNote;
     bots.push(bot);
   }
   const list: CommunityBotList = {
@@ -174,7 +220,10 @@ export interface CommunityDiff {
   changed: string[];
 }
 
-export function diffCommunity(before: CommunityBotList | null, after: CommunityBotList): CommunityDiff {
+export function diffCommunity(
+  before: CommunityBotList | null,
+  after: CommunityBotList,
+): CommunityDiff {
   const old = new Map((before?.bots ?? []).map((b) => [b.name, b] as const));
   const now = new Map(after.bots.map((b) => [b.name, b] as const));
   const added = [...now.keys()].filter((k) => !old.has(k));

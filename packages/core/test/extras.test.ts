@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { buildContentSignal, buildContentUsage, buildLlmsTxt, buildTdmRep, diffLines, lintRobotsTxt, validateLlmsTxt } from '../src/index.js';
+import {
+  buildContentSignal,
+  buildContentUsage,
+  buildLlmsTxt,
+  buildTdmRep,
+  diffLines,
+  lintRobotsTxt,
+  validateLlmsTxt,
+} from '../src/index.js';
 
 describe('extras', () => {
   it('builds llms.txt per llmstxt.org', () => {
@@ -7,8 +15,17 @@ describe('extras', () => {
       name: 'Example Docs',
       summary: 'Docs for Example.',
       sections: [
-        { title: 'Docs', links: [{ title: 'Quick start', url: 'https://e.com/start.md', description: 'Install and run' }] },
-        { title: 'Extra', optional: true, links: [{ title: 'Changelog', url: 'https://e.com/changelog.md' }] },
+        {
+          title: 'Docs',
+          links: [
+            { title: 'Quick start', url: 'https://e.com/start.md', description: 'Install and run' },
+          ],
+        },
+        {
+          title: 'Extra',
+          optional: true,
+          links: [{ title: 'Changelog', url: 'https://e.com/changelog.md' }],
+        },
       ],
     });
     expect(t).toBe(
@@ -20,7 +37,9 @@ describe('extras', () => {
 
   it('builds TDMRep files', () => {
     const r = buildTdmRep([{ reservation: 1, policy: 'https://e.com/policy.json' }]);
-    expect(JSON.parse(r.json)).toEqual([{ location: '/', 'tdm-reservation': 1, 'tdm-policy': 'https://e.com/policy.json' }]);
+    expect(JSON.parse(r.json)).toEqual([
+      { location: '/', 'tdm-reservation': 1, 'tdm-policy': 'https://e.com/policy.json' },
+    ]);
     expect(r.headers).toBe('tdm-reservation: 1\ntdm-policy: https://e.com/policy.json\n');
     expect(r.meta).toContain('<meta name="tdm-reservation" content="1">');
   });
@@ -31,7 +50,9 @@ describe('extras', () => {
     expect(lintRobotsTxt(cs).map((i) => i.code)).toContain('content-signal');
     const cu = buildContentUsage({ 'train-ai': 'n', search: 'y' }, '/');
     expect(cu.robotsLine).toBe('Content-Usage: train-ai=n, search=y');
-    expect(lintRobotsTxt(`User-agent: *\nAllow: /\n${cu.robotsLine}\n`).map((i) => i.code)).toContain('content-usage');
+    expect(
+      lintRobotsTxt(`User-agent: *\nAllow: /\n${cu.robotsLine}\n`).map((i) => i.code),
+    ).toContain('content-usage');
   });
 
   it('diffs lines', () => {

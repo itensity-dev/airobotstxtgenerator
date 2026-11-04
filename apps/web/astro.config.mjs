@@ -13,20 +13,41 @@ const connectSrc = ["'self'"];
 const imgSrc = ["'self'", 'data:'];
 const frameSrc = [];
 if (analytics === 'plausible') {
-  const src = new URL(process.env.PLAUSIBLE_SRC || 'https://plausible.io/js/script.tagged-events.js');
+  const src = new URL(
+    process.env.PLAUSIBLE_SRC || 'https://plausible.io/js/script.tagged-events.js',
+  );
   scriptResources.push(src.origin);
   connectSrc.push(src.origin);
 }
 if (analytics === 'ga4') {
   scriptResources.push('https://www.googletagmanager.com');
-  connectSrc.push('https://*.google-analytics.com', 'https://*.analytics.google.com', 'https://www.googletagmanager.com');
+  connectSrc.push(
+    'https://*.google-analytics.com',
+    'https://*.analytics.google.com',
+    'https://www.googletagmanager.com',
+  );
   imgSrc.push('https://*.google-analytics.com', 'https://www.googletagmanager.com');
 }
 if (adsEnabled) {
-  scriptResources.push('https://pagead2.googlesyndication.com', 'https://*.googlesyndication.com', 'https://fundingchoicesmessages.google.com', 'https://*.adtrafficquality.google');
-  connectSrc.push('https://*.googlesyndication.com', 'https://*.google.com', 'https://*.adtrafficquality.google', 'https://fundingchoicesmessages.google.com');
+  scriptResources.push(
+    'https://pagead2.googlesyndication.com',
+    'https://*.googlesyndication.com',
+    'https://fundingchoicesmessages.google.com',
+    'https://*.adtrafficquality.google',
+  );
+  connectSrc.push(
+    'https://*.googlesyndication.com',
+    'https://*.google.com',
+    'https://*.adtrafficquality.google',
+    'https://fundingchoicesmessages.google.com',
+  );
   imgSrc.push('https:');
-  frameSrc.push('https://*.googlesyndication.com', 'https://*.doubleclick.net', 'https://*.google.com', 'https://fundingchoicesmessages.google.com');
+  frameSrc.push(
+    'https://*.googlesyndication.com',
+    'https://*.doubleclick.net',
+    'https://*.google.com',
+    'https://fundingchoicesmessages.google.com',
+  );
 }
 
 export default defineConfig({
@@ -65,7 +86,9 @@ export default defineConfig({
     resolve: {
       alias: {
         // Use the TypeScript sources of the core package directly (no separate build step needed).
-        '@airobots/core': fileURLToPath(new URL('../../packages/core/src/index.ts', import.meta.url)),
+        '@airobots/core': fileURLToPath(
+          new URL('../../packages/core/src/index.ts', import.meta.url),
+        ),
       },
     },
     build: {

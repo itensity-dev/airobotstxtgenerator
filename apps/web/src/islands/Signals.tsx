@@ -17,7 +17,7 @@ function Out({ title, text, dict }: { title: string; text: string; dict: Dict })
         <h3 class="notice__title">{title}</h3>
         <CopyButton text={text} dict={dict} />
       </div>
-      <pre class="notice__pre">
+      <pre class="notice__pre" tabIndex={0}>
         <code>{text}</code>
       </pre>
     </div>
@@ -49,7 +49,10 @@ export default function Signals(props: Props) {
       } as Parameters<typeof buildContentUsage>[0]),
     [search, aiInput, aiTrain],
   );
-  const shared = aiTrain === 'no' && usageToken ? '\n# Shared AI-training opt-out (proposal, 2026)\nUser-agent: __usage_ai-training\nDisallow: /\n' : '';
+  const shared =
+    aiTrain === 'no' && usageToken
+      ? '\n# Shared AI-training opt-out (proposal, 2026)\nUser-agent: __usage_ai-training\nDisallow: /\n'
+      : '';
   const tdm = useMemo(() => buildTdmRep([{ reservation, policy }]), [reservation, policy]);
 
   const sel = (label: string, v: YN, set: (x: YN) => void) => (
@@ -75,14 +78,24 @@ export default function Signals(props: Props) {
             </legend>
             <div class="choices choices--wide">
               <label class="choice">
-                <input type="radio" name="tdm-r" checked={reservation === 1} onChange={() => setReservation(1)} />
+                <input
+                  type="radio"
+                  name="tdm-r"
+                  checked={reservation === 1}
+                  onChange={() => setReservation(1)}
+                />
                 <span>
                   <strong>1 — {t('tdm.reserved')}</strong>
                   <span class="choice__hint">{t('tdm.reservedHint')}</span>
                 </span>
               </label>
               <label class="choice">
-                <input type="radio" name="tdm-r" checked={reservation === 0} onChange={() => setReservation(0)} />
+                <input
+                  type="radio"
+                  name="tdm-r"
+                  checked={reservation === 0}
+                  onChange={() => setReservation(0)}
+                />
                 <span>
                   <strong>0 — {t('tdm.notReserved')}</strong>
                   <span class="choice__hint">{t('tdm.notReservedHint')}</span>
@@ -92,7 +105,13 @@ export default function Signals(props: Props) {
           </fieldset>
           <div class="field">
             <label for="tdm-policy">tdm-policy</label>
-            <input id="tdm-policy" type="url" placeholder="https://example.com/tdm-policy.json" value={policy} onInput={(e) => setPolicy(e.currentTarget.value)} />
+            <input
+              id="tdm-policy"
+              type="url"
+              placeholder="https://example.com/tdm-policy.json"
+              value={policy}
+              onInput={(e) => setPolicy(e.currentTarget.value)}
+            />
             <span class="field__hint">{t('tdm.policyHint')}</span>
           </div>
         </form>
@@ -121,13 +140,22 @@ export default function Signals(props: Props) {
           </div>
           <p class="field__hint">{t('signals.hint')}</p>
           <label class="row small">
-            <input type="checkbox" checked={usageToken} onChange={(e) => setUsageToken(e.currentTarget.checked)} /> {t('signals.usageToken')}
+            <input
+              type="checkbox"
+              checked={usageToken}
+              onChange={(e) => setUsageToken(e.currentTarget.checked)}
+            />{' '}
+            {t('signals.usageToken')}
           </label>
         </fieldset>
       </form>
       <section class="panel">
         <Out title={t('signals.cloudflare')} text={signals + shared} dict={props.dict} />
-        <Out title={t('signals.aipref')} text={`User-agent: *\nAllow: /\n${usage.robotsLine}\n`} dict={props.dict} />
+        <Out
+          title={t('signals.aipref')}
+          text={`User-agent: *\nAllow: /\n${usage.robotsLine}\n`}
+          dict={props.dict}
+        />
         <Out title={t('signals.header')} text={usage.header + '\n'} dict={props.dict} />
       </section>
     </div>

@@ -29,7 +29,9 @@ describe('generator presets', () => {
         });
         expect(res.ok, JSON.stringify(res.checks.filter((c) => !c.ok).slice(0, 5))).toBe(true);
         expect(res.checks.length).toBeGreaterThan(0);
-        const errors = lintRobotsTxt(res.text, { bots: curatedBots }).filter((i) => i.severity === 'error');
+        const errors = lintRobotsTxt(res.text, { bots: curatedBots }).filter(
+          (i) => i.severity === 'error',
+        );
         expect(errors).toEqual([]);
       });
     }
@@ -37,10 +39,25 @@ describe('generator presets', () => {
 
   it('block-training blocks GPTBot, ClaudeBot, Google-Extended and keeps search bots', () => {
     const { text, blocked, allowed } = generateRobotsTxt(curatedBots, { goal: 'block-training' });
-    for (const ua of ['GPTBot', 'ClaudeBot', 'Google-Extended', 'Applebot-Extended', 'CCBot', 'meta-externalagent']) {
+    for (const ua of [
+      'GPTBot',
+      'ClaudeBot',
+      'Google-Extended',
+      'Applebot-Extended',
+      'CCBot',
+      'meta-externalagent',
+    ]) {
       expect(isAllowed(text, ua, '/any/page'), ua).toBe(false);
     }
-    for (const ua of ['OAI-SearchBot', 'Claude-SearchBot', 'PerplexityBot', 'ChatGPT-User', 'Googlebot', 'Applebot', 'Bingbot']) {
+    for (const ua of [
+      'OAI-SearchBot',
+      'Claude-SearchBot',
+      'PerplexityBot',
+      'ChatGPT-User',
+      'Googlebot',
+      'Applebot',
+      'Bingbot',
+    ]) {
       expect(isAllowed(text, ua, '/any/page'), ua).toBe(true);
     }
     expect(blocked).toContain('gptbot');
@@ -104,11 +121,16 @@ describe('generator presets', () => {
       goal: 'block-training',
       contentSignals: { search: 'yes', 'ai-input': 'yes', 'ai-train': 'no' },
     });
-    expect(res.text).toContain('User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n');
+    expect(res.text).toContain(
+      'User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n',
+    );
   });
 
   it('custom choice blocks exactly the selected bots', () => {
-    const res = generateRobotsTxt(curatedBots, { goal: 'custom', custom: { bytespider: 'block', perplexitybot: 'block' } });
+    const res = generateRobotsTxt(curatedBots, {
+      goal: 'custom',
+      custom: { bytespider: 'block', perplexitybot: 'block' },
+    });
     expect(res.blocked.sort()).toEqual(['bytespider', 'perplexitybot']);
     expect(isAllowed(res.text, 'GPTBot', '/')).toBe(true);
   });
@@ -120,7 +142,10 @@ describe('generator presets', () => {
   });
 
   it('every line has an explanation key', () => {
-    const res = generateRobotsTxt(curatedBots, { goal: 'block-training', sitemaps: ['https://e.com/s.xml'] });
+    const res = generateRobotsTxt(curatedBots, {
+      goal: 'block-training',
+      sitemaps: ['https://e.com/s.xml'],
+    });
     expect(res.lines.every((l) => typeof l.note === 'string')).toBe(true);
     expect(res.lines.map((l) => l.text).join('\n') + '\n').toBe(res.text);
   });

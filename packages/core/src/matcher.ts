@@ -9,7 +9,12 @@
  * - `*` matches any sequence of characters, `$` at the end anchors the pattern;
  * - an Allow for `.../index.htm(l)` also allows the directory itself.
  */
-import { extractUserAgent, isGlobalUserAgent, parseLines, type ParsedRobotsFile } from './parser.js';
+import {
+  extractUserAgent,
+  isGlobalUserAgent,
+  parseLines,
+  type ParsedRobotsFile,
+} from './parser.js';
 
 /** Google's GetPathParamsQuery: path, params and query of a URL, without the fragment. */
 export function getPathParamsQuery(url: string): string {
@@ -96,7 +101,8 @@ export function matchUrl(
   userAgent: string,
   url: string,
 ): MatchResult {
-  const file = typeof robots === 'string' || robots instanceof Uint8Array ? parseLines(robots) : robots;
+  const file =
+    typeof robots === 'string' || robots instanceof Uint8Array ? parseLines(robots) : robots;
   const path = getPathParamsQuery(url);
   const agentLower = userAgent.toLowerCase();
 
@@ -203,7 +209,11 @@ export function matchUrl(
 }
 
 /** Convenience wrapper with the same signature as Google's OneAgentAllowedByRobots. */
-export function isAllowed(robots: string | Uint8Array | ParsedRobotsFile, userAgent: string, url: string): boolean {
+export function isAllowed(
+  robots: string | Uint8Array | ParsedRobotsFile,
+  userAgent: string,
+  url: string,
+): boolean {
   return matchUrl(robots, userAgent, url).allowed;
 }
 
@@ -238,9 +248,14 @@ export interface AgentSummary {
 }
 
 /** Overview of what a robots.txt means for one agent (used for the tester's crawler table). */
-export function summarizeAgent(parsed: import('./parser.js').ParsedRobots, agent: string): AgentSummary {
+export function summarizeAgent(
+  parsed: import('./parser.js').ParsedRobots,
+  agent: string,
+): AgentSummary {
   const a = agent.toLowerCase();
-  let groups = parsed.groups.filter((g) => g.userAgents.some((u) => !u.isGlobal && u.token.toLowerCase() === a));
+  let groups = parsed.groups.filter((g) =>
+    g.userAgents.some((u) => !u.isGlobal && u.token.toLowerCase() === a),
+  );
   let via: AgentSummary['via'] = 'specific';
   if (groups.length === 0) {
     groups = parsed.groups.filter((g) => g.userAgents.some((u) => u.isGlobal));
@@ -251,9 +266,30 @@ export function summarizeAgent(parsed: import('./parser.js').ParsedRobots, agent
   const allowCount = rules.filter((r) => r.type === 'allow' && r.pattern !== '/').length;
   const rootAllowed = matchUrl(parsed, agent, '/').allowed;
   let verdict: AgentSummary['verdict'];
-  if (rootAllowed) verdict = disallowCount > 0 && rules.some((r) => r.type === 'disallow' && !matchUrl(parsed, agent, samplePathOf(r.pattern)).allowed) ? 'partial' : 'allowed';
-  else verdict = allowCount > 0 && rules.some((r) => r.type === 'allow' && matchUrl(parsed, agent, samplePathOf(r.pattern)).allowed) ? 'partial' : 'blocked';
-  return { via, groupLines: groups.map((g) => g.startLine), rootAllowed, verdict, disallowCount, allowCount };
+  if (rootAllowed)
+    verdict =
+      disallowCount > 0 &&
+      rules.some(
+        (r) => r.type === 'disallow' && !matchUrl(parsed, agent, samplePathOf(r.pattern)).allowed,
+      )
+        ? 'partial'
+        : 'allowed';
+  else
+    verdict =
+      allowCount > 0 &&
+      rules.some(
+        (r) => r.type === 'allow' && matchUrl(parsed, agent, samplePathOf(r.pattern)).allowed,
+      )
+        ? 'partial'
+        : 'blocked';
+  return {
+    via,
+    groupLines: groups.map((g) => g.startLine),
+    rootAllowed,
+    verdict,
+    disallowCount,
+    allowCount,
+  };
 }
 
 function samplePathOf(pattern: string): string {

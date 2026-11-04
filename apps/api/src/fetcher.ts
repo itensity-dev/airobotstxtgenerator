@@ -80,11 +80,17 @@ function makeLookup(
   return (hostname, options, callback) => {
     resolve(hostname)
       .then((addresses) => {
-        if (addresses.length === 0) throw new FetchError('dns-failed', `No addresses for ${hostname}`);
+        if (addresses.length === 0)
+          throw new FetchError('dns-failed', `No addresses for ${hostname}`);
         // Refuse the host if ANY address is not public: an attacker could mix records.
         const bad = addresses.find((a) => !allowed(a.address));
-        if (bad) throw new FetchError('address-not-public', `${hostname} resolves to a non-public address`);
-        const family = typeof options === 'object' && options && 'family' in options ? options.family : 0;
+        if (bad)
+          throw new FetchError(
+            'address-not-public',
+            `${hostname} resolves to a non-public address`,
+          );
+        const family =
+          typeof options === 'object' && options && 'family' in options ? options.family : 0;
         const pick = addresses.find((a) => !family || a.family === family) ?? addresses[0]!;
         onAddress(pick.address);
         if (typeof options === 'object' && options && 'all' in options && options.all) {
@@ -94,7 +100,10 @@ function makeLookup(
         }
       })
       .catch((e: unknown) => {
-        const err = e instanceof FetchError ? e : new FetchError('dns-failed', `DNS lookup failed for ${hostname}`);
+        const err =
+          e instanceof FetchError
+            ? e
+            : new FetchError('dns-failed', `DNS lookup failed for ${hostname}`);
         callback(err as NodeJS.ErrnoException, '', 4);
       });
   };
@@ -109,7 +118,14 @@ interface HopResult {
   address: string;
 }
 
-function requestOnce(url: URL, opts: Required<Omit<FetchOptions, 'resolve' | 'isAllowedAddress' | 'allowedPorts'>> & { resolve: Resolver; allowed: (a: string) => boolean; signal: AbortSignal }): Promise<HopResult> {
+function requestOnce(
+  url: URL,
+  opts: Required<Omit<FetchOptions, 'resolve' | 'isAllowedAddress' | 'allowedPorts'>> & {
+    resolve: Resolver;
+    allowed: (a: string) => boolean;
+    signal: AbortSignal;
+  },
+): Promise<HopResult> {
   return new Promise((resolvePromise, reject) => {
     let address = '';
     const lookup = makeLookup(opts.resolve, opts.allowed, (a) => (address = a));
@@ -171,7 +187,10 @@ function requestOnce(url: URL, opts: Required<Omit<FetchOptions, 'resolve' | 'is
   });
 }
 
-export async function fetchRobotsTxt(target: string | URL, options: FetchOptions): Promise<FetchResult> {
+export async function fetchRobotsTxt(
+  target: string | URL,
+  options: FetchOptions,
+): Promise<FetchResult> {
   const started = Date.now();
   const maxRedirects = options.maxRedirects ?? MAX_REDIRECTS;
   const controller = new AbortController();
@@ -207,10 +226,19 @@ export async function fetchRobotsTxt(target: string | URL, options: FetchOptions
         if (/CERT|SSL|TLS|ERR_TLS|DEPTH_ZERO|SELF_SIGNED|UNABLE_TO_VERIFY/i.test(code)) {
           throw new FetchError('tls-failed', `TLS error (${code})`, redirects);
         }
-        throw new FetchError('connection-failed', `Connection failed${code ? ` (${code})` : ''}`, redirects);
+        throw new FetchError(
+          'connection-failed',
+          `Connection failed${code ? ` (${code})` : ''}`,
+          redirects,
+        );
       }
       if (res.status >= 300 && res.status < 400 && res.headers.location) {
-        if (hop >= maxRedirects) throw new FetchError('too-many-redirects', `More than ${maxRedirects} redirects`, redirects);
+        if (hop >= maxRedirects)
+          throw new FetchError(
+            'too-many-redirects',
+            `More than ${maxRedirects} redirects`,
+            redirects,
+          );
         let next: URL;
         try {
           next = new URL(res.headers.location, url);
@@ -219,7 +247,12 @@ export async function fetchRobotsTxt(target: string | URL, options: FetchOptions
         }
         const check = checkTargetUrl(next, ports);
         redirects.push({ from: url.href, to: next.href, status: res.status });
-        if (!check.ok || !check.url) throw new FetchError(check.reason ?? 'redirect-invalid', 'Redirect target not allowed', redirects);
+        if (!check.ok || !check.url)
+          throw new FetchError(
+            check.reason ?? 'redirect-invalid',
+            'Redirect target not allowed',
+            redirects,
+          );
         url = check.url;
         continue;
       }
@@ -227,7 +260,8 @@ export async function fetchRobotsTxt(target: string | URL, options: FetchOptions
         requestedUrl,
         finalUrl: url.href,
         status: res.status,
-        contentType: typeof res.headers['content-type'] === 'string' ? res.headers['content-type'] : null,
+        contentType:
+          typeof res.headers['content-type'] === 'string' ? res.headers['content-type'] : null,
         redirects,
         body: res.body,
         bytesRead: res.bytesRead,

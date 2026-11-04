@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { curatedBots, GOOGLE_MAX_BYTES, isAllowed, lintRobotsTxt, parseLines, suggestBot } from '../src/index.js';
+import {
+  curatedBots,
+  GOOGLE_MAX_BYTES,
+  isAllowed,
+  lintRobotsTxt,
+  parseLines,
+  suggestBot,
+} from '../src/index.js';
 
-const codes = (t: string | Uint8Array) => lintRobotsTxt(t, { bots: curatedBots }).map((i) => i.code);
+const codes = (t: string | Uint8Array) =>
+  lintRobotsTxt(t, { bots: curatedBots }).map((i) => i.code);
 
 describe('linter', () => {
   it('flags a specific group that silently drops * rules (the most common mistake)', () => {
@@ -13,7 +21,8 @@ describe('linter', () => {
   });
 
   it('does not flag when the specific group repeats the rule', () => {
-    const t = 'User-agent: *\nDisallow: /private/\n\nUser-agent: GPTBot\nDisallow: /private/\nDisallow: /blog/\n';
+    const t =
+      'User-agent: *\nDisallow: /private/\n\nUser-agent: GPTBot\nDisallow: /private/\nDisallow: /blog/\n';
     expect(codes(t)).not.toContain('specific-overrides-global');
   });
 
@@ -57,25 +66,41 @@ describe('linter', () => {
   });
 
   it('flags group without rules, version suffix and Disallow: / for everyone', () => {
-    const c = codes('User-agent: GPTBot/1.4\nDisallow: /x\n\nUser-agent: Foo\n\nUser-agent: *\nDisallow: /\n');
+    const c = codes(
+      'User-agent: GPTBot/1.4\nDisallow: /x\n\nUser-agent: Foo\n\nUser-agent: *\nDisallow: /\n',
+    );
     expect(c).toContain('user-agent-version');
     expect(c).toContain('disallow-all-global');
   });
 
   it('validates Content-Signal and Content-Usage lines', () => {
-    expect(codes('User-agent: *\nContent-Signal: search=yes, ai-train=no, use=reference\nAllow: /\n')).toContain('content-signal');
-    expect(codes('User-agent: *\nContent-Signal: ai-train=maybe\nAllow: /\n')).toContain('content-signal-invalid');
-    expect(codes('User-agent: *\nAllow: /\nContent-Usage: train-ai=n\nContent-Usage: /ai-ok/ train-ai=y\n')).toContain('content-usage');
-    expect(codes('User-agent: *\nAllow: /\nContent-Usage: train-ai=no\n')).toContain('content-usage-invalid');
+    expect(
+      codes('User-agent: *\nContent-Signal: search=yes, ai-train=no, use=reference\nAllow: /\n'),
+    ).toContain('content-signal');
+    expect(codes('User-agent: *\nContent-Signal: ai-train=maybe\nAllow: /\n')).toContain(
+      'content-signal-invalid',
+    );
+    expect(
+      codes(
+        'User-agent: *\nAllow: /\nContent-Usage: train-ai=n\nContent-Usage: /ai-ok/ train-ai=y\n',
+      ),
+    ).toContain('content-usage');
+    expect(codes('User-agent: *\nAllow: /\nContent-Usage: train-ai=no\n')).toContain(
+      'content-usage-invalid',
+    );
   });
 
   it('recognises a Cloudflare managed block', () => {
-    const t = '# BEGIN Cloudflare Managed content\nUser-Agent: *\nContent-signal: search=yes,ai-train=no\nAllow: /\n# END Cloudflare Managed Content\n';
+    const t =
+      '# BEGIN Cloudflare Managed content\nUser-Agent: *\nContent-signal: search=yes,ai-train=no\nAllow: /\n# END Cloudflare Managed Content\n';
     expect(codes(t)).toContain('cloudflare-managed');
   });
 
   it('reports files over 500 KiB and BOMs', () => {
-    const big = 'User-agent: *\n' + 'Disallow: /some/long/path/that/repeats\n'.repeat(14000) + 'Disallow: /tail\n';
+    const big =
+      'User-agent: *\n' +
+      'Disallow: /some/long/path/that/repeats\n'.repeat(14000) +
+      'Disallow: /tail\n';
     expect(big.length).toBeGreaterThan(GOOGLE_MAX_BYTES);
     expect(codes(big)).toContain('file-too-large');
     const cut = parseLines(big, { maxBytes: GOOGLE_MAX_BYTES });
@@ -86,21 +111,36 @@ describe('linter', () => {
   });
 
   it('returns nothing serious for a clean file', () => {
-    const issues = lintRobotsTxt('User-agent: GPTBot\nDisallow: /\n\nUser-agent: *\nDisallow: /admin/\n\nSitemap: https://e.com/s.xml\n', {
-      bots: curatedBots,
-    });
+    const issues = lintRobotsTxt(
+      'User-agent: GPTBot\nDisallow: /\n\nUser-agent: *\nDisallow: /admin/\n\nSitemap: https://e.com/s.xml\n',
+      {
+        bots: curatedBots,
+      },
+    );
     expect(issues.filter((i) => i.severity !== 'info')).toEqual([]);
   });
 });
 
 import { parseRobots, summarizeAgent } from '../src/index.js';
 describe('summarizeAgent', () => {
-  const p = parseRobots('User-agent: GPTBot\nDisallow: /\nAllow: /blog/\n\nUser-agent: *\nDisallow: /admin/\n\nUser-agent: CCBot\nDisallow: /\n');
+  const p = parseRobots(
+    'User-agent: GPTBot\nDisallow: /\nAllow: /blog/\n\nUser-agent: *\nDisallow: /admin/\n\nUser-agent: CCBot\nDisallow: /\n',
+  );
   it('classifies', () => {
-    expect(summarizeAgent(p, 'GPTBot')).toMatchObject({ via: 'specific', verdict: 'partial', rootAllowed: false });
+    expect(summarizeAgent(p, 'GPTBot')).toMatchObject({
+      via: 'specific',
+      verdict: 'partial',
+      rootAllowed: false,
+    });
     expect(summarizeAgent(p, 'CCBot')).toMatchObject({ via: 'specific', verdict: 'blocked' });
-    expect(summarizeAgent(p, 'ClaudeBot')).toMatchObject({ via: 'global', verdict: 'partial', rootAllowed: true });
-    expect(summarizeAgent(parseRobots('User-agent: *\nDisallow:\n'), 'X')).toMatchObject({ verdict: 'allowed' });
+    expect(summarizeAgent(p, 'ClaudeBot')).toMatchObject({
+      via: 'global',
+      verdict: 'partial',
+      rootAllowed: true,
+    });
+    expect(summarizeAgent(parseRobots('User-agent: *\nDisallow:\n'), 'X')).toMatchObject({
+      verdict: 'allowed',
+    });
     expect(summarizeAgent(parseRobots(''), 'X')).toMatchObject({ via: 'none', verdict: 'allowed' });
   });
 });

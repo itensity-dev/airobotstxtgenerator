@@ -50,7 +50,8 @@ export function createApp(config: ApiConfig) {
     c.header('Cache-Control', 'no-store');
     const ip =
       (config.trustProxy ? c.req.header('x-forwarded-for')?.split(',')[0]?.trim() : undefined) ||
-      (c.env as { incoming?: { socket?: { remoteAddress?: string } } } | undefined)?.incoming?.socket?.remoteAddress ||
+      (c.env as { incoming?: { socket?: { remoteAddress?: string } } } | undefined)?.incoming
+        ?.socket?.remoteAddress ||
       'unknown';
     const input = c.req.query('url') ?? '';
     const target = robotsUrlFor(input, config.fetchOptions?.allowedPorts);
@@ -75,7 +76,11 @@ export function createApp(config: ApiConfig) {
       result = await fetchRobotsTxt(target.url, opts);
     } catch (e) {
       const err = e as FetchError;
-      if (target.url.protocol === 'https:' && (err.code === 'connection-failed' || err.code === 'tls-failed') && err.redirects.length === 0) {
+      if (
+        target.url.protocol === 'https:' &&
+        (err.code === 'connection-failed' || err.code === 'tls-failed') &&
+        err.redirects.length === 0
+      ) {
         try {
           result = await fetchRobotsTxt(`http://${target.url.host}/robots.txt`, opts);
           httpFallback = true;
@@ -110,7 +115,15 @@ export function createApp(config: ApiConfig) {
 
 function fetchErrorResponse(c: Context, e: unknown) {
   if (e instanceof FetchError) {
-    const status = ['scheme-not-allowed', 'port-not-allowed', 'host-not-allowed', 'ip-not-public', 'address-not-public', 'credentials-not-allowed', 'invalid-url'].includes(e.code)
+    const status = [
+      'scheme-not-allowed',
+      'port-not-allowed',
+      'host-not-allowed',
+      'ip-not-public',
+      'address-not-public',
+      'credentials-not-allowed',
+      'invalid-url',
+    ].includes(e.code)
       ? 400
       : e.code === 'timeout'
         ? 504

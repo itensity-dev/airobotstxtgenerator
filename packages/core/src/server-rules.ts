@@ -7,16 +7,18 @@
 import type { Bot } from './types.js';
 
 export type ServerTarget =
-  | 'nginx'
-  | 'apache'
-  | 'caddy'
-  | 'cloudflare'
-  | 'express'
-  | 'nextjs'
-  | 'django'
-  | 'php';
+  'nginx' | 'apache' | 'caddy' | 'cloudflare' | 'express' | 'nextjs' | 'django' | 'php';
 
-export const SERVER_TARGETS: ServerTarget[] = ['nginx', 'apache', 'caddy', 'cloudflare', 'express', 'nextjs', 'django', 'php'];
+export const SERVER_TARGETS: ServerTarget[] = [
+  'nginx',
+  'apache',
+  'caddy',
+  'cloudflare',
+  'express',
+  'nextjs',
+  'django',
+  'php',
+];
 
 export interface ServerRuleResult {
   target: ServerTarget;
@@ -39,7 +41,11 @@ export function escapeRegex(s: string): string {
 }
 
 /** Unique, case-insensitively de-duplicated User-Agent substrings for the given bots. */
-export function userAgentPatterns(bots: Bot[]): { patterns: string[]; skipped: string[]; ambiguous: string[] } {
+export function userAgentPatterns(bots: Bot[]): {
+  patterns: string[];
+  skipped: string[];
+  ambiguous: string[];
+} {
   const seen = new Set<string>();
   const patterns: string[] = [];
   const skipped: string[] = [];
@@ -58,7 +64,10 @@ export function userAgentPatterns(bots: Bot[]): { patterns: string[]; skipped: s
   }
   // Remove patterns that contain a shorter pattern (it already matches them).
   const reduced = patterns.filter(
-    (p) => !patterns.some((q) => q !== p && q.length < p.length && p.toLowerCase().includes(q.toLowerCase())),
+    (p) =>
+      !patterns.some(
+        (q) => q !== p && q.length < p.length && p.toLowerCase().includes(q.toLowerCase()),
+      ),
   );
   return { patterns: reduced, skipped, ambiguous };
 }
@@ -66,7 +75,11 @@ export function userAgentPatterns(bots: Bot[]): { patterns: string[]; skipped: s
 /** Cloudflare custom rule expressions are limited to 4,096 characters. */
 export const CLOUDFLARE_EXPRESSION_LIMIT = 4096;
 
-export function buildServerRules(target: ServerTarget, bots: Bot[], options: { status?: 403 | 404 | 410 } = {}): ServerRuleResult {
+export function buildServerRules(
+  target: ServerTarget,
+  bots: Bot[],
+  options: { status?: 403 | 404 | 410 } = {},
+): ServerRuleResult {
   const status = options.status ?? 403;
   const { patterns, skipped, ambiguous } = userAgentPatterns(bots);
   const alternation = patterns.map(escapeRegex).join('|');
@@ -112,7 +125,11 @@ export function buildServerRules(target: ServerTarget, bots: Bot[], options: { s
         '    RewriteEngine On',
         '    RewriteCond %{REQUEST_URI} !^/robots\\.txt$',
         `    RewriteCond %{HTTP_USER_AGENT} (${alternation}) [NC]`,
-        status === 403 ? '    RewriteRule ^ - [F,L]' : status === 410 ? '    RewriteRule ^ - [G,L]' : '    RewriteRule ^ - [R=404,L]',
+        status === 403
+          ? '    RewriteRule ^ - [F,L]'
+          : status === 410
+            ? '    RewriteRule ^ - [G,L]'
+            : '    RewriteRule ^ - [R=404,L]',
         '</IfModule>',
       ].join('\n');
       break;
@@ -132,7 +149,9 @@ export function buildServerRules(target: ServerTarget, bots: Bot[], options: { s
     }
     case 'cloudflare': {
       language = 'text';
-      const conditions = patterns.map((p) => `(lower(http.user_agent) contains "${p.toLowerCase().replace(/"/g, '\\"')}")`);
+      const conditions = patterns.map(
+        (p) => `(lower(http.user_agent) contains "${p.toLowerCase().replace(/"/g, '\\"')}")`,
+      );
       const expression = `(${conditions.join(' or ')}) and not (http.request.uri.path eq "/robots.txt")`;
       if (expression.length > CLOUDFLARE_EXPRESSION_LIMIT) {
         warnings.push(
@@ -231,33 +250,40 @@ export function buildServerRules(target: ServerTarget, bots: Bot[], options: { s
     );
   }
   if (ambiguous.length > 0) {
-    warnings.push(`Left out because the name is too generic to match safely: ${ambiguous.join(', ')}.`);
+    warnings.push(
+      `Left out because the name is too generic to match safely: ${ambiguous.join(', ')}.`,
+    );
   }
   return { target, code: code + '\n', language, patterns, skipped, ambiguous, warnings };
 }
 
 /** Snippets to check that a request claiming to be a bot really comes from its operator. */
-export function buildVerificationSnippet(bot: Bot): { method: Bot['verification']; code: string; language: string } {
+export function buildVerificationSnippet(bot: Bot): {
+  method: Bot['verification'];
+  code: string;
+  language: string;
+} {
   if (bot.verification === 'ip-list' && bot.ipRanges) {
     return {
       method: 'ip-list',
       language: 'javascript',
-      code: [
-        `// Verify ${bot.name} by IP: compare the client IP with the operator's published ranges.`,
-        `// Node.js 18+ (ESM). Cache the list; the operator updates it from time to time.`,
-        "import { BlockList, isIPv6 } from 'node:net';",
-        '',
-        `const res = await fetch('${bot.ipRanges}');`,
-        'const { prefixes } = await res.json();',
-        'const ranges = new BlockList();',
-        'for (const p of prefixes) {',
-        '  const cidr = p.ipv4Prefix ?? p.ipv6Prefix;',
-        "  const [net, bits] = cidr.split('/');",
-        "  ranges.addSubnet(net, Number(bits), p.ipv6Prefix ? 'ipv6' : 'ipv4');",
-        '}',
-        '',
-        `export const isReal${bot.token.replace(/[^A-Za-z0-9]/g, '')} = (ip) => ranges.check(ip, isIPv6(ip) ? 'ipv6' : 'ipv4');`,
-      ].join('\n') + '\n',
+      code:
+        [
+          `// Verify ${bot.name} by IP: compare the client IP with the operator's published ranges.`,
+          `// Node.js 18+ (ESM). Cache the list; the operator updates it from time to time.`,
+          "import { BlockList, isIPv6 } from 'node:net';",
+          '',
+          `const res = await fetch('${bot.ipRanges}');`,
+          'const { prefixes } = await res.json();',
+          'const ranges = new BlockList();',
+          'for (const p of prefixes) {',
+          '  const cidr = p.ipv4Prefix ?? p.ipv6Prefix;',
+          "  const [net, bits] = cidr.split('/');",
+          "  ranges.addSubnet(net, Number(bits), p.ipv6Prefix ? 'ipv6' : 'ipv4');",
+          '}',
+          '',
+          `export const isReal${bot.token.replace(/[^A-Za-z0-9]/g, '')} = (ip) => ranges.check(ip, isIPv6(ip) ? 'ipv6' : 'ipv4');`,
+        ].join('\n') + '\n',
     };
   }
   if (bot.verification === 'reverse-dns' && bot.verifyHosts && bot.verifyHosts.length > 0) {
@@ -265,20 +291,21 @@ export function buildVerificationSnippet(bot: Bot): { method: Bot['verification'
     return {
       method: 'reverse-dns',
       language: 'javascript',
-      code: [
-        `// Verify ${bot.name} by reverse DNS, then confirm with a forward lookup.`,
-        "import { promises as dns } from 'node:dns';",
-        '',
-        `const SUFFIXES = [${hosts}];`,
-        '',
-        'export async function isRealBot(ip) {',
-        '  const names = await dns.reverse(ip).catch(() => []);',
-        "  const host = names.find((n) => SUFFIXES.some((s) => n === s.replace(/^\\./, '') || n.endsWith(s.startsWith('.') ? s : '.' + s)));",
-        '  if (!host) return false;',
-        "  const forward = await dns.lookup(host, { all: true }).catch(() => []);",
-        '  return forward.some((a) => a.address === ip);',
-        '}',
-      ].join('\n') + '\n',
+      code:
+        [
+          `// Verify ${bot.name} by reverse DNS, then confirm with a forward lookup.`,
+          "import { promises as dns } from 'node:dns';",
+          '',
+          `const SUFFIXES = [${hosts}];`,
+          '',
+          'export async function isRealBot(ip) {',
+          '  const names = await dns.reverse(ip).catch(() => []);',
+          "  const host = names.find((n) => SUFFIXES.some((s) => n === s.replace(/^\\./, '') || n.endsWith(s.startsWith('.') ? s : '.' + s)));",
+          '  if (!host) return false;',
+          '  const forward = await dns.lookup(host, { all: true }).catch(() => []);',
+          '  return forward.some((a) => a.address === ip);',
+          '}',
+        ].join('\n') + '\n',
     };
   }
   return { method: bot.verification, language: 'text', code: '' };

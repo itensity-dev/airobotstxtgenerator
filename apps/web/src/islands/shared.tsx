@@ -19,7 +19,15 @@ export function classifyLine(text: string): NoticeLine['kind'] {
   return 'other';
 }
 
-export function NoticeLines({ lines, showNotes, label }: { lines: NoticeLine[]; showNotes: boolean; label: string }) {
+export function NoticeLines({
+  lines,
+  showNotes,
+  label,
+}: {
+  lines: NoticeLine[];
+  showNotes: boolean;
+  label: string;
+}) {
   return (
     <div class={`lines${showNotes ? ' lines--notes' : ''}`} role="table" aria-label={label}>
       {lines.map((l, i) => (
@@ -86,7 +94,10 @@ export function download(filename: string, text: string, type = 'text/plain') {
 
 /** Fire an analytics event if an analytics script is present (no personal data, no content). */
 export function track(event: string, props?: Record<string, string>) {
-  const w = window as unknown as { plausible?: (e: string, o?: { props?: Record<string, string> }) => void; gtag?: (...a: unknown[]) => void };
+  const w = window as unknown as {
+    plausible?: (e: string, o?: { props?: Record<string, string> }) => void;
+    gtag?: (...a: unknown[]) => void;
+  };
   try {
     w.plausible?.(event, props ? { props } : undefined);
     w.gtag?.('event', event, props ?? {});

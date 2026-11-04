@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { t } from '../i18n';
+import { LOCALE_INFO, PUBLISHED_LOCALES } from '../i18n/locales';
+import { pathFor, type PageId } from '../i18n/routes';
+import { getPage } from '../lib/content';
+const tools: PageId[] = [
+  'home',
+  'tester',
+  'bots',
+  'server-rules',
+  'llms-txt',
+  'content-signals',
+  'tdmrep',
+  'meta-tags',
+  'guides',
+];
+---
+
+<Layout
+  locale="en"
+  title={t('en', 'notFound.title')}
+  description={t('en', 'notFound.text')}
+  path="/404/"
+  noindex
+>
+  <div class="page-head">
+    <p class="kicker">HTTP 404</p>
+    <h1>{t('en', 'notFound.title')}</h1>
+    <p class="lead">{t('en', 'notFound.text')}</p>
+  </div>
+  <ul class="related">
+    {tools.map((id) => {
+      const p = getPage('en', id);
+      return (
+        p && (
+          <li>
+            <a href={pathFor('en', id)}>{p.frontmatter.h1}</a>
+            <br />
+            <span class="small muted">{p.frontmatter.lead}</span>
+          </li>
+        )
+      );
+    })}
+  </ul>
+  <h2>Other languages</h2>
+  <p class="row">
+    {PUBLISHED_LOCALES.filter((l) => getPage(l, 'home')).map((l) => (
+      <a href={pathFor(l, 'home')} lang={LOCALE_INFO[l].hreflang}>
+        {LOCALE_INFO[l].name}
+      </a>
+    ))}
+  </p>
+</Layout>

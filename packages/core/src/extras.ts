@@ -36,7 +36,9 @@ export function buildLlmsTxt(input: LlmsTxtInput): string {
     if (valid.length === 0) return;
     out.push(`## ${title.trim()}`, '');
     for (const l of valid) {
-      out.push(`- [${l.title.trim()}](${l.url.trim()})${l.description?.trim() ? `: ${l.description.trim()}` : ''}`);
+      out.push(
+        `- [${l.title.trim()}](${l.url.trim()})${l.description?.trim() ? `: ${l.description.trim()}` : ''}`,
+      );
     }
     out.push('');
   };
@@ -59,18 +61,34 @@ export function validateLlmsTxt(text: string): LlmsTxtIssue[] {
   const lines = text.split(/\r?\n/);
   const firstContent = lines.findIndex((l) => l.trim() !== '');
   if (firstContent === -1 || !/^# \S/.test(lines[firstContent]!)) {
-    issues.push({ line: firstContent + 1 || 1, severity: 'error', message: 'The file must start with an H1 ("# Name").' });
+    issues.push({
+      line: firstContent + 1 || 1,
+      severity: 'error',
+      message: 'The file must start with an H1 ("# Name").',
+    });
   }
   lines.forEach((l, i) => {
     if (/^# /.test(l) && i !== firstContent) {
-      issues.push({ line: i + 1, severity: 'warning', message: 'Only one H1 is expected; use "## " for sections.' });
+      issues.push({
+        line: i + 1,
+        severity: 'warning',
+        message: 'Only one H1 is expected; use "## " for sections.',
+      });
     }
     if (/^#{3,} /.test(l)) {
-      issues.push({ line: i + 1, severity: 'warning', message: 'llms.txt uses H2 sections ("## ") for link lists.' });
+      issues.push({
+        line: i + 1,
+        severity: 'warning',
+        message: 'llms.txt uses H2 sections ("## ") for link lists.',
+      });
     }
     const m = /^\s*[-*] \[([^\]]*)\]\(([^)]*)\)/.exec(l);
     if (m && !/^(https?:\/\/|\/)/.test(m[2]!)) {
-      issues.push({ line: i + 1, severity: 'warning', message: `Link "${m[2]}" should be an absolute URL or a root-relative path.` });
+      issues.push({
+        line: i + 1,
+        severity: 'warning',
+        message: `Link "${m[2]}" should be an absolute URL or a root-relative path.`,
+      });
     }
   });
   return issues;
@@ -90,9 +108,18 @@ export interface TdmRepInput {
  * an HTTP header pair and HTML meta tags expressing a text-and-data-mining rights reservation
  * as provided for by Art. 4 of EU Directive 2019/790.
  */
-export function buildTdmRep(rules: TdmRepInput[]): { json: string; headers: string; meta: string; nginx: string; apache: string } {
+export function buildTdmRep(rules: TdmRepInput[]): {
+  json: string;
+  headers: string;
+  meta: string;
+  nginx: string;
+  apache: string;
+} {
   const entries = rules.map((r) => {
-    const e: Record<string, string | number> = { location: r.location?.trim() || '/', 'tdm-reservation': r.reservation };
+    const e: Record<string, string | number> = {
+      location: r.location?.trim() || '/',
+      'tdm-reservation': r.reservation,
+    };
     if (r.reservation === 1 && r.policy?.trim()) e['tdm-policy'] = r.policy.trim();
     return e;
   });
@@ -104,7 +131,8 @@ export function buildTdmRep(rules: TdmRepInput[]): { json: string; headers: stri
     `<meta name="tdm-reservation" content="${main.reservation}">\n` +
     (policy ? `<meta name="tdm-policy" content="${policy}">\n` : '');
   const nginx =
-    `add_header tdm-reservation "${main.reservation}" always;\n` + (policy ? `add_header tdm-policy "${policy}" always;\n` : '');
+    `add_header tdm-reservation "${main.reservation}" always;\n` +
+    (policy ? `add_header tdm-policy "${policy}" always;\n` : '');
   const apache =
     `<IfModule mod_headers.c>\n    Header always set tdm-reservation "${main.reservation}"\n` +
     (policy ? `    Header always set tdm-policy "${policy}"\n` : '') +
@@ -121,8 +149,14 @@ export interface ContentSignalInput {
 }
 
 /** Cloudflare Content Signals Policy lines (placed inside a User-agent group of robots.txt). */
-export function buildContentSignal(input: ContentSignalInput, userAgent = '*', withPolicyComment = true): string {
-  const parts = (['search', 'ai-input', 'ai-train'] as const).filter((k) => input[k]).map((k) => `${k}=${input[k]}`);
+export function buildContentSignal(
+  input: ContentSignalInput,
+  userAgent = '*',
+  withPolicyComment = true,
+): string {
+  const parts = (['search', 'ai-input', 'ai-train'] as const)
+    .filter((k) => input[k])
+    .map((k) => `${k}=${input[k]}`);
   const out: string[] = [];
   if (withPolicyComment) {
     out.push(
@@ -145,7 +179,10 @@ export interface ContentUsageInput {
 }
 
 /** IETF aipref draft syntax (draft-ietf-aipref-vocab / -attach): `train-ai=n, search=y`. */
-export function buildContentUsage(input: ContentUsageInput, path?: string): { robotsLine: string; header: string } {
+export function buildContentUsage(
+  input: ContentUsageInput,
+  path?: string,
+): { robotsLine: string; header: string } {
   const pref = (['train-ai', 'ai-use', 'search'] as const)
     .filter((k) => input[k])
     .map((k) => `${k}=${input[k]}`)

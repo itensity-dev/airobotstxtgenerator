@@ -10,9 +10,23 @@ interface Props {
 }
 const { code, locale, label, lang } = Astro.props;
 ---
+
 <div class="code">
-  {label && <div class="code__head"><span class="mono small">{label}</span><button type="button" class="btn btn--small btn--ghost" data-copy hidden data-done={t(locale, 'common.copied')}>{t(locale, 'common.copy')}</button></div>}
-  <pre data-lang={lang}><code>{code}</code></pre>
+  {label && (
+    <div class="code__head">
+      <span class="mono small">{label}</span>
+      <button
+        type="button"
+        class="btn btn--small btn--ghost"
+        data-copy
+        hidden
+        data-done={t(locale, 'common.copied')}
+      >
+        {t(locale, 'common.copy')}
+      </button>
+    </div>
+  )}
+  <pre data-lang={lang} tabindex="0"><code>{code}</code></pre>
 </div>
 <script>
   for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {

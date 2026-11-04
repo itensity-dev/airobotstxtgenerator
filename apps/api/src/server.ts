@@ -9,9 +9,12 @@ const app = createApp({
   cacheTtlMs: Number(process.env.API_CACHE_TTL_SECONDS ?? 600) * 1000,
 });
 
-const server = serve({ fetch: app.fetch, port, hostname: process.env.HOST ?? '0.0.0.0' }, (info) => {
-  console.log(`api listening on :${info.port}`);
-});
+const server = serve(
+  { fetch: app.fetch, port, hostname: process.env.HOST ?? '0.0.0.0' },
+  (info) => {
+    console.log(`api listening on :${info.port}`);
+  },
+);
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.on(signal, () => {

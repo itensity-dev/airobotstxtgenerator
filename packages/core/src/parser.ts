@@ -149,7 +149,8 @@ function startsWithIgnoreCase(s: string, prefix: string): boolean {
 
 /** Classify a key the way Google does (case-insensitive prefix match plus accepted typos). */
 export function getKeyType(key: string): { type: KeyType; isTypo: boolean } {
-  const userAgentTypo = startsWithIgnoreCase(key, 'useragent') || startsWithIgnoreCase(key, 'user agent');
+  const userAgentTypo =
+    startsWithIgnoreCase(key, 'useragent') || startsWithIgnoreCase(key, 'user agent');
   if (startsWithIgnoreCase(key, 'user-agent') || userAgentTypo) {
     return { type: 'user-agent', isTypo: userAgentTypo };
   }
@@ -229,7 +230,10 @@ function decodeBytes(bytes: Uint8Array): { text: string; hadBom: boolean } {
 }
 
 /** Split a robots.txt body into classified lines. Accepts a string or raw bytes. */
-export function parseLines(input: string | Uint8Array, options: ParseOptions = {}): ParsedRobotsFile {
+export function parseLines(
+  input: string | Uint8Array,
+  options: ParseOptions = {},
+): ParsedRobotsFile {
   let text: string;
   let hadBom = false;
   let byteLength: number;

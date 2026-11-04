@@ -49,7 +49,8 @@ export function fill(s: string): string {
 function fillDeep<T>(v: T): T {
   if (typeof v === 'string') return fill(v) as T;
   if (Array.isArray(v)) return v.map(fillDeep) as T;
-  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fillDeep(x)])) as T;
+  if (v && typeof v === 'object')
+    return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fillDeep(x)])) as T;
   return v;
 }
 
@@ -88,7 +89,9 @@ export interface BotText {
   description?: string;
 }
 
-const botTexts = import.meta.glob<{ default: Record<string, BotText> }>('../content/*/bots.json', { eager: true });
+const botTexts = import.meta.glob<{ default: Record<string, BotText> }>('../content/*/bots.json', {
+  eager: true,
+});
 
 export function getBotTexts(locale: Locale): Record<string, BotText> {
   return botTexts[`../content/${locale}/bots.json`]?.default ?? {};
@@ -100,7 +103,10 @@ export interface BotPageStrings {
   h1: string;
 }
 
-const botPageStrings = import.meta.glob<{ default: { pattern: BotPageStrings } }>('../content/*/bot-page.json', { eager: true });
+const botPageStrings = import.meta.glob<{ default: { pattern: BotPageStrings } }>(
+  '../content/*/bot-page.json',
+  { eager: true },
+);
 
 export function getBotPagePattern(locale: Locale): BotPageStrings | undefined {
   return botPageStrings[`../content/${locale}/bot-page.json`]?.default.pattern;

@@ -27,8 +27,36 @@ export const LOCALE_INFO: Record<Locale, LocaleInfo> = {
   ja: { hreflang: 'ja', intl: 'ja-JP', name: '日本語', eu: false, og: 'ja_JP' },
 };
 
-/** Languages published on the site. A language is added here only when all its pages are translated. */
-export const PUBLISHED_LOCALES: Locale[] = [...LOCALES];
+/**
+ * Languages published on the site: a language appears only when every page, bot text and UI key
+ * exists (CI additionally runs scripts/i18n-check.ts for placeholders and links).
+ */
+const contentFiles = Object.keys(import.meta.glob('../content/*/*.{md,json}'));
+const uiFiles = import.meta.glob<{ default: Record<string, unknown> }>('./ui/*.json', {
+  eager: true,
+});
+function filesOf(l: string): Set<string> {
+  return new Set(
+    contentFiles
+      .filter((f) => f.startsWith(`../content/${l}/`))
+      .map((f) => f.slice(`../content/${l}/`.length)),
+  );
+}
+function keyCount(o: Record<string, unknown>): number {
+  return Object.values(o).reduce<number>(
+    (n, v) => n + (typeof v === 'string' ? 1 : keyCount(v as Record<string, unknown>)),
+    0,
+  );
+}
+const enFiles = filesOf('en');
+const enKeys = keyCount(uiFiles['./ui/en.json']?.default ?? {});
+export const PUBLISHED_LOCALES: Locale[] = LOCALES.filter((l) => {
+  if (l === 'en') return true;
+  const ui = uiFiles[`./ui/${l}.json`]?.default;
+  if (!ui || keyCount(ui) < enKeys) return false;
+  const files = filesOf(l);
+  return [...enFiles].every((f) => files.has(f));
+});
 
 export function isLocale(x: string): x is Locale {
   return (LOCALES as readonly string[]).includes(x);
@@ -41,7 +69,12 @@ export function formatDate(iso: string, locale: Locale, style: 'long' | 'medium'
       ? { year: 'numeric', timeZone: 'UTC' }
       : iso.length === 7
         ? { year: 'numeric', month: 'long', timeZone: 'UTC' }
-        : { year: 'numeric', month: style === 'long' ? 'long' : 'short', day: 'numeric', timeZone: 'UTC' };
+        : {
+            year: 'numeric',
+            month: style === 'long' ? 'long' : 'short',
+            day: 'numeric',
+            timeZone: 'UTC',
+          };
   return new Intl.DateTimeFormat(LOCALE_INFO[locale].intl, opts).format(d);
 }
 

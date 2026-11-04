@@ -15,7 +15,10 @@ export function parseRateLimit(value: string | undefined): RateLimitConfig {
 
 export class RateLimiter {
   private hits = new Map<string, { count: number; reset: number }>();
-  constructor(private readonly config: RateLimitConfig, private readonly now: () => number = Date.now) {}
+  constructor(
+    private readonly config: RateLimitConfig,
+    private readonly now: () => number = Date.now,
+  ) {}
 
   /** Returns seconds to wait if the request is over the limit, otherwise 0. */
   take(key: string): { allowed: boolean; remaining: number; retryAfter: number } {
@@ -43,7 +46,11 @@ export class RateLimiter {
 /** Small TTL cache with a size cap (oldest entries evicted first). */
 export class TtlCache<V> {
   private map = new Map<string, { value: V; expires: number }>();
-  constructor(private readonly ttlMs: number, private readonly max = 1000, private readonly now: () => number = Date.now) {}
+  constructor(
+    private readonly ttlMs: number,
+    private readonly max = 1000,
+    private readonly now: () => number = Date.now,
+  ) {}
   get(key: string): V | undefined {
     const e = this.map.get(key);
     if (!e) return undefined;

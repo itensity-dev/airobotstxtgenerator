@@ -5,7 +5,10 @@ import { matchUrl, parseLines } from '../src/index.js';
 
 interface Expected {
   agents: string[];
-  cases: Record<string, { site: string; bytes: number; paths: string[]; verdicts: Record<string, string> }>;
+  cases: Record<
+    string,
+    { site: string; bytes: number; paths: string[]; verdicts: Record<string, string> }
+  >;
 }
 
 const dir = join(import.meta.dirname, 'fixtures');

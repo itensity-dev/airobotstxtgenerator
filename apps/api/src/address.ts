@@ -7,8 +7,27 @@
  */
 import ipaddr from 'ipaddr.js';
 
-const BLOCKED_HOST_SUFFIXES = ['.localhost', '.local', '.internal', '.intranet', '.lan', '.home', '.corp', '.arpa', '.test', '.invalid', '.example'];
-const BLOCKED_HOSTS = new Set(['localhost', 'metadata', 'metadata.google.internal', 'instance-data', 'kubernetes', 'kubernetes.default']);
+const BLOCKED_HOST_SUFFIXES = [
+  '.localhost',
+  '.local',
+  '.internal',
+  '.intranet',
+  '.lan',
+  '.home',
+  '.corp',
+  '.arpa',
+  '.test',
+  '.invalid',
+  '.example',
+];
+const BLOCKED_HOSTS = new Set([
+  'localhost',
+  'metadata',
+  'metadata.google.internal',
+  'instance-data',
+  'kubernetes',
+  'kubernetes.default',
+]);
 
 export function isPublicAddress(address: string): boolean {
   let addr: ipaddr.IPv4 | ipaddr.IPv6;
@@ -58,14 +77,18 @@ export interface TargetCheck {
 export const DEFAULT_PORTS: readonly string[] = ['', '80', '443'];
 
 /** Validate a URL before any network activity. */
-export function checkTargetUrl(input: string | URL, allowedPorts: readonly string[] = DEFAULT_PORTS): TargetCheck {
+export function checkTargetUrl(
+  input: string | URL,
+  allowedPorts: readonly string[] = DEFAULT_PORTS,
+): TargetCheck {
   let url: URL;
   try {
     url = typeof input === 'string' ? new URL(input) : new URL(input.href);
   } catch {
     return { ok: false, reason: 'invalid-url' };
   }
-  if (url.protocol !== 'http:' && url.protocol !== 'https:') return { ok: false, reason: 'scheme-not-allowed' };
+  if (url.protocol !== 'http:' && url.protocol !== 'https:')
+    return { ok: false, reason: 'scheme-not-allowed' };
   if (url.username || url.password) return { ok: false, reason: 'credentials-not-allowed' };
   if (!allowedPorts.includes(url.port)) return { ok: false, reason: 'port-not-allowed' };
   let host = url.hostname.toLowerCase();
@@ -74,14 +97,21 @@ export function checkTargetUrl(input: string | URL, allowedPorts: readonly strin
     return isPublicAddress(host) ? { ok: true, url } : { ok: false, reason: 'ip-not-public' };
   }
   const bare = host.replace(/\.$/, '');
-  if (BLOCKED_HOSTS.has(bare) || BLOCKED_HOST_SUFFIXES.some((s) => bare.endsWith(s)) || !bare.includes('.')) {
+  if (
+    BLOCKED_HOSTS.has(bare) ||
+    BLOCKED_HOST_SUFFIXES.some((s) => bare.endsWith(s)) ||
+    !bare.includes('.')
+  ) {
     return { ok: false, reason: 'host-not-allowed' };
   }
   return { ok: true, url };
 }
 
 /** Turn user input ("example.com", "https://example.com/page") into the robots.txt URL of its origin. */
-export function robotsUrlFor(input: string, allowedPorts: readonly string[] = DEFAULT_PORTS): TargetCheck {
+export function robotsUrlFor(
+  input: string,
+  allowedPorts: readonly string[] = DEFAULT_PORTS,
+): TargetCheck {
   const trimmed = input.trim();
   if (trimmed === '' || trimmed.length > 2048) return { ok: false, reason: 'invalid-url' };
   const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(trimmed) ? trimmed : `https://${trimmed}`;

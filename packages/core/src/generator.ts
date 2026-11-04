@@ -109,7 +109,11 @@ export interface SiteTypePreset {
 /** Starting points for the wizard; every value can be edited by the user. */
 export const SITE_TYPE_PRESETS: Record<SiteType, SiteTypePreset> = {
   blog: { goal: 'block-training', globalDisallow: [], exceptions: [] },
-  news: { goal: 'block-training', globalDisallow: [], exceptions: [{ path: '/premium/', access: 'block' }] },
+  news: {
+    goal: 'block-training',
+    globalDisallow: [],
+    exceptions: [{ path: '/premium/', access: 'block' }],
+  },
   shop: {
     goal: 'block-training',
     globalDisallow: ['/cart/', '/checkout/', '/account/'],
@@ -148,7 +152,15 @@ const SECTION_TITLES: Record<Section, string> = {
   general: 'General-purpose crawlers',
 };
 
-const SECTION_ORDER: Section[] = ['training', 'token', 'mixed', 'unknown', 'search', 'user', 'general'];
+const SECTION_ORDER: Section[] = [
+  'training',
+  'token',
+  'mixed',
+  'unknown',
+  'search',
+  'user',
+  'general',
+];
 
 function sectionOf(b: Bot): Section {
   if (b.general) return 'general';
@@ -204,7 +216,8 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
     .filter((e) => e.path !== '' && e.path !== '/');
   const globalDisallow = (options.globalDisallow ?? []).map(normalizePath).filter((p) => p !== '');
   const repeat =
-    options.globalRulesToRepeat ?? globalDisallow.map((pattern) => ({ type: 'disallow' as const, pattern }));
+    options.globalRulesToRepeat ??
+    globalDisallow.map((pattern) => ({ type: 'disallow' as const, pattern }));
   const allowEx = exceptions.filter((e) => e.access === 'allow');
   const blockEx = exceptions.filter((e) => e.access === 'block');
 
@@ -213,7 +226,8 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
 
   // Rules for blocked bots: everything closed, AI-open exceptions reopened, nested closures kept.
   const blockedRules: Rule[] = [{ type: 'disallow', pattern: '/', note: 'disallow-all' }];
-  for (const a of allowEx) blockedRules.push({ type: 'allow', pattern: a.path, note: 'allow-exception' });
+  for (const a of allowEx)
+    blockedRules.push({ type: 'allow', pattern: a.path, note: 'allow-exception' });
   for (const b of blockEx) {
     if (allowEx.some((a) => isUnder(b.path, a.path))) {
       blockedRules.push({ type: 'disallow', pattern: b.path, note: 'block-exception' });
@@ -228,8 +242,10 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
   // Rules for allowed AI bots: they need their own group only if some paths are closed to AI.
   const allowedRules: Rule[] = [];
   if (blockEx.length > 0) {
-    for (const r of repeat) allowedRules.push({ type: r.type, pattern: r.pattern, note: 'repeat-global' });
-    for (const b of blockEx) allowedRules.push({ type: 'disallow', pattern: b.path, note: 'block-exception' });
+    for (const r of repeat)
+      allowedRules.push({ type: r.type, pattern: r.pattern, note: 'repeat-global' });
+    for (const b of blockEx)
+      allowedRules.push({ type: 'disallow', pattern: b.path, note: 'block-exception' });
     for (const a of allowEx) {
       if (blockEx.some((b) => isUnder(a.path, b.path))) {
         allowedRules.push({ type: 'allow', pattern: a.path, note: 'allow-exception' });
@@ -242,7 +258,10 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
     lines.push(ref === undefined ? { text, note } : { text, note, ref });
 
   if (comments) {
-    push(`# robots.txt — ${options.generatorName ?? 'generated with airobotstxtgenerator.com'}${options.date ? ` on ${options.date}` : ''}`, 'header');
+    push(
+      `# robots.txt — ${options.generatorName ?? 'generated with airobotstxtgenerator.com'}${options.date ? ` on ${options.date}` : ''}`,
+      'header',
+    );
     const policy: Record<Goal, string> = {
       'block-training': 'Policy: no AI training; AI search and user-requested fetches allowed.',
       'block-all-ai': 'Policy: no AI crawlers or AI agents; regular search engines allowed.',
@@ -250,7 +269,10 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
       custom: 'Policy: custom choice per AI crawler.',
     };
     push(`# ${policy[options.goal]}`, 'policy');
-    push('# robots.txt is a request, not access control: see server rules for enforcement.', 'policy');
+    push(
+      '# robots.txt is a request, not access control: see server rules for enforcement.',
+      'policy',
+    );
     push('', 'blank');
   }
 
@@ -280,7 +302,11 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
   }
   if (allowedRules.length > 0) {
     const members = bots.filter((b) => access.get(b.id) === 'allow' && !b.general);
-    emitGroup(members, allowedRules, 'AI crawlers allowed except for AI-restricted paths (they ignore the * group once named)');
+    emitGroup(
+      members,
+      allowedRules,
+      'AI crawlers allowed except for AI-restricted paths (they ignore the * group once named)',
+    );
   }
 
   if (includeGlobal) {
@@ -365,22 +391,40 @@ export function verifyPolicy(text: string, bots: Bot[], spec: PolicySpec): Polic
     let rules: Rule[];
     if (acc === 'block') {
       rules = [
-        ...global.filter((g) => g.type === 'disallow' && allowEx.some((a) => isUnder(g.pattern, a.path))),
+        ...global.filter(
+          (g) => g.type === 'disallow' && allowEx.some((a) => isUnder(g.pattern, a.path)),
+        ),
         { type: 'disallow', pattern: '/', note: 'disallow-all' },
-        ...allowEx.map((a) => ({ type: 'allow' as const, pattern: a.path, note: 'allow-exception' as const })),
+        ...allowEx.map((a) => ({
+          type: 'allow' as const,
+          pattern: a.path,
+          note: 'allow-exception' as const,
+        })),
         ...blockEx
           .filter((x) => allowEx.some((a) => isUnder(x.path, a.path)))
-          .map((x) => ({ type: 'disallow' as const, pattern: x.path, note: 'block-exception' as const })),
+          .map((x) => ({
+            type: 'disallow' as const,
+            pattern: x.path,
+            note: 'block-exception' as const,
+          })),
       ];
     } else if (b.general) {
       rules = global;
     } else {
       rules = [
         ...global,
-        ...blockEx.map((x) => ({ type: 'disallow' as const, pattern: x.path, note: 'block-exception' as const })),
+        ...blockEx.map((x) => ({
+          type: 'disallow' as const,
+          pattern: x.path,
+          note: 'block-exception' as const,
+        })),
         ...allowEx
           .filter((a) => blockEx.some((x) => isUnder(a.path, x.path)))
-          .map((a) => ({ type: 'allow' as const, pattern: a.path, note: 'allow-exception' as const })),
+          .map((a) => ({
+            type: 'allow' as const,
+            pattern: a.path,
+            note: 'allow-exception' as const,
+          })),
       ];
     }
     for (const path of paths) {

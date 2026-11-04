@@ -26,16 +26,35 @@ const body = resolveLinksInHtml(await mod.compiledContent(), locale);
 const crumbs = crumbsFor(locale, id);
 const isTool = id !== 'meta-tags';
 const jsonLd = [
-  ...(isTool ? [webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale })] : []),
+  ...(isTool
+    ? [
+        webApplication({
+          name: fm.h1,
+          description: fm.description,
+          url: SITE_URL + page.path,
+          locale,
+        }),
+      ]
+    : []),
   breadcrumbList(crumbs),
   ...(fm.faq?.length ? [faqPage(fm.faq)] : []),
 ];
 const dict = pick(locale, ['llms.', 'signals.', 'tdm.', 'common.']);
-
 ---
-<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor(id)} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent={id === 'llms-txt' ? 'llms-txt' : undefined}>
+
+<Layout
+  locale={locale}
+  title={fm.title}
+  description={fm.description}
+  path={page.path}
+  alternates={alternatesFor(id)}
+  ogImage={ogPath(page)}
+  markdown={mdPath(page)}
+  jsonLd={jsonLd}
+  navCurrent={id === 'llms-txt' ? 'llms-txt' : undefined}
+>
   <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
-  {(id === 'tdmrep') && <p class="callout small">{t(locale, 'common.notLegal')}</p>}
+  {id === 'tdmrep' && <p class="callout small">{t(locale, 'common.notLegal')}</p>}
   {id === 'llms-txt' && <LlmsTxt client:load dict={dict} />}
   {id === 'content-signals' && <Signals client:load dict={dict} mode="signals" />}
   {id === 'tdmrep' && <Signals client:load dict={dict} mode="tdmrep" />}
