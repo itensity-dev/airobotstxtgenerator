@@ -3,6 +3,7 @@ import {
   SITE_TYPE_PRESETS,
   generateRobotsTxt,
   mergeIntoExisting,
+  verifyPolicy,
   type Access,
   type Bot,
   type ContentSignals,
@@ -41,6 +42,8 @@ interface Props {
   communityUrl: string;
   /** Operator id → display name. */
   operators: Record<string, string>;
+  /** Verification of the initial example, computed at build time. */
+  initialCheck?: { text: string; agents: number; paths: number; failed: number; count: number };
   testerHref: string;
   date: string;
   initialSiteType?: SiteType;
@@ -131,6 +134,7 @@ export default function Generator(props: Props) {
         contentSignals,
         comments,
         date: props.date,
+        verify: false,
       }),
     [
       allBots,
@@ -162,10 +166,24 @@ export default function Generator(props: Props) {
   );
 
   const outText = mode === 'merge' ? (merged?.text ?? '') : result.text;
-  const checks = mode === 'merge' ? (merged?.checks ?? []) : result.checks;
-  const failed = checks.filter((c) => !c.ok).length;
-  const agentsChecked = new Set(checks.map((c) => c.bot)).size;
-  const pathsChecked = new Set(checks.map((c) => c.path)).size;
+  // The initial example was verified at build time; verify again only when the file changes.
+  const checks = useMemo(() => {
+    if (mode === 'merge') return merged?.checks ?? [];
+    if (props.initialCheck && result.text === props.initialCheck.text) return null;
+    return verifyPolicy(result.text, allBots, {
+      access: result.access,
+      exceptions: result.exceptions,
+      globalRules: result.globalRules,
+    });
+  }, [mode, merged, result, allBots]);
+  const failed = checks ? checks.filter((c) => !c.ok).length : (props.initialCheck?.failed ?? 0);
+  const agentsChecked = checks
+    ? new Set(checks.map((c) => c.bot)).size
+    : (props.initialCheck?.agents ?? 0);
+  const pathsChecked = checks
+    ? new Set(checks.map((c) => c.path)).size
+    : (props.initialCheck?.paths ?? 0);
+  const checkCount = checks ? checks.length : (props.initialCheck?.count ?? 0);
 
   const outLines: NoticeLine[] = useMemo(() => {
     if (mode === 'merge') {
@@ -585,7 +603,7 @@ export default function Generator(props: Props) {
             <h2 id="gen-out-title" class="notice__title">
               {t('gen.resultTitle')}
             </h2>
-            <label class="row small">
+            <label class="row small notes-toggle">
               <input
                 type="checkbox"
                 checked={showNotes}
@@ -607,7 +625,7 @@ export default function Generator(props: Props) {
           </div>
           <div class="notice__foot">
             <span aria-live="polite">
-              {checks.length > 0 &&
+              {checkCount > 0 &&
                 (failed === 0 ? (
                   <span class="stamp stamp--ok stamp--big">
                     {t('gen.verified', { agents: agentsChecked, paths: pathsChecked })}
@@ -680,4 +698,32 @@ export default function Generator(props: Props) {
       </section>
     </div>
   );
+}
+
+/** Defaults of the generator form, shared with the page that pre-computes the first example. */
+export const GENERATOR_DEFAULTS = {
+  siteType: 'blog' as SiteType,
+  goal: 'block-training' as Goal,
+  sitemaps: 'https://example.com/sitemap.xml',
+};
+
+export function initialCheckFor(bots: GenBot[], date: string): NonNullable<Props['initialCheck']> {
+  const r = generateRobotsTxt(bots as Bot[], {
+    goal: GENERATOR_DEFAULTS.goal,
+    siteType: GENERATOR_DEFAULTS.siteType,
+    custom: {},
+    exceptions: SITE_TYPE_PRESETS.blog.exceptions,
+    globalDisallow: SITE_TYPE_PRESETS.blog.globalDisallow,
+    sitemaps: [GENERATOR_DEFAULTS.sitemaps],
+    contentSignals: null,
+    comments: true,
+    date,
+  });
+  return {
+    text: r.text,
+    agents: new Set(r.checks.map((c) => c.bot)).size,
+    paths: new Set(r.checks.map((c) => c.path)).size,
+    failed: r.checks.filter((c) => !c.ok).length,
+    count: r.checks.length,
+  };
 }

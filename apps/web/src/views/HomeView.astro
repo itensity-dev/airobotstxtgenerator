@@ -3,7 +3,7 @@ import { communityBots, registry } from '@airobots/core';
 import Layout from '../layouts/Layout.astro';
 import PageHead from '../components/PageHead.astro';
 import PageSections from '../components/PageSections.astro';
-import Generator from '../islands/Generator';
+import Generator, { initialCheckFor } from '../islands/Generator';
 import { pick } from '../i18n';
 import { pathFor } from '../i18n/routes';
 import { getPage } from '../lib/content';
@@ -49,6 +49,7 @@ const dict = pick(locale, ['gen.', 'note.', 'common.', 'verdict.', 'purpose.']);
     client:load
     dict={dict}
     bots={genBots()}
+    initialCheck={initialCheckFor(genBots(), registry.updated)}
     communityCount={communityBots.length}
     communityUrl="/bots.json"
     operators={operators}

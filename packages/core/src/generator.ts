@@ -47,6 +47,8 @@ export interface GeneratorOptions {
    * (a crawler obeys only its most specific group). Defaults to `globalDisallow`.
    */
   globalRulesToRepeat?: { type: 'allow' | 'disallow'; pattern: string }[];
+  /** Verify the file against the policy (default true). The UI can defer this work. */
+  verify?: boolean;
   /** Header line naming the tool. */
   generatorName?: string;
 }
@@ -88,6 +90,11 @@ export interface PolicyCheck {
 
 export interface GeneratorResult {
   text: string;
+  /** Access decided per bot id (useful to verify later with verifyPolicy). */
+  access: Map<string, Access>;
+  /** Normalised exceptions and the rules repeated from the * group. */
+  exceptions: PathException[];
+  globalRules: { type: 'allow' | 'disallow'; pattern: string }[];
   lines: GeneratedLine[];
   /** Bot ids that end up blocked from `/`. */
   blocked: string[];
@@ -337,11 +344,15 @@ export function generateRobotsTxt(bots: Bot[], options: GeneratorOptions): Gener
     if (b.purpose === 'search' || b.purpose === 'user') blockedVisibility.push(b.id);
     if (b.respectsRobots === 'no') blockedNonCompliant.push(b.id);
   }
-  const checks = includeGlobal
-    ? verifyPolicy(text, bots, { access, exceptions, globalRules: repeat })
-    : [];
+  const checks =
+    includeGlobal && options.verify !== false
+      ? verifyPolicy(text, bots, { access, exceptions, globalRules: repeat })
+      : [];
   return {
     text,
+    access,
+    exceptions,
+    globalRules: repeat,
     lines,
     blocked: blockedIds,
     allowed: allowedIds,

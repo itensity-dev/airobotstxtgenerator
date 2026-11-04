@@ -50,13 +50,16 @@ marked **(default — confirm)**.
 | 26 | Astro 7 (static), Preact 11 islands, TypeScript 6 | Latest stable Astro; Preact is the lightest option for form-heavy islands; TS 6 because typescript-eslint and @astrojs/check do not support TS 7 yet. |
 | 27 | Astro's built-in CSP (hashed inline scripts) + a header CSP for `frame-ancestors`, `object-src`, `base-uri`, `form-action`; no COOP/COEP | Strict CSP without breaking hydration; third-party origins added only when analytics/ads are enabled. |
 | 28 | Markdown syntax highlighting off | Shiki's inline styles conflict with the CSP. |
-| 29 | Fonts self-hosted from @fontsource (latin, latin-ext, cyrillic subsets), only Libre Franklin latin preloaded, metric-matched fallbacks | Brief §15; Japanese uses system Mincho/Gothic fonts (CJK web fonts are too heavy). |
+| 29 | Fonts self-hosted from @fontsource (latin, latin-ext, cyrillic subsets), only Libre Franklin latin preloaded, metric-matched fallbacks (Arial/Liberation, Times/Liberation, Courier/Liberation, DejaVu) | Brief §15; Japanese uses system Mincho/Gothic fonts (CJK web fonts are too heavy). |
+| 29a | Display face Old Standard TT uses `font-display: optional` (text and code faces keep `swap`) | CI Lighthouse measured CLS 0.126: a heading re-wrapped when the display font arrived after first paint. Metric overrides cannot guarantee identical line breaks for a specific string; `optional` shows the fallback serif on a cold, slow first visit and the real face from cache afterwards, with zero layout shift. |
 | 30 | A language is published only when all its pages, bot texts and UI keys exist (checked at build) and CI runs `i18n-check` | Brief §12. |
 | 31 | Translations produced by eight parallel translation passes with a shared brief and the local-search research in `docs/I18N.md` | Natural local phrasing, not word-for-word; legal statements limited to what the research marks verified. |
 | 32 | Japanese URLs use English slugs; others use localised slugs; `pt-br` in paths, `pt-BR` in hreflang | Research recommendation (docs/I18N.md). |
 | 33 | PWA: generated `sw.js` precaches the generator and tester pages of every language plus all hashed assets; network-first for pages | Generator and paste test work offline (brief §11). |
 | 34 | OG images rendered at build with satori + resvg (Noto Sans JP for Japanese) | Brief §13. |
 | 35 | Ads: off by default; `AdSlot` renders a fixed 336×280 block only outside tool areas when `ADS_ENABLED=true`; GA4 only after consent; Plausible needs none | Brief §17. |
+
+| 40 | Comments inside generated robots.txt files are always English; the explanation of each line is shown in the page language next to the file | robots.txt is read by machines and by developers of any language; English comments are the convention and keep files identical across locales. |
 
 ## Deployment
 

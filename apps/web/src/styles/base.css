@@ -1200,3 +1200,9 @@ code.wrap-code {
   border-width: var(--line);
   background: var(--paper);
 }
+@media (max-width: 767px) {
+  /* Line notes are not shown on narrow screens, so their toggle is hidden too. */
+  .notice__head .notes-toggle {
+    display: none;
+  }
+}
