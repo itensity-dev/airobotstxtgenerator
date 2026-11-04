@@ -144,3 +144,29 @@
   descent-override: 27.5%;
   line-gap-override: 0%;
 }
+/* Linux fallbacks (DejaVu ships with most distributions); used when the faces above are missing. */
+@font-face {
+  font-family: 'Franklin Fallback DejaVu';
+  src: local('DejaVu Sans');
+  size-adjust: 90.99%;
+  ascent-override: 106.17%;
+  descent-override: 27.04%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Old Standard Fallback DejaVu';
+  src: local('DejaVu Serif Bold'), local('DejaVuSerif-Bold');
+  font-weight: 700;
+  size-adjust: 78.17%;
+  ascent-override: 97.48%;
+  descent-override: 30.45%;
+  line-gap-override: 30.19%;
+}
+@font-face {
+  font-family: 'Plex Mono Fallback DejaVu';
+  src: local('DejaVu Sans Mono');
+  size-adjust: 99.66%;
+  ascent-override: 102.85%;
+  descent-override: 27.59%;
+  line-gap-override: 0%;
+}

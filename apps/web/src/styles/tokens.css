@@ -20,14 +20,14 @@
   --selection: #e9d9a8;
 
   --font-display:
-    'Old Standard TT', 'Old Standard Fallback', 'Hiragino Mincho ProN', 'Yu Mincho',
-    'Noto Serif JP', Georgia, serif;
+    'Old Standard TT', 'Old Standard Fallback', 'Old Standard Fallback DejaVu',
+    'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', Georgia, serif;
   --font-text:
-    'Libre Franklin', 'Franklin Fallback', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
-    'Yu Gothic', 'Meiryo', 'Noto Sans JP', Arial, sans-serif;
+    'Libre Franklin', 'Franklin Fallback', 'Franklin Fallback DejaVu', 'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', 'Noto Sans JP', Arial, sans-serif;
   --font-mono:
-    'IBM Plex Mono', 'Plex Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, Consolas,
-    monospace;
+    'IBM Plex Mono', 'Plex Mono Fallback', 'Plex Mono Fallback DejaVu', ui-monospace,
+    'SFMono-Regular', Menlo, Consolas, monospace;
 
   --fs-xs: 0.8125rem; /* 13 */
   --fs-sm: 0.875rem; /* 14 */
