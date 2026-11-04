@@ -1,5 +1,137 @@
 ---
-import type { SitePage } from '../lib/pages';
-interface Props { page: SitePage }
+import { buildServerRules, buildVerificationSnippet, getBot, getOperator, registry } from '@airobots/core';
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import Code from '../components/Code.astro';
+import { t } from '../i18n';
+import { formatDate } from '../i18n/locales';
+import { botPath, pathFor } from '../i18n/routes';
+import { getBotPagePattern, getBotTexts, getPage } from '../lib/content';
+import { interpolate } from '../i18n';
+import { renderInline } from '../lib/markdown';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { breadcrumbList, faqPage } from '../lib/seo';
+import { crumbsFor, mdPath, ogPath } from '../lib/view';
+import { SITE_URL } from '../config/site';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const bot = getBot(page.botId!)!;
+const op = getOperator(bot.operator);
+const opName = op?.name ?? bot.operatorName ?? '—';
+const texts = getBotTexts(locale)[bot.id] ?? {};
+const en = getBotTexts('en')[bot.id] ?? { details: '' };
+const summary = texts.summary ?? bot.summary;
+const respectsNote = texts.respectsNote ?? bot.respectsNote;
+const note = texts.note ?? bot.note;
+const details = texts.details ?? en.details;
+const pattern = getBotPagePattern(locale) ?? getBotPagePattern('en')!;
+const vars = { name: bot.name, operator: opName, summary };
+const title = texts.title ?? interpolate(pattern.title, vars);
+const description = (texts.description ?? interpolate(pattern.description, vars)).slice(0, 300);
+const purposeLabel = bot.general ? t(locale, 'purpose.general') : bot.kind === 'token' ? t(locale, 'purpose.token') : t(locale, `purpose.${bot.purpose}`);
+const crumbs = crumbsFor(locale, 'bot', { name: bot.name, href: botPath(locale, bot.id) });
+
+const token = bot.token;
+const blockTxt = `User-agent: ${token}\nDisallow: /\n`;
+const allowTxt = `# ${token} may crawl everything; it ignores the * group once named\nUser-agent: ${token}\nAllow: /\n\nUser-agent: *\nDisallow: /private/\n`;
+const partialTxt = `User-agent: ${token}\nDisallow: /premium/\nDisallow: /members/\nAllow: /\n`;
+const hasUa = bot.uaMatch.length > 0;
+const nginx = hasUa ? buildServerRules('nginx', [bot]).code : '';
+const apache = hasUa ? buildServerRules('apache', [bot]).code : '';
+const cloudflare = hasUa ? buildServerRules('cloudflare', [bot]).code : '';
+const verify = buildVerificationSnippet(bot);
+const related = (bot.related ?? []).map((id) => getBot(id)).filter((b): b is NonNullable<typeof b> => !!b);
+const compClass = { yes: 'stamp--ok', no: 'stamp--no', partial: 'stamp--part', unknown: 'stamp--info' }[bot.respectsRobots];
+
+const faq = [
+  { q: t(locale, 'bots.faqWhat', { name: bot.name }), a: `${summary} ${note ?? ''}`.trim() },
+  { q: t(locale, 'bots.faqRobots', { name: bot.name }), a: `${t(locale, `compliance.${bot.respectsRobots}`)}. ${respectsNote ?? ''}`.trim() },
+  {
+    q: t(locale, 'bots.faqVerify', { name: bot.name }),
+    a:
+      bot.verification === 'none'
+        ? t(locale, 'bots.verifyNone', { operator: opName, name: bot.name })
+        : `${t(locale, `verification.${bot.verification}`)}${bot.verifyHosts ? ': ' + bot.verifyHosts.join(', ') : ''}${bot.ipRanges ? ' — ' + bot.ipRanges : ''}`,
+  },
+];
+const jsonLd = [breadcrumbList(crumbs), faqPage(faq)];
+const historyText = (h: { date: string; text: string }, i: number) => texts.history?.[String(i)] ?? h.text;
+const serverPage = pathFor(locale, 'server-rules');
+const testerPage = pathFor(locale, 'tester');
+const botsPage = getPage(locale, 'bots');
 ---
-<p>TODO</p>
+<Layout locale={locale} title={title} description={description} path={page.path} alternates={alternatesFor('bot', bot.id)} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent="bots" ogType="article">
+  <PageHead h1={bot.name} lead={summary} crumbs={crumbs} kicker={`${opName} · ${purposeLabel}`} />
+  <div class="bot-grid">
+    <div>
+      <dl class="record">
+        <dt>{t(locale, 'bots.record.token')}</dt><dd><code>{token}</code></dd>
+        <dt>{t(locale, 'bots.record.ua')}</dt><dd>{bot.kind === 'token' ? <span class="muted">{t(locale, 'bots.tokenOnly', { name: bot.name })}</span> : bot.userAgent ? <code class="wrap-code">{bot.userAgent}</code> : <span class="muted">—</span>}</dd>
+        <dt>{t(locale, 'bots.record.operator')}</dt><dd>{op ? <a href={op.url} rel="noopener">{op.name}</a> : opName}</dd>
+        <dt>{t(locale, 'bots.record.purpose')}</dt><dd>{purposeLabel}</dd>
+        <dt>{t(locale, 'bots.record.robots')}</dt><dd><span class={`stamp ${compClass}`}>{t(locale, `compliance.${bot.respectsRobots}`)}</span>{respectsNote && <p class="small">{respectsNote}</p>}</dd>
+        <dt>{t(locale, 'bots.record.verify')}</dt><dd>{t(locale, `verification.${bot.verification}`)}{bot.verifyHosts && <span class="small"> — {bot.verifyHosts.map((h) => <code>{h}</code>)}</span>}</dd>
+        <dt>{t(locale, 'bots.record.ip')}</dt><dd>{bot.ipRanges ? <a href={bot.ipRanges} rel="noopener nofollow">{bot.ipRanges}</a> : <span class="muted">{t(locale, 'bots.noDocs')}</span>}</dd>
+        <dt>{t(locale, 'bots.record.docs')}</dt><dd>{bot.docs ? <a href={bot.docs} rel="noopener">{bot.docs}</a> : <span class="muted">{bot.source === 'observed' ? t(locale, 'bots.observed', { operator: opName }) : t(locale, 'bots.noDocs')}</span>}</dd>
+        <dt>{t(locale, 'bots.record.checked')}</dt><dd><time datetime={bot.lastVerified}>{formatDate(bot.lastVerified, locale)}</time> <span class="small muted">({t(locale, `bots.method.${bot.checkMethod}`)})</span></dd>
+      </dl>
+      <section class="prose">
+        <p set:html={renderInline(details, false, locale)} />
+        {note && <p class="callout" set:html={renderInline(note, false, locale)} />}
+      </section>
+
+      <h2>{t(locale, 'bots.blockTitle', { name: bot.name })}</h2>
+      <Code code={blockTxt} locale={locale} label="robots.txt" />
+      <h3>{t(locale, 'bots.partialTitle', { name: bot.name })}</h3>
+      <Code code={partialTxt} locale={locale} label="robots.txt" />
+      <h3>{t(locale, 'bots.allowTitle', { name: bot.name })}</h3>
+      <Code code={allowTxt} locale={locale} label="robots.txt" />
+      <p class="small"><a href={`${testerPage}#paste`}>{t(locale, 'nav.tester')}</a> · <a href={pathFor(locale, 'home')}>{t(locale, 'nav.home')}</a></p>
+
+      <h2>{t(locale, 'bots.serverTitle', { name: bot.name })}</h2>
+      {hasUa ? (
+        <>
+          <Code code={nginx} locale={locale} label="nginx" />
+          <Code code={apache} locale={locale} label="Apache .htaccess" />
+          <Code code={cloudflare} locale={locale} label="Cloudflare WAF" />
+          <p class="small"><a href={serverPage}>{t(locale, 'nav.serverRules')} →</a></p>
+        </>
+      ) : (
+        <p class="callout">{t(locale, 'bots.tokenOnly', { name: bot.name })}</p>
+      )}
+
+      <h2>{t(locale, 'bots.verifyTitle', { name: bot.name })}</h2>
+      {verify.code ? <Code code={verify.code} locale={locale} label="Node.js" /> : <p>{bot.kind === 'token' ? t(locale, 'bots.tokenOnly', { name: bot.name }) : t(locale, 'bots.verifyNone', { operator: opName, name: bot.name })}</p>}
+    </div>
+    <aside>
+      {bot.history && bot.history.length > 0 && (
+        <section>
+          <h2>{t(locale, 'bots.historyTitle')}</h2>
+          <ol class="history">
+            {bot.history.map((h, i) => <li><time datetime={h.date}>{formatDate(h.date, locale)}</time><span>{historyText(h, i)}</span></li>)}
+          </ol>
+        </section>
+      )}
+      {related.length > 0 && (
+        <section>
+          <h2>{t(locale, 'bots.relatedTitle')}</h2>
+          <ul class="related">
+            {related.map((r) => <li>{r.page ? <a href={botPath(locale, r.id)}>{r.name}</a> : <strong>{r.name}</strong>}<br /><span class="small muted">{getOperator(r.operator)?.name} · {r.general ? t(locale, 'purpose.general') : r.kind === 'token' ? t(locale, 'purpose.token') : t(locale, `purpose.${r.purpose}`)}</span></li>)}
+          </ul>
+        </section>
+      )}
+      <section>
+        <h2>{t(locale, 'common.faq')}</h2>
+        <div class="faq">
+          {faq.map((f) => <details><summary>{f.q}</summary><div><p>{f.a}</p></div></details>)}
+        </div>
+      </section>
+      <p class="small"><a href={pathFor(locale, 'bots')}>← {botsPage?.frontmatter.nav ?? t(locale, 'nav.bots')}</a></p>
+    </aside>
+  </div>
+  <p class="updated">{t(locale, 'common.updated', { date: formatDate(bot.lastVerified, locale) })}</p>
+</Layout>

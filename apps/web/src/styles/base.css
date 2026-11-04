@@ -956,3 +956,200 @@ textarea.textarea--short {
   background: var(--red-wash);
   text-decoration: line-through;
 }
+.tester {
+  display: grid;
+  gap: var(--s-5);
+  margin-bottom: var(--s-7);
+}
+.tester .row > .field {
+  flex: 1 1 200px;
+  margin: 0;
+}
+.test-verdict {
+  font-size: var(--fs-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+}
+.fetch-status {
+  margin-top: var(--s-3);
+}
+.code {
+  margin: 0 0 var(--s-4);
+}
+.code__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s-2);
+  border: var(--line-hair) solid var(--rule);
+  border-bottom: 0;
+  background: var(--paper-3);
+  padding: var(--s-1) var(--s-1) var(--s-1) var(--s-3);
+}
+.code pre {
+  margin: 0;
+}
+.bot-grid {
+  display: grid;
+  gap: var(--s-6);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 1024px) {
+  .bot-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+}
+.history {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--s-5);
+  border-top: var(--line-hair) solid var(--rule);
+}
+.history li {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr);
+  gap: var(--s-3);
+  padding: var(--s-2) 0;
+  border-bottom: var(--line-hair) solid var(--rule-light);
+  margin: 0;
+  font-size: var(--fs-sm);
+}
+.history time {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-items: center;
+  margin-bottom: var(--s-3);
+}
+.filter-row input {
+  max-width: 360px;
+}
+code.wrap-code {
+  white-space: normal;
+  word-break: break-all;
+}
+.notice__pre {
+  margin: 0;
+  border: 0;
+  background: var(--paper);
+  max-height: 560px;
+  overflow: auto;
+}
+.check-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-3) 0 0;
+  columns: 2 180px;
+  font-size: var(--fs-sm);
+}
+.check-list li {
+  break-inside: avoid;
+  margin: 0 0 var(--s-1);
+}
+.llms-section {
+  border-top: var(--line-hair) solid var(--rule);
+  padding-top: var(--s-3);
+}
+.llms-section legend input {
+  width: auto;
+  min-height: 36px;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+.llms-link {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-1);
+  margin-bottom: var(--s-3);
+  padding-bottom: var(--s-3);
+  border-bottom: var(--line-hair) dashed var(--rule-light);
+}
+@media (min-width: 640px) {
+  .llms-link {
+    grid-template-columns: 1fr 1.4fr;
+  }
+  .llms-link input:nth-child(3) {
+    grid-column: 1 / 2;
+  }
+}
+.signal-out {
+  margin-bottom: var(--s-4);
+}
+.signal-out h3 {
+  margin: 0;
+}
+.guide-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--s-6);
+  border-top: var(--line) solid var(--rule);
+}
+.guide-list li {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: var(--s-4);
+  padding: var(--s-4) 0;
+  border-bottom: var(--line-hair) solid var(--rule-light);
+  margin: 0;
+}
+.guide-list__n {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-2xl);
+  line-height: 1;
+}
+.guide-list h2 {
+  margin: 0 0 var(--s-2);
+  font-size: var(--fs-lg);
+}
+.toc {
+  border-top: var(--line) solid var(--rule);
+  padding-top: var(--s-2);
+  margin-bottom: var(--s-5);
+  font-size: var(--fs-sm);
+}
+.toc ol {
+  margin: 0;
+  padding-left: 1.4em;
+}
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  display: block;
+  overflow-x: auto;
+}
+.article th,
+.article td {
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--line-hair) solid var(--rule-light);
+  padding: var(--s-2);
+}
+.article thead th {
+  border-bottom: var(--line-hair) solid var(--rule);
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  display: block;
+  overflow-x: auto;
+  margin-bottom: var(--s-5);
+}
+.prose th,
+.prose td {
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--line-hair) solid var(--rule-light);
+  padding: var(--s-2);
+}
+.prose thead th {
+  border-bottom: var(--line-hair) solid var(--rule);
+}

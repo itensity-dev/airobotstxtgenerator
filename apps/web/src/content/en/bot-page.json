@@ -1,0 +1,7 @@
+{
+  "pattern": {
+    "title": "{name}: what it is and how to block it ({operator})",
+    "description": "{summary} User-Agent, robots.txt token, IP ranges, verification and ready-to-copy rules to block or allow {name}.",
+    "h1": "{name}"
+  }
+}

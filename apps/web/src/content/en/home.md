@@ -3,7 +3,7 @@ title: "AI robots.txt Generator — block GPTBot, ClaudeBot & AI crawlers"
 description: "Free AI robots.txt generator: block AI training (GPTBot, ClaudeBot, Google-Extended, CCBot) and keep AI search, or block all AI. Every file is checked against RFC 9309."
 h1: "AI robots.txt generator"
 nav: "robots.txt generator"
-lead: "Pick your site type and goal; the generator writes a robots.txt for 50 documented AI crawlers and tokens, explains every line and checks the result with an RFC 9309 parser before you copy it."
+lead: "Pick your site type and goal; the generator writes a robots.txt for {{all}} documented AI crawlers and tokens, explains every line and checks the result with an RFC 9309 parser before you copy it."
 steps:
   - "Choose the **site type** — it sets sensible starting paths (a shop closes `/cart/` and `/checkout/` to every crawler, a news site closes `/premium/` to AI bots)."
   - "Choose the **goal**: no AI training but stay in AI search, no AI at all, allow everything, or decide bot by bot."
@@ -13,7 +13,7 @@ steps:
 capabilities:
   - feature: "AI crawler list"
     status: "yes"
-    note: "50 agents and tokens with the operator's own documentation and the date of the last check; 149 more from the ai.robots.txt community list on request."
+    note: "{{all}} agents and tokens with the operator's own documentation and the date of the last check; {{community}} more from the ai.robots.txt community list on request."
   - feature: "Presets by purpose"
     status: "yes"
     note: "Training, AI search, user-requested fetches and robots.txt-only tokens are treated separately."

@@ -1,5 +1,101 @@
 ---
-import type { SitePage } from '../lib/pages';
-interface Props { page: SitePage }
+import { communityList, curatedBots, getOperator, registry } from '@airobots/core';
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import PageSections from '../components/PageSections.astro';
+import { t } from '../i18n';
+import { formatDate, formatNumber } from '../i18n/locales';
+import { botPath } from '../i18n/routes';
+import { getBotTexts, getPage } from '../lib/content';
+import { resolveLinksInHtml } from '../lib/links';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { breadcrumbList, dataset, faqPage } from '../lib/seo';
+import { crumbsFor, mdPath, ogPath } from '../lib/view';
+import { SITE_URL } from '../config/site';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const mod = getPage(locale, 'bots')!;
+const fm = mod.frontmatter;
+const body = resolveLinksInHtml(await mod.compiledContent(), locale);
+const crumbs = crumbsFor(locale, 'bots');
+const texts = getBotTexts(locale);
+const order = ['training', 'mixed', 'unknown', 'search', 'user'];
+const bots = [...curatedBots].sort((a, b) => (getOperator(a.operator)?.name ?? '').localeCompare(getOperator(b.operator)?.name ?? '') || order.indexOf(a.purpose) - order.indexOf(b.purpose));
+const purpose = (b: (typeof bots)[number]) => (b.general ? t(locale, 'purpose.general') : b.kind === 'token' ? t(locale, 'purpose.token') : t(locale, `purpose.${b.purpose}`));
+const comp = { yes: 'stamp--ok', no: 'stamp--no', partial: 'stamp--part', unknown: 'stamp--info' } as const;
+const jsonLd = [
+  breadcrumbList(crumbs),
+  dataset({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, updated: registry.updated, count: curatedBots.length + communityList.bots.length }),
+  ...(fm.faq?.length ? [faqPage(fm.faq)] : []),
+];
 ---
-<p>TODO</p>
+<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor('bots')} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent="bots">
+  <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
+  <div class="filter-row">
+    <label for="bot-filter" class="small">{t(locale, 'bots.filterLabel')}</label>
+    <input id="bot-filter" type="search" placeholder={t(locale, 'bots.search')} data-filter="#register-curated" />
+    <span class="small muted">{t(locale, 'bots.count', { count: formatNumber(curatedBots.length, locale) })} · <a href="/bots.json">bots.json</a></span>
+  </div>
+  <div class="table-wrap">
+    <table class="register" id="register-curated">
+      <thead>
+        <tr>
+          <th scope="col">{t(locale, 'bots.colName')}</th>
+          <th scope="col">{t(locale, 'bots.colOperator')}</th>
+          <th scope="col">{t(locale, 'bots.colPurpose')}</th>
+          <th scope="col">{t(locale, 'bots.colRobots')}</th>
+          <th scope="col">{t(locale, 'bots.colVerify')}</th>
+          <th scope="col">{t(locale, 'bots.colChecked')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {bots.map((b) => (
+          <tr data-search={`${b.name} ${b.token} ${getOperator(b.operator)?.name ?? ''} ${purpose(b)}`.toLowerCase()}>
+            <th scope="row" class="mono">{b.page ? <a href={botPath(locale, b.id)}>{b.token}</a> : b.token}{b.legacy && <span class="small muted"> (legacy)</span>}</th>
+            <td>{getOperator(b.operator)?.name}</td>
+            <td>{purpose(b)}</td>
+            <td><span class={`stamp ${comp[b.respectsRobots]}`}>{t(locale, `compliance.${b.respectsRobots}`)}</span></td>
+            <td class="small">{t(locale, `verification.${b.verification}`)}</td>
+            <td class="small num"><time datetime={b.lastVerified}>{formatDate(b.lastVerified, locale, 'medium')}</time></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <details class="community">
+    <summary><strong>{t(locale, 'bots.community')}</strong> — {t(locale, 'bots.count', { count: formatNumber(communityList.bots.length, locale) })}</summary>
+    <p class="small muted">{t(locale, 'bots.communityNote', { date: formatDate(communityList.updated, locale) })}</p>
+    <div class="table-wrap">
+      <table class="register">
+        <thead><tr><th scope="col">{t(locale, 'bots.colName')}</th><th scope="col">{t(locale, 'bots.colOperator')}</th><th scope="col">{t(locale, 'bots.colPurpose')}</th><th scope="col">{t(locale, 'bots.colRobots')}</th></tr></thead>
+        <tbody>
+          {communityList.bots.map((b) => (
+            <tr><th scope="row" class="mono">{b.token}</th><td>{b.operatorName ?? '—'}</td><td>{t(locale, `purpose.${b.purpose}`)}</td><td><span class={`stamp ${comp[b.respectsRobots]}`}>{t(locale, `compliance.${b.respectsRobots}`)}</span></td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  <PageSections locale={locale} fm={fm}>
+    <Fragment set:html={body} />
+  </PageSections>
+</Layout>
+<script>
+  for (const input of document.querySelectorAll<HTMLInputElement>('[data-filter]')) {
+    const table = document.querySelector(input.dataset.filter!);
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      for (const row of table?.querySelectorAll<HTMLElement>('tbody tr') ?? []) {
+        row.hidden = q !== '' && !(row.dataset.search ?? '').includes(q);
+      }
+    });
+  }
+</script>
+<style>
+  .community { margin: var(--s-5) 0; border-top: var(--line-hair) solid var(--rule); padding-top: var(--s-3); }
+  .community summary { cursor: pointer; padding: var(--s-2) 0; }
+</style>

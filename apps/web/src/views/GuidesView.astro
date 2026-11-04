@@ -1,5 +1,40 @@
 ---
-import type { SitePage } from '../lib/pages';
-interface Props { page: SitePage }
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { t } from '../i18n';
+import { formatDate } from '../i18n/locales';
+import { pathFor, type PageId } from '../i18n/routes';
+import { getPage } from '../lib/content';
+import { resolveLinksInHtml } from '../lib/links';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { breadcrumbList } from '../lib/seo';
+import { crumbsFor, mdPath, ogPath } from '../lib/view';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const mod = getPage(locale, 'guides')!;
+const fm = mod.frontmatter;
+const body = resolveLinksInHtml(await mod.compiledContent(), locale);
+const crumbs = crumbsFor(locale, 'guides');
+const ids: PageId[] = ['guide-training-search', 'guide-syntax', 'guide-eu-ai-act', 'guide-bad-bots'];
+const guides = ids.map((id, i) => ({ n: i + 1, href: pathFor(locale, id), p: getPage(locale, id) })).filter((g) => g.p);
 ---
-<p>TODO</p>
+<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor('guides')} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={[breadcrumbList(crumbs)]} navCurrent="guides">
+  <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
+  <ol class="guide-list">
+    {guides.map((g) => (
+      <li>
+        <span class="guide-list__n">{String(g.n).padStart(2, '0')}</span>
+        <div>
+          <h2><a href={g.href}>{g.p!.frontmatter.h1}</a></h2>
+          <p>{g.p!.frontmatter.lead}</p>
+          <p class="small muted">{t(locale, 'common.updated', { date: formatDate(g.p!.frontmatter.updated, locale) })}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+  <div class="prose"><Fragment set:html={body} /></div>
+</Layout>

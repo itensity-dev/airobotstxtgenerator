@@ -356,5 +356,49 @@
   "notFound": {
     "title": "Page not found",
     "text": "There is no page at this address. These tools are:"
+  },
+  "llms": {
+    "name": "Site or project name (H1)",
+    "summary": "Summary (blockquote)",
+    "summaryHint": "One or two sentences: what the site is and what the file lists.",
+    "details": "Notes (optional)",
+    "sectionTitle": "Section title",
+    "optional": "Optional section (readers may skip it)",
+    "linkTitle": "Title",
+    "linkDesc": "Description (optional)",
+    "addLink": "Add link",
+    "addSection": "Add section",
+    "removeSection": "Remove section",
+    "valid": "Valid llms.txt structure: one H1, a summary, H2 sections with link lists."
+  },
+  "signals": {
+    "choose": "Your preferences",
+    "unset": "no preference",
+    "hint": "search = index and link; ai-input = use in AI answers (RAG, grounding); ai-train = train or fine-tune models. A signal you do not set expresses no preference.",
+    "usageToken": "Also add the shared __usage_ai-training group when ai-train is no",
+    "cloudflare": "robots.txt — Content-Signal (Cloudflare)",
+    "aipref": "robots.txt — Content-Usage (IETF aipref draft)",
+    "header": "HTTP header — Content-Usage (IETF aipref draft)"
+  },
+  "tdm": {
+    "reserved": "rights reserved",
+    "reservedHint": "Text and data mining is not allowed without a licence (opt-out under Art. 4 DSM Directive).",
+    "notReserved": "not reserved",
+    "notReservedHint": "No reservation expressed.",
+    "policyHint": "Optional URL of a machine-readable policy describing how to obtain a licence.",
+    "headers": "HTTP response headers"
+  },
+  "licenses": {
+    "fonts": "Fonts",
+    "data": "Data and test sources",
+    "browser": "Code delivered to your browser",
+    "server": "Server components",
+    "build": "Build tools ({count} packages)",
+    "colPackage": "Package",
+    "colVersion": "Version",
+    "colLicense": "License",
+    "colFont": "Font",
+    "colAuthor": "Author",
+    "colSource": "Source"
   }
 }

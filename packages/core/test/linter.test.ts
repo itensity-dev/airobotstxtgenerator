@@ -92,3 +92,15 @@ describe('linter', () => {
     expect(issues.filter((i) => i.severity !== 'info')).toEqual([]);
   });
 });
+
+import { parseRobots, summarizeAgent } from '../src/index.js';
+describe('summarizeAgent', () => {
+  const p = parseRobots('User-agent: GPTBot\nDisallow: /\nAllow: /blog/\n\nUser-agent: *\nDisallow: /admin/\n\nUser-agent: CCBot\nDisallow: /\n');
+  it('classifies', () => {
+    expect(summarizeAgent(p, 'GPTBot')).toMatchObject({ via: 'specific', verdict: 'partial', rootAllowed: false });
+    expect(summarizeAgent(p, 'CCBot')).toMatchObject({ via: 'specific', verdict: 'blocked' });
+    expect(summarizeAgent(p, 'ClaudeBot')).toMatchObject({ via: 'global', verdict: 'partial', rootAllowed: true });
+    expect(summarizeAgent(parseRobots('User-agent: *\nDisallow:\n'), 'X')).toMatchObject({ verdict: 'allowed' });
+    expect(summarizeAgent(parseRobots(''), 'X')).toMatchObject({ via: 'none', verdict: 'allowed' });
+  });
+});

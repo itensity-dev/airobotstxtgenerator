@@ -1,5 +1,64 @@
 ---
-import type { SitePage } from '../lib/pages';
-interface Props { page: SitePage }
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import { t } from '../i18n';
+import { formatDate, LOCALE_INFO } from '../i18n/locales';
+import { pathFor, type PageId } from '../i18n/routes';
+import { getPage } from '../lib/content';
+import { resolveLinksInHtml } from '../lib/links';
+import { renderInline } from '../lib/markdown';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { article, breadcrumbList, faqPage, organization } from '../lib/seo';
+import { crumbsFor, mdPath, ogPath } from '../lib/view';
+import { SITE_URL } from '../config/site';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const id = page.id as PageId;
+const mod = getPage(locale, id)!;
+const fm = mod.frontmatter;
+const body = resolveLinksInHtml(await mod.compiledContent(), locale);
+const crumbs = crumbsFor(locale, id);
+const isGuide = id.startsWith('guide-');
+const legalNote = id === 'guide-eu-ai-act' || id === 'terms' || id === 'privacy';
+const jsonLd: Record<string, unknown>[] = [breadcrumbList(crumbs)];
+if (isGuide) jsonLd.push(article({ headline: fm.h1, description: fm.description, url: SITE_URL + page.path, locale, updated: fm.updated }));
+if (id === 'about') jsonLd.push(organization());
+if (fm.faq?.length) jsonLd.push(faqPage(fm.faq));
+const related = (fm.related ?? []).map((r) => ({ href: pathFor(locale, r), p: getPage(locale, r) })).filter((r) => r.p);
+const headings = (mod.getHeadings?.() ?? []).filter((h) => h.depth === 2);
 ---
-<p>TODO</p>
+<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor(id)} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent={isGuide ? 'guides' : undefined} ogType={isGuide ? 'article' : 'website'} noindex={false}>
+  <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
+  {legalNote && <p class="callout small">{t(locale, 'common.notLegal')}{id === 'guide-eu-ai-act' && LOCALE_INFO[locale].eu ? '' : ''}</p>}
+  <div class="cols cols--rule">
+    <article class="prose article">
+      <Fragment set:html={body} />
+      {fm.faq && fm.faq.length > 0 && (
+        <section>
+          <h2>{t(locale, 'common.faq')}</h2>
+          <div class="faq">
+            {fm.faq.map((f) => <details><summary>{f.q}</summary><div set:html={renderInline(f.a, true, locale)} /></details>)}
+          </div>
+        </section>
+      )}
+    </article>
+    <aside>
+      {headings.length > 2 && (
+        <nav class="toc" aria-label="Contents">
+          <ol>{headings.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </nav>
+      )}
+      {related.length > 0 && (
+        <section>
+          <h2>{t(locale, 'common.related')}</h2>
+          <ul class="related">{related.map((r) => <li><a href={r.href}>{r.p!.frontmatter.nav ?? r.p!.frontmatter.h1}</a><br /><span class="small muted">{r.p!.frontmatter.lead}</span></li>)}</ul>
+        </section>
+      )}
+    </aside>
+  </div>
+  <p class="updated">{t(locale, 'common.updated', { date: formatDate(fm.updated, locale) })}</p>
+</Layout>

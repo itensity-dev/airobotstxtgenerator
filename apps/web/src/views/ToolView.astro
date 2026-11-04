@@ -1,5 +1,45 @@
 ---
-import type { SitePage } from '../lib/pages';
-interface Props { page: SitePage }
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import PageSections from '../components/PageSections.astro';
+import LlmsTxt from '../islands/LlmsTxt';
+import Signals from '../islands/Signals';
+import { pick, t } from '../i18n';
+import type { PageId } from '../i18n/routes';
+
+import { getPage } from '../lib/content';
+import { resolveLinksInHtml } from '../lib/links';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { breadcrumbList, faqPage, webApplication } from '../lib/seo';
+import { crumbsFor, mdPath, ogPath } from '../lib/view';
+import { SITE_URL } from '../config/site';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const id = page.id as PageId;
+const mod = getPage(locale, id)!;
+const fm = mod.frontmatter;
+const body = resolveLinksInHtml(await mod.compiledContent(), locale);
+const crumbs = crumbsFor(locale, id);
+const isTool = id !== 'meta-tags';
+const jsonLd = [
+  ...(isTool ? [webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale })] : []),
+  breadcrumbList(crumbs),
+  ...(fm.faq?.length ? [faqPage(fm.faq)] : []),
+];
+const dict = pick(locale, ['llms.', 'signals.', 'tdm.', 'common.']);
+
 ---
-<p>TODO</p>
+<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor(id)} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent={id === 'llms-txt' ? 'llms-txt' : undefined}>
+  <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
+  {(id === 'tdmrep') && <p class="callout small">{t(locale, 'common.notLegal')}</p>}
+  {id === 'llms-txt' && <LlmsTxt client:load dict={dict} />}
+  {id === 'content-signals' && <Signals client:load dict={dict} mode="signals" />}
+  {id === 'tdmrep' && <Signals client:load dict={dict} mode="tdmrep" />}
+  <PageSections locale={locale} fm={fm}>
+    <Fragment set:html={body} />
+  </PageSections>
+</Layout>

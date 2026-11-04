@@ -73,7 +73,7 @@ export function buildServerRules(target: ServerTarget, bots: Bot[], options: { s
   const warnings: string[] = [];
   let code = '';
   let language = 'text';
-  const header = `AI crawler block — ${patterns.length} User-Agent patterns from airobotstxtgenerator.com`;
+  const header = `AI crawler block — ${patterns.length} User-Agent pattern${patterns.length === 1 ? '' : 's'} (airobotstxtgenerator.com)`;
 
   switch (target) {
     case 'nginx': {

@@ -223,3 +223,41 @@ export function normalizeRequestPath(input: string): string {
     return getPathParamsQuery(trimmed);
   }
 }
+
+export interface AgentSummary {
+  /** Which groups the agent obeys. */
+  via: 'specific' | 'global' | 'none';
+  /** Start lines of the groups the agent obeys. */
+  groupLines: number[];
+  /** Decision for the site root `/`. */
+  rootAllowed: boolean;
+  /** `partial`: root allowed but some paths disallowed, or root blocked with exceptions. */
+  verdict: 'allowed' | 'blocked' | 'partial';
+  disallowCount: number;
+  allowCount: number;
+}
+
+/** Overview of what a robots.txt means for one agent (used for the tester's crawler table). */
+export function summarizeAgent(parsed: import('./parser.js').ParsedRobots, agent: string): AgentSummary {
+  const a = agent.toLowerCase();
+  let groups = parsed.groups.filter((g) => g.userAgents.some((u) => !u.isGlobal && u.token.toLowerCase() === a));
+  let via: AgentSummary['via'] = 'specific';
+  if (groups.length === 0) {
+    groups = parsed.groups.filter((g) => g.userAgents.some((u) => u.isGlobal));
+    via = groups.length > 0 ? 'global' : 'none';
+  }
+  const rules = groups.flatMap((g) => g.rules).filter((r) => r.pattern !== '');
+  const disallowCount = rules.filter((r) => r.type === 'disallow').length;
+  const allowCount = rules.filter((r) => r.type === 'allow' && r.pattern !== '/').length;
+  const rootAllowed = matchUrl(parsed, agent, '/').allowed;
+  let verdict: AgentSummary['verdict'];
+  if (rootAllowed) verdict = disallowCount > 0 && rules.some((r) => r.type === 'disallow' && !matchUrl(parsed, agent, samplePathOf(r.pattern)).allowed) ? 'partial' : 'allowed';
+  else verdict = allowCount > 0 && rules.some((r) => r.type === 'allow' && matchUrl(parsed, agent, samplePathOf(r.pattern)).allowed) ? 'partial' : 'blocked';
+  return { via, groupLines: groups.map((g) => g.startLine), rootAllowed, verdict, disallowCount, allowCount };
+}
+
+function samplePathOf(pattern: string): string {
+  let p = pattern.endsWith('$') ? pattern.slice(0, -1) : pattern;
+  p = p.replace(/\*/g, 'x');
+  return p.startsWith('/') ? p : '/' + p;
+}

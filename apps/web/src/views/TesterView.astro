@@ -1,5 +1,36 @@
 ---
-import type { SitePage } from '../lib/pages';
-interface Props { page: SitePage }
+import { communityBots, registry } from '@airobots/core';
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import PageSections from '../components/PageSections.astro';
+import Tester from '../islands/Tester';
+import { pick, t } from '../i18n';
+import { pathFor } from '../i18n/routes';
+import { getPage } from '../lib/content';
+import { resolveLinksInHtml } from '../lib/links';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { breadcrumbList, faqPage, webApplication } from '../lib/seo';
+import { crumbsFor, genBots, mdPath, ogPath } from '../lib/view';
+import { SITE_URL } from '../config/site';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const mod = getPage(locale, 'tester')!;
+const fm = mod.frontmatter;
+const body = resolveLinksInHtml(await mod.compiledContent(), locale);
+const crumbs = crumbsFor(locale, 'tester');
+const operators = Object.fromEntries(registry.operators.map((o) => [o.id, o.name]));
+const jsonLd = [webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale }), breadcrumbList(crumbs), ...(fm.faq?.length ? [faqPage(fm.faq)] : [])];
+const dict = pick(locale, ['tester.', 'lint.', 'common.', 'verdict.', 'purpose.']);
 ---
-<p>TODO</p>
+<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor('tester')} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent="tester">
+  <PageHead h1={fm.h1} lead={fm.lead} crumbs={crumbs} />
+  <noscript><p class="callout small">{t(locale, 'common.noJs')}</p></noscript>
+  <Tester client:load dict={dict} bots={genBots()} operators={operators} communityUrl="/bots.json" communityCount={communityBots.length} botBase={pathFor(locale, 'bots')} apiUrl="/api/robots" />
+  <PageSections locale={locale} fm={fm}>
+    <Fragment set:html={body} />
+  </PageSections>
+</Layout>

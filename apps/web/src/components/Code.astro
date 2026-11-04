@@ -1,0 +1,32 @@
+---
+/** Static code block with a copy button (progressively enhanced; works without JS as plain text). */
+import { t } from '../i18n';
+import type { Locale } from '../i18n/locales';
+interface Props {
+  code: string;
+  locale: Locale;
+  label?: string;
+  lang?: string;
+}
+const { code, locale, label, lang } = Astro.props;
+---
+<div class="code">
+  {label && <div class="code__head"><span class="mono small">{label}</span><button type="button" class="btn btn--small btn--ghost" data-copy hidden data-done={t(locale, 'common.copied')}>{t(locale, 'common.copy')}</button></div>}
+  <pre data-lang={lang}><code>{code}</code></pre>
+</div>
+<script>
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    if (btn.dataset.bound) continue;
+    btn.dataset.bound = '1';
+    btn.hidden = false;
+    btn.addEventListener('click', async () => {
+      const code = btn.closest('.code')?.querySelector('code')?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        const old = btn.textContent;
+        btn.textContent = btn.dataset.done ?? 'Copied';
+        setTimeout(() => (btn.textContent = old), 1500);
+      } catch {}
+    });
+  }
+</script>
