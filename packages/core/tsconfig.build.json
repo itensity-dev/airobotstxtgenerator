@@ -3,9 +3,9 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
-    "lib": ["ES2023"],
+    "lib": ["ES2023", "DOM"],
     "types": [],
     "noEmit": false
   },
-  "include": ["src"]
+  "include": ["src", "src/data/*.json"]
 }

@@ -1,0 +1,1641 @@
+{
+  "updated": "2026-11-04",
+  "license": "Data: CC BY 4.0, airobotstxtgenerator.com. Entries marked source \"ai.robots.txt\" come from the ai.robots.txt project (MIT License).",
+  "sources": [
+    {
+      "name": "Operator documentation (linked per bot)",
+      "url": "https://airobotstxtgenerator.com/bots/"
+    },
+    {
+      "name": "ai.robots.txt",
+      "url": "https://github.com/ai-robots-txt/ai.robots.txt",
+      "license": "MIT"
+    }
+  ],
+  "operators": [
+    {
+      "id": "openai",
+      "name": "OpenAI",
+      "url": "https://openai.com"
+    },
+    {
+      "id": "anthropic",
+      "name": "Anthropic",
+      "url": "https://www.anthropic.com"
+    },
+    {
+      "id": "google",
+      "name": "Google",
+      "url": "https://www.google.com"
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "url": "https://www.apple.com"
+    },
+    {
+      "id": "perplexity",
+      "name": "Perplexity AI",
+      "url": "https://www.perplexity.ai"
+    },
+    {
+      "id": "meta",
+      "name": "Meta",
+      "url": "https://www.meta.com"
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "url": "https://www.amazon.com"
+    },
+    {
+      "id": "bytedance",
+      "name": "ByteDance",
+      "url": "https://www.bytedance.com"
+    },
+    {
+      "id": "commoncrawl",
+      "name": "Common Crawl Foundation",
+      "url": "https://commoncrawl.org"
+    },
+    {
+      "id": "mistral",
+      "name": "Mistral AI",
+      "url": "https://mistral.ai"
+    },
+    {
+      "id": "duckduckgo",
+      "name": "DuckDuckGo",
+      "url": "https://duckduckgo.com"
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "url": "https://www.bing.com"
+    },
+    {
+      "id": "ai2",
+      "name": "Allen Institute for AI (Ai2)",
+      "url": "https://allenai.org"
+    },
+    {
+      "id": "yandex",
+      "name": "Yandex",
+      "url": "https://yandex.com"
+    },
+    {
+      "id": "you",
+      "name": "You.com",
+      "url": "https://you.com"
+    },
+    {
+      "id": "exa",
+      "name": "Exa",
+      "url": "https://exa.ai"
+    },
+    {
+      "id": "firecrawl",
+      "name": "Firecrawl",
+      "url": "https://www.firecrawl.dev"
+    },
+    {
+      "id": "huawei",
+      "name": "Huawei (Petal Search)",
+      "url": "https://petalsearch.com"
+    },
+    {
+      "id": "kagi",
+      "name": "Kagi",
+      "url": "https://kagi.com"
+    },
+    {
+      "id": "webz",
+      "name": "Webz.io",
+      "url": "https://webz.io"
+    },
+    {
+      "id": "imagesift",
+      "name": "ImageSift",
+      "url": "https://imagesift.com"
+    },
+    {
+      "id": "diffbot",
+      "name": "Diffbot",
+      "url": "https://www.diffbot.com"
+    },
+    {
+      "id": "cohere",
+      "name": "Cohere",
+      "url": "https://cohere.com"
+    },
+    {
+      "id": "ietf",
+      "name": "IETF AI Preferences (aipref) proposal",
+      "url": "https://datatracker.ietf.org/wg/aipref/about/"
+    }
+  ],
+  "bots": [
+    {
+      "id": "gptbot",
+      "name": "GPTBot",
+      "token": "GPTBot",
+      "uaMatch": [
+        "GPTBot"
+      ],
+      "operator": "openai",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "OpenAI's crawler that collects publicly available pages that may be used to train its generative AI foundation models.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot",
+      "respectsNote": "OpenAI: disallowing GPTBot signals that the site's content should not be used to train its generative AI foundation models.",
+      "ipRanges": "https://openai.com/gptbot.json",
+      "ipRangesFormat": "json",
+      "docs": "https://developers.openai.com/api/docs/bots",
+      "note": "Blocking GPTBot does not remove a site from ChatGPT search; that is controlled by OAI-SearchBot.",
+      "history": [
+        {
+          "date": "2023-08-07",
+          "text": "OpenAI documents GPTBot and how to block it in robots.txt."
+        },
+        {
+          "date": "2026-11-04",
+          "text": "User-Agent version observed in documentation: GPTBot/1.4."
+        }
+      ],
+      "related": [
+        "oai-searchbot",
+        "chatgpt-user",
+        "claudebot",
+        "google-extended"
+      ],
+      "aiRobotsTxtKey": "GPTBot"
+    },
+    {
+      "id": "oai-searchbot",
+      "name": "OAI-SearchBot",
+      "token": "OAI-SearchBot",
+      "uaMatch": [
+        "OAI-SearchBot"
+      ],
+      "operator": "openai",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "OpenAI's crawler for ChatGPT search: it finds and indexes pages so ChatGPT can show and link them in answers.",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot",
+      "respectsNote": "OpenAI: sites that disallow OAI-SearchBot are not shown in ChatGPT search answers; robots.txt changes take about 24 hours to apply.",
+      "ipRanges": "https://openai.com/searchbot.json",
+      "ipRangesFormat": "json",
+      "docs": "https://developers.openai.com/api/docs/bots",
+      "note": "Blocking OAI-SearchBot removes the site from ChatGPT search answers (it may still appear as a navigational link). It is independent of GPTBot.",
+      "history": [
+        {
+          "date": "2024-07-25",
+          "text": "OpenAI introduces SearchGPT; OAI-SearchBot becomes the crawler for search results."
+        },
+        {
+          "date": "2026-11-04",
+          "text": "Documentation shows a Chrome-style User-Agent with OAI-SearchBot/1.4."
+        }
+      ],
+      "related": [
+        "gptbot",
+        "chatgpt-user",
+        "claude-searchbot",
+        "perplexitybot"
+      ],
+      "aiRobotsTxtKey": "OAI-SearchBot"
+    },
+    {
+      "id": "chatgpt-user",
+      "name": "ChatGPT-User",
+      "token": "ChatGPT-User",
+      "uaMatch": [
+        "ChatGPT-User"
+      ],
+      "operator": "openai",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "partial",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches a page when a ChatGPT user or a custom GPT asks for it; it is not used for automatic crawling.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot",
+      "respectsNote": "OpenAI: because these actions are initiated by a user, robots.txt rules may not apply.",
+      "ipRanges": "https://openai.com/chatgpt-user.json",
+      "ipRangesFormat": "json",
+      "docs": "https://developers.openai.com/api/docs/bots",
+      "note": "A Disallow for ChatGPT-User is a request that OpenAI says may not be applied. Use server rules to enforce it.",
+      "related": [
+        "gptbot",
+        "oai-searchbot",
+        "claude-user",
+        "perplexity-user"
+      ],
+      "aiRobotsTxtKey": "ChatGPT-User"
+    },
+    {
+      "id": "oai-adsbot",
+      "name": "OAI-AdsBot",
+      "token": "OAI-AdsBot",
+      "uaMatch": [
+        "OAI-AdsBot"
+      ],
+      "operator": "openai",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Checks landing pages that advertisers submit for ads in ChatGPT; OpenAI says the data is not used to train generative AI models.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-AdsBot/1.0; +https://openai.com/adsbot",
+      "general": true,
+      "respectsNote": "OpenAI asks advertisers to make sure robots.txt allows OAI-AdsBot on their landing pages.",
+      "ipRanges": "https://openai.com/adsbot.json",
+      "ipRangesFormat": "json",
+      "docs": "https://developers.openai.com/api/docs/bots",
+      "note": "Relevant only if you advertise in ChatGPT. AI presets here leave it allowed.",
+      "history": [
+        {
+          "date": "2026",
+          "text": "Introduced with ads in ChatGPT."
+        }
+      ],
+      "related": [
+        "oai-searchbot",
+        "gptbot"
+      ],
+      "aiRobotsTxtKey": "OAI-AdsBot"
+    },
+    {
+      "id": "claudebot",
+      "name": "ClaudeBot",
+      "token": "ClaudeBot",
+      "uaMatch": [
+        "ClaudeBot"
+      ],
+      "operator": "anthropic",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "fetched",
+      "source": "official",
+      "page": true,
+      "summary": "Anthropic's crawler that collects public web content that may be used to train its AI models.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +claudebot@anthropic.com)",
+      "respectsNote": "Anthropic: its bots honour robots.txt directives, including the non-standard Crawl-delay, and do not bypass CAPTCHAs.",
+      "ipRanges": "https://claude.com/crawling/bots.json",
+      "ipRangesFormat": "json",
+      "docs": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+      "note": "Opt-out works per subdomain: each subdomain needs its own robots.txt.",
+      "history": [
+        {
+          "date": "2026-10-20",
+          "text": "Anthropic publishes an IP list for its bots (claude.com/crawling/bots.json)."
+        }
+      ],
+      "related": [
+        "claude-searchbot",
+        "claude-user",
+        "anthropic-ai",
+        "gptbot"
+      ],
+      "aiRobotsTxtKey": "ClaudeBot"
+    },
+    {
+      "id": "claude-searchbot",
+      "name": "Claude-SearchBot",
+      "token": "Claude-SearchBot",
+      "uaMatch": [
+        "Claude-SearchBot"
+      ],
+      "operator": "anthropic",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "fetched",
+      "source": "official",
+      "page": true,
+      "summary": "Anthropic's crawler that indexes pages to improve the quality of search results in Claude.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-SearchBot/1.0; +Claude-SearchBot@anthropic.com)",
+      "respectsNote": "Covered by Anthropic's statement that all its bots honour robots.txt.",
+      "ipRanges": "https://claude.com/crawling/bots.json",
+      "ipRangesFormat": "json",
+      "docs": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+      "note": "Blocking it may reduce how often the site appears in Claude's search answers.",
+      "related": [
+        "claudebot",
+        "claude-user",
+        "oai-searchbot"
+      ],
+      "aiRobotsTxtKey": "Claude-SearchBot"
+    },
+    {
+      "id": "claude-user",
+      "name": "Claude-User",
+      "token": "Claude-User",
+      "uaMatch": [
+        "Claude-User"
+      ],
+      "operator": "anthropic",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "fetched",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches a page when a Claude user asks a question that needs it.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-User/1.0; +Claude-User@anthropic.com)",
+      "respectsNote": "Anthropic says Claude-User follows robots.txt, which lets site owners control access by user-initiated requests.",
+      "ipRanges": "https://claude.com/crawling/bots.json",
+      "ipRangesFormat": "json",
+      "docs": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+      "note": "Unlike most user-triggered fetchers, Anthropic states that Claude-User honours robots.txt.",
+      "related": [
+        "claudebot",
+        "claude-searchbot",
+        "chatgpt-user"
+      ],
+      "aiRobotsTxtKey": "Claude-User"
+    },
+    {
+      "id": "anthropic-ai",
+      "name": "anthropic-ai",
+      "token": "anthropic-ai",
+      "uaMatch": [
+        "anthropic-ai"
+      ],
+      "operator": "anthropic",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "unknown",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "fetched",
+      "source": "official",
+      "page": true,
+      "summary": "An older Anthropic name that many robots.txt files still block; it no longer appears in Anthropic's documentation.",
+      "legacy": true,
+      "docs": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+      "note": "Keeping a Disallow for anthropic-ai is harmless but does not replace ClaudeBot.",
+      "history": [
+        {
+          "date": "2026-11-04",
+          "text": "Absent from Anthropic's current crawler article."
+        }
+      ],
+      "related": [
+        "claudebot",
+        "claude-user"
+      ],
+      "aiRobotsTxtKey": "anthropic-ai"
+    },
+    {
+      "id": "claude-web",
+      "name": "Claude-Web",
+      "token": "Claude-Web",
+      "uaMatch": [
+        "Claude-Web"
+      ],
+      "operator": "anthropic",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "unknown",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "fetched",
+      "source": "official",
+      "page": false,
+      "summary": "A former Anthropic user agent, superseded by Claude-User and Claude-SearchBot.",
+      "legacy": true,
+      "docs": "https://support.claude.com/en/articles/8896518-does-anthropic-crawl-data-from-the-web-and-how-can-site-owners-block-the-crawler",
+      "related": [
+        "claude-user"
+      ],
+      "aiRobotsTxtKey": "Claude-Web"
+    },
+    {
+      "id": "googlebot",
+      "name": "Googlebot",
+      "token": "Googlebot",
+      "uaMatch": [
+        "Googlebot"
+      ],
+      "operator": "google",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "secondary",
+      "source": "official",
+      "page": false,
+      "summary": "Google Search's main crawler. Its content also feeds AI Overviews and AI Mode in Search.",
+      "userAgent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+      "general": true,
+      "ipRanges": "https://developers.google.com/crawling/ipranges/common-crawlers.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "googlebot.com",
+        "google.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
+      "note": "Not an AI-specific crawler: blocking it removes the site from Google Search.",
+      "aiRobotsTxtKey": ""
+    },
+    {
+      "id": "google-extended",
+      "name": "Google-Extended",
+      "token": "Google-Extended",
+      "uaMatch": [],
+      "operator": "google",
+      "purpose": "training",
+      "kind": "token",
+      "respectsRobots": "yes",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "A robots.txt token that controls whether content crawled by Google may be used to train Gemini models and to ground Gemini Apps and Vertex AI.",
+      "respectsNote": "A robots.txt control token only: there is no Google-Extended User-Agent; pages are fetched by Google's existing crawlers.",
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
+      "note": "Disallowing Google-Extended does not affect Google Search inclusion or ranking, and does not remove pages from AI Overviews or AI Mode, which rely on Googlebot.",
+      "history": [
+        {
+          "date": "2023-09-28",
+          "text": "Google introduces Google-Extended."
+        },
+        {
+          "date": "2026-10",
+          "text": "Google announces it will also read a Disallow under __usage_ai-training as a Google-Extended opt-out when Google-Extended is not named."
+        }
+      ],
+      "related": [
+        "applebot-extended",
+        "usage-ai-training",
+        "googlebot",
+        "gptbot"
+      ],
+      "aiRobotsTxtKey": "Google-Extended"
+    },
+    {
+      "id": "googleother",
+      "name": "GoogleOther",
+      "token": "GoogleOther",
+      "uaMatch": [
+        "GoogleOther"
+      ],
+      "operator": "google",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "A generic Google crawler used by product teams for one-off crawls and internal research and development.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GoogleOther) Chrome/W.X.Y.Z Safari/537.36",
+      "respectsNote": "Google: common crawlers always respect robots.txt rules for automatic crawls.",
+      "ipRanges": "https://developers.google.com/crawling/ipranges/common-crawlers.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "googlebot.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
+      "note": "Blocking GoogleOther does not affect Google Search. Google does not tie it to a specific product.",
+      "history": [
+        {
+          "date": "2023-04-20",
+          "text": "Google introduces GoogleOther."
+        },
+        {
+          "date": "2024-05",
+          "text": "GoogleOther-Image and GoogleOther-Video variants added."
+        }
+      ],
+      "related": [
+        "googlebot",
+        "google-extended",
+        "google-cloudvertexbot"
+      ],
+      "aiRobotsTxtKey": "GoogleOther"
+    },
+    {
+      "id": "googleother-image",
+      "name": "GoogleOther-Image",
+      "token": "GoogleOther-Image",
+      "uaMatch": [
+        "GoogleOther-Image"
+      ],
+      "operator": "google",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Image-focused variant of GoogleOther; follows GoogleOther rules when not named.",
+      "userAgent": "GoogleOther-Image/1.0",
+      "ipRanges": "https://developers.google.com/crawling/ipranges/common-crawlers.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "googlebot.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
+      "related": [
+        "googleother"
+      ],
+      "aiRobotsTxtKey": "GoogleOther-Image"
+    },
+    {
+      "id": "googleother-video",
+      "name": "GoogleOther-Video",
+      "token": "GoogleOther-Video",
+      "uaMatch": [
+        "GoogleOther-Video"
+      ],
+      "operator": "google",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Video-focused variant of GoogleOther; follows GoogleOther rules when not named.",
+      "userAgent": "GoogleOther-Video/1.0",
+      "ipRanges": "https://developers.google.com/crawling/ipranges/common-crawlers.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "googlebot.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
+      "related": [
+        "googleother"
+      ],
+      "aiRobotsTxtKey": "GoogleOther-Video"
+    },
+    {
+      "id": "google-cloudvertexbot",
+      "name": "Google-CloudVertexBot",
+      "token": "Google-CloudVertexBot",
+      "uaMatch": [
+        "Google-CloudVertexBot"
+      ],
+      "operator": "google",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Crawls sites at the request of their owners to build Vertex AI agents and enterprise search.",
+      "userAgent": "Google-CloudVertexBot",
+      "respectsNote": "Google: common crawlers respect robots.txt.",
+      "ipRanges": "https://developers.google.com/crawling/ipranges/common-crawlers.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "googlebot.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers",
+      "note": "It has no effect on Google Search. Blocking it can break a Vertex AI search app built on your own site.",
+      "related": [
+        "googleother",
+        "google-extended"
+      ],
+      "aiRobotsTxtKey": "Google-CloudVertexBot"
+    },
+    {
+      "id": "google-agent",
+      "name": "Google-Agent",
+      "token": "Google-Agent",
+      "uaMatch": [
+        "Google-Agent"
+      ],
+      "operator": "google",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "no",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Used by AI agents running on Google infrastructure to browse sites and act on a user's request.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Google-Agent; +<google-docs-url>) Chrome/W.X.Y.Z Safari/537.36",
+      "respectsNote": "Google: user-triggered fetchers generally ignore robots.txt rules because a user requested the fetch.",
+      "ipRanges": "https://developers.google.com/crawling/ipranges/user-triggered-agents.json",
+      "ipRangesFormat": "json",
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+      "note": "robots.txt cannot stop it. Some requests are signed with Web Bot Auth (identity agent.bot.goog, experimental).",
+      "history": [
+        {
+          "date": "2026-03-20",
+          "text": "Google adds Google-Agent to its list of user-triggered fetchers."
+        }
+      ],
+      "related": [
+        "google-gemininotebook",
+        "chatgpt-user",
+        "perplexity-user"
+      ],
+      "aiRobotsTxtKey": "Google-Agent"
+    },
+    {
+      "id": "google-gemininotebook",
+      "name": "Google-GeminiNotebook",
+      "token": "Google-GeminiNotebook",
+      "uaMatch": [
+        "Google-GeminiNotebook"
+      ],
+      "operator": "google",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "no",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches the URLs a user adds as sources in Gemini Notebook (formerly NotebookLM).",
+      "respectsNote": "Google: user-triggered fetchers generally ignore robots.txt.",
+      "ipRanges": "https://developers.google.com/crawling/ipranges/user-triggered-fetchers-google.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "google.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+      "note": "Replaced the Google-NotebookLM name. robots.txt does not stop user-triggered fetches.",
+      "history": [
+        {
+          "date": "2025-10",
+          "text": "Google-NotebookLM added to Google's user-triggered fetchers."
+        },
+        {
+          "date": "2026-07-16",
+          "text": "Renamed Google-GeminiNotebook when NotebookLM became Gemini Notebook."
+        }
+      ],
+      "related": [
+        "google-agent",
+        "google-extended"
+      ],
+      "aiRobotsTxtKey": ""
+    },
+    {
+      "id": "google-notebooklm",
+      "name": "Google-NotebookLM",
+      "token": "Google-NotebookLM",
+      "uaMatch": [
+        "Google-NotebookLM"
+      ],
+      "operator": "google",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "no",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Former name of Google-GeminiNotebook, supported during a transition period in 2026.",
+      "legacy": true,
+      "verifyHosts": [
+        "google.com"
+      ],
+      "docs": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers",
+      "related": [
+        "google-gemininotebook"
+      ],
+      "aiRobotsTxtKey": "Google-NotebookLM"
+    },
+    {
+      "id": "applebot",
+      "name": "Applebot",
+      "token": "Applebot",
+      "uaMatch": [
+        "Applebot"
+      ],
+      "operator": "apple",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Apple's web crawler for Siri, Spotlight and Safari search. Pages it crawls may also be used to train Apple's foundation models unless Applebot-Extended is disallowed.",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Safari/605.1.15 (Applebot/0.1; +http://www.apple.com/go/applebot)",
+      "general": true,
+      "respectsNote": "Apple: Applebot follows robots.txt rules aimed at Applebot; if Applebot is not named but Googlebot is, it follows the Googlebot rules. It does not support Crawl-delay.",
+      "ipRanges": "https://search.developer.apple.com/applebot.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "applebot.apple.com"
+      ],
+      "docs": "https://support.apple.com/en-us/119829",
+      "note": "Do not block Applebot to stop AI training: disallow Applebot-Extended instead and stay in Apple search features.",
+      "related": [
+        "applebot-extended",
+        "googlebot"
+      ],
+      "aiRobotsTxtKey": "Applebot"
+    },
+    {
+      "id": "applebot-extended",
+      "name": "Applebot-Extended",
+      "token": "Applebot-Extended",
+      "uaMatch": [],
+      "operator": "apple",
+      "purpose": "training",
+      "kind": "token",
+      "respectsRobots": "yes",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "A robots.txt token that decides whether pages crawled by Applebot may be used to train Apple's generative foundation models.",
+      "respectsNote": "Apple: Applebot-Extended does not crawl webpages; it only determines how data crawled by Applebot may be used.",
+      "docs": "https://support.apple.com/en-us/119829",
+      "note": "Disallowing it keeps pages in Siri, Spotlight and Safari results.",
+      "history": [
+        {
+          "date": "2024-06-10",
+          "text": "Apple documents Applebot-Extended alongside Apple Intelligence."
+        }
+      ],
+      "related": [
+        "applebot",
+        "google-extended",
+        "usage-ai-training"
+      ],
+      "aiRobotsTxtKey": "Applebot-Extended"
+    },
+    {
+      "id": "perplexitybot",
+      "name": "PerplexityBot",
+      "token": "PerplexityBot",
+      "uaMatch": [
+        "PerplexityBot"
+      ],
+      "operator": "perplexity",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Perplexity's crawler that finds and links websites in Perplexity search results. Perplexity says it is not used to crawl content for AI foundation models.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)",
+      "respectsNote": "Perplexity: PerplexityBot crawls only in compliance with robots.txt; changes can take up to 24 hours.",
+      "ipRanges": "https://www.perplexity.ai/perplexitybot.json",
+      "ipRangesFormat": "json",
+      "docs": "https://docs.perplexity.ai/docs/resources/perplexity-crawlers",
+      "note": "Blocking PerplexityBot removes the site from Perplexity's answers and citations.",
+      "related": [
+        "perplexity-user",
+        "oai-searchbot",
+        "claude-searchbot"
+      ],
+      "aiRobotsTxtKey": "PerplexityBot"
+    },
+    {
+      "id": "perplexity-user",
+      "name": "Perplexity-User",
+      "token": "Perplexity-User",
+      "uaMatch": [
+        "Perplexity-User"
+      ],
+      "operator": "perplexity",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "no",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Visits a page when a Perplexity user asks a question that needs it; not used for crawling or training.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Perplexity-User/1.0; +https://perplexity.ai/perplexity-user)",
+      "respectsNote": "Perplexity: because a user requested the fetch, Perplexity-User generally ignores robots.txt rules.",
+      "ipRanges": "https://www.perplexity.ai/perplexity-user.json",
+      "ipRangesFormat": "json",
+      "docs": "https://docs.perplexity.ai/docs/resources/perplexity-crawlers",
+      "note": "Use server rules if you need to stop it; a robots.txt Disallow is generally ignored.",
+      "related": [
+        "perplexitybot",
+        "chatgpt-user",
+        "claude-user"
+      ],
+      "aiRobotsTxtKey": "Perplexity-User"
+    },
+    {
+      "id": "meta-externalagent",
+      "name": "meta-externalagent",
+      "token": "meta-externalagent",
+      "uaMatch": [
+        "meta-externalagent"
+      ],
+      "operator": "meta",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Meta's crawler for uses such as training AI models or improving products by indexing content directly.",
+      "userAgent": "meta-externalagent/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)",
+      "respectsNote": "Meta: add a robots.txt Disallow for the crawler; robots.txt may be cached for up to 24 hours.",
+      "docs": "https://developers.facebook.com/documentation/sharing/webmasters/web-crawlers",
+      "note": "Meta publishes no IP list for it; it recommends IP allowlisting over User-Agent matching but gives no ranges.",
+      "history": [
+        {
+          "date": "2024-07",
+          "text": "Meta documents meta-externalagent."
+        }
+      ],
+      "related": [
+        "meta-webindexer",
+        "meta-externalfetcher",
+        "facebookexternalhit"
+      ],
+      "aiRobotsTxtKey": "meta-externalagent"
+    },
+    {
+      "id": "meta-webindexer",
+      "name": "meta-webindexer",
+      "token": "meta-webindexer",
+      "uaMatch": [
+        "meta-webindexer"
+      ],
+      "operator": "meta",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Meta's crawler that improves search results in Meta AI; allowing it lets Meta AI cite and link the site.",
+      "userAgent": "meta-webindexer/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)",
+      "docs": "https://developers.facebook.com/documentation/sharing/webmasters/web-crawlers",
+      "related": [
+        "meta-externalagent",
+        "meta-externalfetcher"
+      ],
+      "aiRobotsTxtKey": "meta-webindexer"
+    },
+    {
+      "id": "meta-externalfetcher",
+      "name": "meta-externalfetcher",
+      "token": "meta-externalfetcher",
+      "uaMatch": [
+        "meta-externalfetcher"
+      ],
+      "operator": "meta",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "partial",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches individual links for Meta AI products when a user asks for them.",
+      "userAgent": "meta-externalfetcher/1.1 (+https://developers.facebook.com/docs/sharing/webmasters/crawler)",
+      "respectsNote": "Meta: fetches individual links at a user's request and may bypass robots.txt.",
+      "docs": "https://developers.facebook.com/documentation/sharing/webmasters/web-crawlers",
+      "related": [
+        "meta-externalagent",
+        "meta-webindexer",
+        "facebookexternalhit"
+      ],
+      "aiRobotsTxtKey": "meta-externalfetcher"
+    },
+    {
+      "id": "facebookexternalhit",
+      "name": "facebookexternalhit",
+      "token": "facebookexternalhit",
+      "uaMatch": [
+        "facebookexternalhit"
+      ],
+      "operator": "meta",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "partial",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Builds link previews when a URL is shared in Facebook, Instagram, Messenger or WhatsApp. It is not an AI crawler.",
+      "userAgent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+      "general": true,
+      "respectsNote": "Meta: it might bypass robots.txt when performing security or integrity checks.",
+      "docs": "https://developers.facebook.com/documentation/sharing/webmasters/web-crawlers",
+      "note": "Blocking it breaks link previews in Meta's apps. Several public AI blocklists include it anyway.",
+      "related": [
+        "meta-externalagent",
+        "meta-externalfetcher"
+      ],
+      "aiRobotsTxtKey": "facebookexternalhit"
+    },
+    {
+      "id": "facebookbot",
+      "name": "FacebookBot",
+      "token": "FacebookBot",
+      "uaMatch": [
+        "FacebookBot"
+      ],
+      "operator": "meta",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "unknown",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "A former Meta crawler once documented for speech-recognition training; no longer on Meta's crawler page.",
+      "userAgent": "Mozilla/5.0 (compatible; FacebookBot/1.0; +https://developers.facebook.com/docs/sharing/webmasters/facebookbot/)",
+      "legacy": true,
+      "docs": "https://developers.facebook.com/documentation/sharing/webmasters/web-crawlers",
+      "related": [
+        "meta-externalagent"
+      ],
+      "aiRobotsTxtKey": "FacebookBot"
+    },
+    {
+      "id": "amazonbot",
+      "name": "Amazonbot",
+      "token": "Amazonbot",
+      "uaMatch": [
+        "Amazonbot"
+      ],
+      "operator": "amazon",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Amazon's crawler that improves Amazon products and services; Amazon says the data may be used to train its AI models.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Amazonbot/0.1) Chrome/W.X.Y.Z Safari/537.36",
+      "respectsNote": "Amazon: reads robots.txt for each host; honours robots meta noarchive (do not use for model training), noindex and none.",
+      "ipRanges": "https://developer.amazon.com/amazonbot/ip-addresses/",
+      "ipRangesFormat": "html",
+      "docs": "https://developer.amazon.com/amazonbot",
+      "note": "For a page-level training opt-out Amazon honours <meta name=\"robots\" content=\"noarchive\">.",
+      "related": [
+        "amzn-searchbot",
+        "amzn-user"
+      ],
+      "aiRobotsTxtKey": "Amazonbot"
+    },
+    {
+      "id": "amzn-searchbot",
+      "name": "Amzn-SearchBot",
+      "token": "Amzn-SearchBot",
+      "uaMatch": [
+        "Amzn-SearchBot"
+      ],
+      "operator": "amazon",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Powers search experiences in Amazon products, including Alexa; Amazon says it is not used for generative AI training.",
+      "respectsNote": "Amazon: if robots.txt does not name Amzn-SearchBot but allows other search bots, it follows the rules given to those bots.",
+      "ipRanges": "https://developer.amazon.com/amazonbot/searchbot-ip-addresses/",
+      "ipRangesFormat": "html",
+      "docs": "https://developer.amazon.com/amazonbot",
+      "related": [
+        "amazonbot",
+        "amzn-user"
+      ],
+      "aiRobotsTxtKey": "Amzn-SearchBot"
+    },
+    {
+      "id": "amzn-user",
+      "name": "Amzn-User",
+      "token": "Amzn-User",
+      "uaMatch": [
+        "Amzn-User"
+      ],
+      "operator": "amazon",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "partial",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches live information for Alexa when a user asks a question; not used for generative AI training.",
+      "respectsNote": "Amazon: because a user initiates these requests, it may not follow every robots.txt directive.",
+      "ipRanges": "https://developer.amazon.com/amazonbot/live-ip-addresses/",
+      "ipRangesFormat": "html",
+      "docs": "https://developer.amazon.com/amazonbot",
+      "related": [
+        "amazonbot",
+        "amzn-searchbot"
+      ],
+      "aiRobotsTxtKey": "Amzn-User"
+    },
+    {
+      "id": "bytespider",
+      "name": "Bytespider",
+      "token": "Bytespider",
+      "uaMatch": [
+        "Bytespider"
+      ],
+      "operator": "bytedance",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "unknown",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "secondary",
+      "source": "observed",
+      "page": true,
+      "summary": "A crawler run by ByteDance (TikTok's parent company), widely reported to collect data for training its AI models.",
+      "userAgent": "Mozilla/5.0 (Linux; Android 5.0) AppleWebKit/537.36 (KHTML, like Gecko) Mobile Safari/537.36 (compatible; Bytespider; spider-feedback@bytedance.com)",
+      "respectsNote": "ByteDance publishes no documentation. Independent reports say it often does not follow robots.txt.",
+      "note": "Because there is no official statement, enforce a block at the server or CDN rather than relying on robots.txt.",
+      "related": [
+        "ccbot",
+        "gptbot",
+        "claudebot"
+      ],
+      "aiRobotsTxtKey": "Bytespider"
+    },
+    {
+      "id": "ccbot",
+      "name": "CCBot",
+      "token": "CCBot",
+      "uaMatch": [
+        "CCBot"
+      ],
+      "operator": "commoncrawl",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Crawler of Common Crawl, a non-profit open web archive whose datasets are widely used to train large language models.",
+      "userAgent": "CCBot/2.0 (https://commoncrawl.org/faq/)",
+      "respectsNote": "Common Crawl: block it with User-agent: CCBot and Disallow: /; it supports Crawl-delay.",
+      "ipRanges": "https://index.commoncrawl.org/ccbot.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "crawl.commoncrawl.org"
+      ],
+      "docs": "https://commoncrawl.org/ccbot",
+      "note": "Common Crawl data is used by many AI developers, so blocking CCBot reaches beyond one company. Blocking also removes the site from future archive snapshots.",
+      "history": [
+        {
+          "date": "2026-08-11",
+          "text": "Common Crawl documents dedicated IP ranges and reverse DNS under crawl.commoncrawl.org."
+        }
+      ],
+      "related": [
+        "gptbot",
+        "claudebot",
+        "bytespider"
+      ],
+      "aiRobotsTxtKey": "CCBot"
+    },
+    {
+      "id": "mistralai-training",
+      "name": "MistralAI-Training",
+      "token": "MistralAI-Training",
+      "uaMatch": [
+        "MistralAI-Training"
+      ],
+      "operator": "mistral",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Mistral AI's crawler that builds training datasets; Mistral says it is not used for search or live answers.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; MistralAI-Training/1.0; +https://docs.mistral.ai/robots)",
+      "respectsNote": "Mistral: its crawlers are designed to respect robots.txt.",
+      "docs": "https://docs.mistral.ai/robots",
+      "related": [
+        "mistralai-index",
+        "mistralai-user"
+      ],
+      "aiRobotsTxtKey": "MistralAI-Training"
+    },
+    {
+      "id": "mistralai-index",
+      "name": "MistralAI-Index",
+      "token": "MistralAI-Index",
+      "uaMatch": [
+        "MistralAI-Index"
+      ],
+      "operator": "mistral",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Mistral AI's crawler that indexes pages for search in its assistant; Mistral says content is not used for training.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; MistralAI-Index/1.0; +https://docs.mistral.ai/robots)",
+      "respectsNote": "Mistral: automated crawling for indexing only; robots.txt is respected.",
+      "docs": "https://docs.mistral.ai/robots",
+      "related": [
+        "mistralai-training",
+        "mistralai-user"
+      ],
+      "aiRobotsTxtKey": "MistralAI-Index"
+    },
+    {
+      "id": "mistralai-user",
+      "name": "MistralAI-User",
+      "token": "MistralAI-User",
+      "uaMatch": [
+        "MistralAI-User"
+      ],
+      "operator": "mistral",
+      "purpose": "user",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches a page when a question in Mistral's assistant needs a web source; not automatic crawling and not training.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; MistralAI-User/1.0; +https://docs.mistral.ai/robots)",
+      "respectsNote": "Mistral: the token governs which sites user-triggered requests may access.",
+      "docs": "https://docs.mistral.ai/robots",
+      "related": [
+        "mistralai-index",
+        "mistralai-training",
+        "claude-user"
+      ],
+      "aiRobotsTxtKey": "MistralAI-User"
+    },
+    {
+      "id": "duckassistbot",
+      "name": "DuckAssistBot",
+      "token": "DuckAssistBot",
+      "uaMatch": [
+        "DuckAssistBot"
+      ],
+      "operator": "duckduckgo",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "fetched",
+      "source": "official",
+      "page": true,
+      "summary": "Fetches pages in real time for DuckDuckGo's AI-assisted answers with citations; DuckDuckGo says the data is not used to train AI models.",
+      "userAgent": "DuckAssistBot/1.2; (+http://duckduckgo.com/duckassistbot.html)",
+      "respectsNote": "DuckDuckGo: publishers can disallow DuckAssistBot in robots.txt; changes take effect after about 72 hours.",
+      "ipRanges": "https://duckduckgo.com/duckassistbot.json",
+      "ipRangesFormat": "json",
+      "docs": "https://duckduckgo.com/duckduckgo-help-pages/results/duckassistbot",
+      "note": "Opting out does not affect DuckDuckGo's organic rankings.",
+      "related": [
+        "perplexitybot",
+        "oai-searchbot"
+      ],
+      "aiRobotsTxtKey": "DuckAssistBot"
+    },
+    {
+      "id": "bingbot",
+      "name": "Bingbot",
+      "token": "bingbot",
+      "uaMatch": [
+        "bingbot"
+      ],
+      "operator": "microsoft",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Microsoft's search crawler. There is no separate Copilot crawler: Copilot answers use Bing's index.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/W.X.Y.Z Safari/537.36",
+      "general": true,
+      "respectsNote": "Bing's standard search crawler follows robots.txt. AI use of content is controlled separately.",
+      "ipRanges": "https://www.bing.com/toolbox/bingbot.json",
+      "ipRangesFormat": "json",
+      "verifyHosts": [
+        "search.msn.com"
+      ],
+      "docs": "https://www.bing.com/webmasters/help/new-ai-preferences-2t1cc16d",
+      "note": "Blocking bingbot removes the site from Bing and from search engines that use Bing's index. NOCACHE and NOARCHIVE meta tags limit use in Copilot; Bing has announced support for __usage_ai-training from 1 February 2027.",
+      "history": [
+        {
+          "date": "2026-10",
+          "text": "Bing announces AI Training and AI Grounding preferences, including the __usage_ai-training robots.txt token from 2027-02-01."
+        }
+      ],
+      "related": [
+        "usage-ai-training",
+        "googlebot"
+      ],
+      "aiRobotsTxtKey": ""
+    },
+    {
+      "id": "ai2bot",
+      "name": "AI2Bot",
+      "token": "AI2Bot",
+      "uaMatch": [
+        "AI2Bot"
+      ],
+      "operator": "ai2",
+      "purpose": "training",
+      "kind": "crawler",
+      "respectsRobots": "unknown",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Crawler of the Allen Institute for AI; the content is used to train open language models such as OLMo.",
+      "userAgent": "Mozilla/5.0 (compatible) AI2Bot (+https://www.allenai.org/crawler)",
+      "respectsNote": "Ai2's crawler notice says the User-Agent can be used to filter or reject its traffic; no explicit robots.txt statement was found.",
+      "docs": "https://allenai.org/crawler",
+      "related": [
+        "ccbot",
+        "gptbot"
+      ],
+      "aiRobotsTxtKey": "AI2Bot"
+    },
+    {
+      "id": "yandexadditional",
+      "name": "YandexAdditional",
+      "token": "YandexAdditional",
+      "uaMatch": [
+        "YandexAdditional"
+      ],
+      "operator": "yandex",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Yandex's robot for its AI answers in search (YandexGPT); blocking it keeps content out of those answers without affecting regular Yandex Search.",
+      "userAgent": "YandexAdditional/1.0",
+      "respectsNote": "Yandex: disallowing YandexAdditional (or YandexAdditionalBot) keeps content out of AI answers in Yandex Search; it takes 2–14 days.",
+      "verifyHosts": [
+        "yandex.ru",
+        "yandex.net",
+        "yandex.com"
+      ],
+      "docs": "https://yandex.com/support/webmaster/en/yandex-ai",
+      "note": "Some Yandex robots ignore User-agent: *, so name it explicitly.",
+      "related": [
+        "yandexadditionalbot"
+      ],
+      "aiRobotsTxtKey": "YandexAdditional"
+    },
+    {
+      "id": "yandexadditionalbot",
+      "name": "YandexAdditionalBot",
+      "token": "YandexAdditionalBot",
+      "uaMatch": [
+        "YandexAdditionalBot"
+      ],
+      "operator": "yandex",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Alternative name of YandexAdditional; Yandex accepts either in robots.txt.",
+      "userAgent": "YandexAdditionalBot/1.0",
+      "verifyHosts": [
+        "yandex.ru",
+        "yandex.net",
+        "yandex.com"
+      ],
+      "docs": "https://yandex.com/support/webmaster/en/yandex-ai",
+      "related": [
+        "yandexadditional"
+      ],
+      "aiRobotsTxtKey": "YandexAdditionalBot"
+    },
+    {
+      "id": "youbot",
+      "name": "YouBot",
+      "token": "YouBot",
+      "uaMatch": [
+        "YouBot"
+      ],
+      "operator": "you",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "web-bot-auth",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "You.com's crawler; its index powers You.com search and the search API that AI applications use.",
+      "userAgent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; YouBot/1.0; +https://docs.you.com/youbot; env:prod) Chrome/X.X.X.X Safari/537.36",
+      "respectsNote": "You.com: YouBot fully respects robots.txt, including User-Agent-specific rules and Crawl-delay; robots.txt is cached for 30 minutes.",
+      "verifyHosts": [
+        "search.you.com"
+      ],
+      "docs": "https://docs.you.com/youbot",
+      "related": [
+        "exasearchbot",
+        "perplexitybot"
+      ],
+      "aiRobotsTxtKey": "YouBot"
+    },
+    {
+      "id": "exasearchbot",
+      "name": "ExaSearchBot",
+      "token": "ExaSearchBot",
+      "uaMatch": [
+        "ExaSearchBot"
+      ],
+      "operator": "exa",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "web-bot-auth",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "Crawler of Exa, a search engine built for AI applications; every request is signed with HTTP Message Signatures (Web Bot Auth).",
+      "userAgent": "Mozilla/5.0 (compatible; ExaSearchBot/1.0; +https://crawler.exa.ai/)",
+      "respectsNote": "Exa: uses an ExaSearchBot group if present, otherwise the rules for major search engines, otherwise *.",
+      "docs": "https://crawler.exa.ai/",
+      "note": "\"ExaBot\" in community lists is not the official name.",
+      "related": [
+        "youbot",
+        "perplexitybot"
+      ],
+      "aiRobotsTxtKey": "ExaSearchBot"
+    },
+    {
+      "id": "firecrawlagent",
+      "name": "FirecrawlAgent",
+      "token": "FirecrawlAgent",
+      "uaMatch": [],
+      "operator": "firecrawl",
+      "purpose": "user",
+      "kind": "token",
+      "respectsRobots": "partial",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "The robots.txt name of Firecrawl, a scraping API that turns pages into data for AI applications on behalf of its customers.",
+      "respectsNote": "Firecrawl: robots.txt is respected by default (FirecrawlAgent group, then *); Enterprise customers can turn this off.",
+      "docs": "https://docs.firecrawl.dev/advanced-scraping-guide",
+      "note": "FirecrawlAgent is matched in robots.txt only; it is not necessarily present in the User-Agent header, so server rules cannot rely on it.",
+      "related": [
+        "chatgpt-user",
+        "claude-user"
+      ],
+      "aiRobotsTxtKey": "FirecrawlAgent"
+    },
+    {
+      "id": "petalbot",
+      "name": "PetalBot",
+      "token": "PetalBot",
+      "uaMatch": [
+        "PetalBot"
+      ],
+      "operator": "huawei",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "reverse-dns",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "secondary",
+      "source": "official",
+      "page": false,
+      "summary": "Crawler of Huawei's Petal Search, also used for Huawei Assistant and AI search features.",
+      "userAgent": "Mozilla/5.0 (compatible; PetalBot;+https://webmaster.petalsearch.com/site/petalbot)",
+      "general": true,
+      "verifyHosts": [
+        "aspiegel.com"
+      ],
+      "docs": "https://webmaster.petalsearch.com/site/petalbot",
+      "related": [
+        "bingbot"
+      ],
+      "aiRobotsTxtKey": "PetalBot"
+    },
+    {
+      "id": "kagibot",
+      "name": "Kagibot",
+      "token": "Kagibot",
+      "uaMatch": [
+        "Kagibot"
+      ],
+      "operator": "kagi",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "ip-list",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Crawler of the Kagi search engine.",
+      "userAgent": "Mozilla/5.0 (compatible; Kagibot/1.0; +https://kagi.com/bot)",
+      "general": true,
+      "respectsNote": "Kagi: rules aimed at Kagibot are respected; otherwise it follows Googlebot rules.",
+      "ipRanges": "https://kagi.com/bot",
+      "ipRangesFormat": "html",
+      "docs": "https://kagi.com/bot",
+      "aiRobotsTxtKey": ""
+    },
+    {
+      "id": "omgili",
+      "name": "omgili",
+      "token": "omgili",
+      "uaMatch": [
+        "omgili"
+      ],
+      "operator": "webz",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Webz.io's crawler (also seen as omgilibot); the collected data is sold to third parties, including for AI and machine learning.",
+      "userAgent": "omgili/0.5 +http://omgili.com",
+      "docs": "https://webz.io/blog/web-data/what-is-the-omgili-bot-and-why-is-it-crawling-your-website/",
+      "aiRobotsTxtKey": "omgili"
+    },
+    {
+      "id": "imagesiftbot",
+      "name": "ImagesiftBot",
+      "token": "ImagesiftBot",
+      "uaMatch": [
+        "ImagesiftBot"
+      ],
+      "operator": "imagesift",
+      "purpose": "mixed",
+      "kind": "crawler",
+      "respectsRobots": "yes",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Collects public images for ImageSift's web-intelligence products.",
+      "userAgent": "Mozilla/5.0 (compatible; ImagesiftBot; +imagesift.com)",
+      "respectsNote": "ImageSift: honours robots.txt rules aimed at the bot and Crawl-delay; falls back to Googlebot rules.",
+      "docs": "https://imagesift.com/about",
+      "aiRobotsTxtKey": "ImagesiftBot"
+    },
+    {
+      "id": "diffbot",
+      "name": "Diffbot",
+      "token": "Diffbot",
+      "uaMatch": [
+        "Diffbot"
+      ],
+      "operator": "diffbot",
+      "purpose": "search",
+      "kind": "crawler",
+      "respectsRobots": "partial",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": false,
+      "summary": "Crawler behind Diffbot's search index and Knowledge Graph; Diffbot says it is not used for AI training.",
+      "respectsNote": "Diffbot: crawls follow robots.txt by default, but customers can switch this off.",
+      "docs": "https://docs.diffbot.com/docs/does-crawl-respect-robotstxt",
+      "aiRobotsTxtKey": "Diffbot"
+    },
+    {
+      "id": "cohere-ai",
+      "name": "cohere-ai",
+      "token": "cohere-ai",
+      "uaMatch": [
+        "cohere-ai"
+      ],
+      "operator": "cohere",
+      "purpose": "unknown",
+      "kind": "crawler",
+      "respectsRobots": "unknown",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "secondary",
+      "source": "observed",
+      "page": true,
+      "summary": "A name found in many AI blocklists. Cohere's own crawler page says it does not currently crawl the web for training.",
+      "docs": "https://docs.cohere.com/docs/cohere-web-crawlers",
+      "note": "Blocking it is harmless; Cohere promises to list any future crawler on its documentation page.",
+      "related": [
+        "ai2bot",
+        "ccbot"
+      ],
+      "aiRobotsTxtKey": "cohere-ai"
+    },
+    {
+      "id": "usage-ai-training",
+      "name": "__usage_ai-training",
+      "token": "__usage_ai-training",
+      "uaMatch": [],
+      "operator": "ietf",
+      "purpose": "training",
+      "kind": "token",
+      "respectsRobots": "partial",
+      "verification": "none",
+      "lastVerified": "2026-11-04",
+      "checkMethod": "search-index",
+      "source": "official",
+      "page": true,
+      "summary": "A shared robots.txt token proposed in October 2026 for opting out of AI training across vendors, instead of naming every company's crawler.",
+      "respectsNote": "Announced, not yet in effect: Google says it will read a Disallow under this token as a Google-Extended opt-out when Google-Extended is not named; Bing says it will honour it from 1 February 2027.",
+      "docs": "https://developers.google.com/search/blog/2026/10/ai-training-control",
+      "note": "It complements, not replaces, vendor tokens such as GPTBot or Google-Extended. Support by other AI companies was not confirmed when this entry was checked.",
+      "history": [
+        {
+          "date": "2026-10-30",
+          "text": "Proposed in an IETF Internet-Draft; Google and Microsoft announce support starting in 2027."
+        }
+      ],
+      "related": [
+        "google-extended",
+        "applebot-extended",
+        "bingbot"
+      ],
+      "aiRobotsTxtKey": ""
+    }
+  ]
+}

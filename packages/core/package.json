@@ -17,11 +17,12 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./bots.json": "./data/bots.json"
+    "./bots.json": "./dist/data/bots.json",
+    "./community-bots.json": "./dist/data/community-bots.json"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "data", "README.md", "LICENSE"],
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
