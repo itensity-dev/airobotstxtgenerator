@@ -1,0 +1,91 @@
+---
+import { curatedBots, communityBots, registry } from '@airobots/core';
+import { t } from '../i18n';
+import { formatDate, formatNumber, LOCALE_INFO, PUBLISHED_LOCALES, type Locale } from '../i18n/locales';
+import { pathFor } from '../i18n/routes';
+import { BRAND } from '../config/site';
+
+interface Props {
+  locale: Locale;
+  alternates: Partial<Record<Locale, string>>;
+  current?: string | undefined;
+}
+const { locale, alternates, current } = Astro.props;
+const nav = [
+  { id: 'home', label: t(locale, 'nav.home'), href: pathFor(locale, 'home') },
+  { id: 'tester', label: t(locale, 'nav.tester'), href: pathFor(locale, 'tester') },
+  { id: 'bots', label: t(locale, 'nav.bots'), href: pathFor(locale, 'bots') },
+  { id: 'server-rules', label: t(locale, 'nav.serverRules'), href: pathFor(locale, 'server-rules') },
+  { id: 'llms-txt', label: t(locale, 'nav.llmsTxt'), href: pathFor(locale, 'llms-txt') },
+  { id: 'guides', label: t(locale, 'nav.guides'), href: pathFor(locale, 'guides') },
+];
+const verified = curatedBots.filter((b) => !b.legacy).length;
+const listed = communityBots.length;
+const langs = PUBLISHED_LOCALES.map((l) => ({ l, href: alternates[l] ?? pathFor(l, 'home'), name: LOCALE_INFO[l].name }));
+---
+<header class="masthead">
+  <div class="masthead__top">
+    <p class="masthead__ear">
+      <strong>{t(locale, 'site.earLeftTitle')}</strong>
+      {t(locale, 'site.earLeft', { verified: formatNumber(verified, locale), listed: formatNumber(listed, locale) })}
+    </p>
+    <a class="masthead__title" href={pathFor(locale, 'home')}>{BRAND}</a>
+    <p class="masthead__ear masthead__ear--right">
+      <strong>{t(locale, 'site.earRightTitle')}</strong>
+      {t(locale, 'site.earRight')}
+    </p>
+  </div>
+  <div class="masthead__bar">
+    <span class="masthead__date">{t(locale, 'site.edition', { date: formatDate(registry.updated, locale) })}</span>
+    <nav aria-label={t(locale, 'nav.label')}>
+      <ul class="nav">
+        {nav.map((n) => (
+          <li><a href={n.href} aria-current={current === n.id ? 'page' : undefined}>{n.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <div class="masthead__tools">
+      <details class="lang-menu">
+        <summary aria-label={t(locale, 'site.language')}>{LOCALE_INFO[locale].hreflang.toUpperCase()}</summary>
+        <ul>
+          {langs.map(({ l, href, name }) => (
+            <li><a href={href} hreflang={LOCALE_INFO[l].hreflang} lang={LOCALE_INFO[l].hreflang} aria-current={l === locale ? 'true' : undefined}>{name}</a></li>
+          ))}
+        </ul>
+      </details>
+      <button type="button" class="theme-toggle" data-theme-toggle data-labels={JSON.stringify({ light: t(locale, 'site.themeLight'), dark: t(locale, 'site.themeDark'), auto: t(locale, 'site.themeAuto') })} aria-label={t(locale, 'site.themeLabel')} hidden>
+        {t(locale, 'site.themeAuto')}
+      </button>
+    </div>
+  </div>
+</header>
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  if (btn) {
+    const labels = JSON.parse(btn.dataset.labels || '{}') as Record<string, string>;
+    const order = ['auto', 'light', 'dark'];
+    const read = () => {
+      try {
+        return localStorage.getItem('theme') || 'auto';
+      } catch {
+        return 'auto';
+      }
+    };
+    const apply = (mode: string) => {
+      if (mode === 'auto') document.documentElement.removeAttribute('data-theme');
+      else document.documentElement.setAttribute('data-theme', mode);
+      btn.textContent = labels[mode] ?? mode;
+      btn.setAttribute('aria-pressed', mode === 'auto' ? 'false' : 'true');
+    };
+    apply(read());
+    btn.hidden = false;
+    btn.addEventListener('click', () => {
+      const next = order[(order.indexOf(read()) + 1) % order.length]!;
+      try {
+        if (next === 'auto') localStorage.removeItem('theme');
+        else localStorage.setItem('theme', next);
+      } catch {}
+      apply(next);
+    });
+  }
+</script>

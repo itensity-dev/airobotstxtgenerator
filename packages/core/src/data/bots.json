@@ -1620,14 +1620,18 @@
       "checkMethod": "search-index",
       "source": "official",
       "page": true,
-      "summary": "A shared robots.txt token proposed in October 2026 for opting out of AI training across vendors, instead of naming every company's crawler.",
-      "respectsNote": "Announced, not yet in effect: Google says it will read a Disallow under this token as a Google-Extended opt-out when Google-Extended is not named; Bing says it will honour it from 1 February 2027.",
-      "docs": "https://developers.google.com/search/blog/2026/10/ai-training-control",
-      "note": "It complements, not replaces, vendor tokens such as GPTBot or Google-Extended. Support by other AI companies was not confirmed when this entry was checked.",
+      "summary": "A shared robots.txt group for opting out of AI training across companies, proposed in October 2026, instead of naming every company's crawler.",
+      "respectsNote": "Announced support: Anthropic already honours it; Microsoft Bing from 1 February 2027; Google in early 2027 (as a Google-Extended opt-out when Google-Extended is not named); OpenAI \"in the coming months\". A User-agent: * group does not count as a training preference.",
+      "docs": "https://datatracker.ietf.org/doc/draft-kelley-aipref-training-preference-signal/",
+      "note": "It complements vendor tokens such as GPTBot or Google-Extended; keep those too until support is universal. It is an Internet-Draft, not a standard.",
       "history": [
         {
           "date": "2026-10-30",
-          "text": "Proposed in an IETF Internet-Draft; Google and Microsoft announce support starting in 2027."
+          "text": "Proposed in the Internet-Draft draft-kelley-aipref-training-preference-signal-00 (based on the IETF AIPREF vocabulary)."
+        },
+        {
+          "date": "2026-10",
+          "text": "Google and Microsoft announce support starting in 2027; Anthropic supports it."
         }
       ],
       "related": [

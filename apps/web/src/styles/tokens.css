@@ -1,0 +1,113 @@
+/* Design tokens — "Gazette" direction (docs/DESIGN.md). */
+:root {
+  color-scheme: light;
+  --paper: #f5f0e5;
+  --paper-2: #ece5d4;
+  --paper-3: #e2d9c4;
+  --ink: #1a1916;
+  --ink-2: #4b463e;
+  --ink-3: #6b655a;
+  --rule: #1a1916;
+  --rule-light: #cdc3ad;
+  --red: #b0251b;
+  --red-wash: #f3dcd4;
+  --green: #2d6a3d;
+  --green-wash: #dce8d6;
+  --amber: #8a5a00;
+  --amber-wash: #f1e3c2;
+  --focus: #1a1916;
+  --link: #1a1916;
+  --selection: #e9d9a8;
+
+  --font-display: 'Old Standard TT', 'Old Standard Fallback', 'Hiragino Mincho ProN', 'Yu Mincho', 'Noto Serif JP', Georgia, serif;
+  --font-text: 'Libre Franklin', 'Franklin Fallback', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', 'Noto Sans JP', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Plex Mono Fallback', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --fs-xs: 0.8125rem; /* 13 */
+  --fs-sm: 0.875rem; /* 14 */
+  --fs-code: 0.9375rem; /* 15 */
+  --fs-base: 1.0625rem; /* 17 */
+  --fs-md: 1.25rem; /* 20 */
+  --fs-lg: 1.5rem; /* 24 */
+  --fs-xl: 1.875rem; /* 30 */
+  --fs-2xl: 2.5rem; /* 40 */
+  --fs-3xl: 3.25rem; /* 52 */
+  --lh-text: 1.55;
+  --lh-tight: 1.1;
+  --measure: 68ch;
+
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  --radius: 0;
+  --radius-control: 1px;
+  --line-hair: 1px;
+  --line: 2px;
+  --line-heavy: 4px;
+
+  --page-max: 1240px;
+  --gutter: 16px;
+  --transition: 120ms ease;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 32px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #14130f;
+    --paper-2: #1e1c17;
+    --paper-3: #2a2720;
+    --ink: #eee7d7;
+    --ink-2: #b9b0a0;
+    --ink-3: #9a9182;
+    --rule: #eee7d7;
+    --rule-light: #3e392f;
+    --red: #ff7a6b;
+    --red-wash: #3a1c17;
+    --green: #7cc48f;
+    --green-wash: #18301f;
+    --amber: #e6b04f;
+    --amber-wash: #33270f;
+    --focus: #eee7d7;
+    --link: #eee7d7;
+    --selection: #4a3f1c;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #14130f;
+  --paper-2: #1e1c17;
+  --paper-3: #2a2720;
+  --ink: #eee7d7;
+  --ink-2: #b9b0a0;
+  --ink-3: #9a9182;
+  --rule: #eee7d7;
+  --rule-light: #3e392f;
+  --red: #ff7a6b;
+  --red-wash: #3a1c17;
+  --green: #7cc48f;
+  --green-wash: #18301f;
+  --amber: #e6b04f;
+  --amber-wash: #33270f;
+  --focus: #eee7d7;
+  --link: #eee7d7;
+  --selection: #4a3f1c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition: 0ms;
+  }
+}

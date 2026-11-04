@@ -1,0 +1,65 @@
+---
+import { t } from '../i18n';
+import { LOCALE_INFO, PUBLISHED_LOCALES, type Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  alternates: Partial<Record<Locale, string>>;
+}
+const { locale, alternates } = Astro.props;
+// One hidden banner per available translation; a small script shows the one matching the browser language.
+const options = PUBLISHED_LOCALES.filter((l) => l !== locale && alternates[l]).map((l) => ({
+  l,
+  href: alternates[l]!,
+  text: t(l, 'site.langBanner', { language: LOCALE_INFO[l].name }),
+  go: t(l, 'site.langBannerSwitch', { language: LOCALE_INFO[l].name }),
+  no: t(l, 'site.langBannerDismiss'),
+}));
+---
+{options.length > 0 && (
+  <div data-lang-banners hidden>
+    {options.map((o) => (
+      <aside class="lang-banner" data-lang={LOCALE_INFO[o.l].hreflang.toLowerCase()} lang={LOCALE_INFO[o.l].hreflang} hidden>
+        <span>{o.text}</span>
+        <span class="row">
+          <a class="btn btn--small" href={o.href} hreflang={LOCALE_INFO[o.l].hreflang}>{o.go}</a>
+          <button type="button" class="btn btn--ghost btn--small" data-dismiss>{o.no}</button>
+        </span>
+      </aside>
+    ))}
+  </div>
+)}
+<script>
+  const box = document.querySelector<HTMLElement>('[data-lang-banners]');
+  if (box) {
+    let dismissed = false;
+    try {
+      dismissed = localStorage.getItem('lang-banner-dismissed') === '1';
+    } catch {}
+    if (!dismissed) {
+      const prefs = (navigator.languages || [navigator.language]).map((l) => l.toLowerCase());
+      const page = document.documentElement.lang.toLowerCase();
+      const banners = [...box.querySelectorAll<HTMLElement>('[data-lang]')];
+      // Only suggest when the browser prefers another language before the page language.
+      for (const pref of prefs) {
+        if (pref === page || pref.split('-')[0] === page.split('-')[0]) break;
+        const match =
+          banners.find((b) => b.dataset.lang === pref) ??
+          banners.find((b) => b.dataset.lang!.split('-')[0] === pref.split('-')[0]);
+        if (match) {
+          match.hidden = false;
+          box.hidden = false;
+          break;
+        }
+      }
+      box.addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).closest('[data-dismiss]')) {
+          box.hidden = true;
+          try {
+            localStorage.setItem('lang-banner-dismissed', '1');
+          } catch {}
+        }
+      });
+    }
+  }
+</script>

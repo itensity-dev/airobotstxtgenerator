@@ -1,0 +1,33 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { allPages, type SitePage } from '../lib/pages';
+import HomeView from '../views/HomeView.astro';
+import TesterView from '../views/TesterView.astro';
+import BotsView from '../views/BotsView.astro';
+import BotView from '../views/BotView.astro';
+import ServerRulesView from '../views/ServerRulesView.astro';
+import ToolView from '../views/ToolView.astro';
+import ArticleView from '../views/ArticleView.astro';
+import GuidesView from '../views/GuidesView.astro';
+import LicensesView from '../views/LicensesView.astro';
+
+export const getStaticPaths = (() =>
+  allPages().map((p) => ({
+    params: { path: p.path === '/' ? undefined : p.path.replace(/^\/|\/$/g, '') },
+    props: p,
+  }))) satisfies GetStaticPaths;
+
+const page = Astro.props as SitePage;
+const { id } = page;
+const serverIds = ['server-rules', 'server-nginx', 'server-apache', 'server-caddy', 'server-cloudflare', 'server-frameworks'];
+const toolIds = ['llms-txt', 'content-signals', 'tdmrep', 'meta-tags'];
+---
+{id === 'home' && <HomeView page={page} />}
+{id === 'tester' && <TesterView page={page} />}
+{id === 'bots' && <BotsView page={page} />}
+{id === 'bot' && <BotView page={page} />}
+{serverIds.includes(id) && <ServerRulesView page={page} />}
+{toolIds.includes(id) && <ToolView page={page} />}
+{id === 'guides' && <GuidesView page={page} />}
+{(id.startsWith('guide-') || ['about', 'checker-bot', 'privacy', 'terms'].includes(id)) && <ArticleView page={page} />}
+{id === 'licenses' && <LicensesView page={page} />}

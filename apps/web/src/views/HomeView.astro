@@ -1,0 +1,36 @@
+---
+import { communityBots, registry } from '@airobots/core';
+import Layout from '../layouts/Layout.astro';
+import PageHead from '../components/PageHead.astro';
+import PageSections from '../components/PageSections.astro';
+import Generator from '../islands/Generator';
+import { pick } from '../i18n';
+import { pathFor } from '../i18n/routes';
+import { getPage } from '../lib/content';
+import { alternatesFor, type SitePage } from '../lib/pages';
+import { faqPage, webApplication } from '../lib/seo';
+import { genBots, mdPath, ogPath } from '../lib/view';
+import { SITE_URL } from '../config/site';
+import { t } from '../i18n';
+import { resolveLinksInHtml } from '../lib/links';
+
+interface Props {
+  page: SitePage;
+}
+const { page } = Astro.props;
+const { locale } = page;
+const operators = Object.fromEntries(registry.operators.map((o) => [o.id, o.name]));
+const mod = getPage(locale, 'home')!;
+const fm = mod.frontmatter;
+const body = resolveLinksInHtml(await mod.compiledContent(), locale);
+const jsonLd = [webApplication({ name: fm.h1, description: fm.description, url: SITE_URL + page.path, locale }), ...(fm.faq?.length ? [faqPage(fm.faq)] : [])];
+const dict = pick(locale, ['gen.', 'note.', 'common.', 'verdict.', 'purpose.']);
+---
+<Layout locale={locale} title={fm.title} description={fm.description} path={page.path} alternates={alternatesFor('home')} ogImage={ogPath(page)} markdown={mdPath(page)} jsonLd={jsonLd} navCurrent="home">
+  <PageHead h1={fm.h1} lead={fm.lead} />
+  <noscript><p class="callout small">{t(locale, 'common.noJs')}</p></noscript>
+  <Generator client:load dict={dict} bots={genBots()} communityCount={communityBots.length} communityUrl="/bots.json" operators={operators} testerHref={pathFor(locale, 'tester')} date={registry.updated} />
+  <PageSections locale={locale} fm={fm}>
+    <Fragment set:html={body} />
+  </PageSections>
+</Layout>

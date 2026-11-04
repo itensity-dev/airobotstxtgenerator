@@ -1,0 +1,5 @@
+---
+import { ANALYTICS_PROVIDER, PLAUSIBLE_DOMAIN, PLAUSIBLE_SRC } from '../config/site';
+// GA4 is loaded only after consent by the consent script (not shipped while ANALYTICS_PROVIDER is not ga4).
+---
+{ANALYTICS_PROVIDER === 'plausible' && <script defer data-domain={PLAUSIBLE_DOMAIN} src={PLAUSIBLE_SRC}></script>}
