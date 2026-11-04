@@ -45,8 +45,10 @@
 		@sw path /sw.js
 		header @sw Cache-Control "no-cache"
 
+		# Pre-compressed .br files for brotli clients; gzip on the fly for the rest.
+		encode gzip
 		file_server {
-			precompressed br gzip
+			precompressed br
 		}
 	}
 
@@ -55,7 +57,7 @@
 		handle @notfound {
 			rewrite * /404.html
 			file_server {
-				precompressed br gzip
+				precompressed br
 			}
 		}
 	}

@@ -1,9 +1,10 @@
 // After `astro build`: write the service worker with a precache list, then pre-compress text files
-// (Caddy serves .br/.gz with `file_server { precompressed br gzip }`).
+// with brotli (Caddy serves .br via `file_server { precompressed br }` and gzips on the fly for the
+// few clients without brotli support — keeping the image small).
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { createHash } from 'node:crypto';
-import { brotliCompressSync, gzipSync, constants } from 'node:zlib';
+import { brotliCompressSync, constants } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const dist = fileURLToPath(new URL('../dist', import.meta.url));
@@ -101,9 +102,8 @@ for (const f of files) {
       [constants.BROTLI_PARAM_SIZE_HINT]: buf.length,
     },
   });
-  const gz = gzipSync(buf, { level: 9 });
+  if (br.length >= buf.length) continue;
   writeFileSync(f + '.br', br);
-  writeFileSync(f + '.gz', gz);
   n++;
   saved += buf.length - br.length;
 }

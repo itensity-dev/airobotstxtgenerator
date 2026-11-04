@@ -62,7 +62,7 @@ marked **(default — confirm)**.
 
 | # | Decision | Why |
 |---|---|---|
-| 36 | Web image = Alpine + the Caddy binary + `dist` (not the full caddy image), user `web` (uid 10001), port 8080 | Smaller and non-root. Compressed size is reported by CI; uncompressed it exceeds 60 MB because of ~550 OG PNGs and pre-compressed copies. |
+| 36 | Web image = Alpine + the Caddy binary + `dist` (not the full caddy image), user `web` (uid 10001), port 8080; only brotli copies are pre-built, gzip is done on the fly | 49.9 MB compressed (what the registry stores and transfers) with 9 languages; 173 MB unpacked because of 549 pages, 549 OG PNGs and .br copies. The 60 MB budget is met for the pushed image, not for the unpacked size. |
 | 37 | Node 26 (current LTS) in Docker and CI; pnpm installed with npm (Node 26 no longer ships corepack) | |
 | 38 | Optional BuildKit secret `ca` for building behind a TLS-intercepting proxy | Needed in the development sandbox only; ignored in CI. |
 | 39 | Edge Caddy (profile `vps`) terminates TLS and redirects `www` and `aicrawlerblocker.com` | Brief §16. |
