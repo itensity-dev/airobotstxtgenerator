@@ -72,7 +72,8 @@ const langs = PUBLISHED_LOCALES.map((l) => ({
     </nav>
     <div class="masthead__tools">
       <details class="lang-menu">
-        <summary aria-label={t(locale, 'site.language')}>
+        <summary>
+          <span class="visually-hidden">{t(locale, 'site.language')}: </span>
           {LOCALE_INFO[locale].hreflang.toUpperCase()}
         </summary>
         <ul>
@@ -99,10 +100,10 @@ const langs = PUBLISHED_LOCALES.map((l) => ({
           dark: t(locale, 'site.themeDark'),
           auto: t(locale, 'site.themeAuto'),
         })}
-        aria-label={t(locale, 'site.themeLabel')}
         hidden
       >
-        {t(locale, 'site.themeAuto')}
+        <span class="visually-hidden">{t(locale, 'site.themeLabel')}: </span>
+        <span data-theme-label>{t(locale, 'site.themeAuto')}</span>
       </button>
     </div>
   </div>
@@ -122,7 +123,8 @@ const langs = PUBLISHED_LOCALES.map((l) => ({
     const apply = (mode: string) => {
       if (mode === 'auto') document.documentElement.removeAttribute('data-theme');
       else document.documentElement.setAttribute('data-theme', mode);
-      btn.textContent = labels[mode] ?? mode;
+      const label = btn.querySelector('[data-theme-label]');
+      if (label) label.textContent = labels[mode] ?? mode;
       btn.setAttribute('aria-pressed', mode === 'auto' ? 'false' : 'true');
     };
     apply(read());
