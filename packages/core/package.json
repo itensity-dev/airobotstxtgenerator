@@ -1,0 +1,38 @@
+{
+  "name": "@airobots/core",
+  "version": "1.0.0",
+  "description": "RFC 9309 robots.txt parser and matcher (Google-compatible), AI crawler registry, robots.txt generator, linter and server-rule builders. Zero runtime dependencies.",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://airobotstxtgenerator.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/itensity-dev/airobotstxtgenerator.git",
+    "directory": "packages/core"
+  },
+  "keywords": ["robots.txt", "rfc9309", "ai crawlers", "gptbot", "claudebot", "robots.txt parser", "robots.txt generator"],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./bots.json": "./data/bots.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "data", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "bots:sync": "tsx scripts/sync-bots.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.2",
+    "vitest": "^5.1.0"
+  }
+}

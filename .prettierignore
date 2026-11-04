@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+pnpm-lock.yaml
+coverage
+packages/core/test/fixtures
+packages/core/test/google
+apps/web/public
+docs/screenshots
+**/*.md
+**/*.mdx
+apps/web/src/content
