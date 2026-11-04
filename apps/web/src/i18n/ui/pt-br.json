@@ -279,6 +279,7 @@
     "rule-before-user-agent": "Esta regra vem antes de qualquer linha User-agent, então nenhum crawler a aplica.",
     "empty-user-agent": "Valor de User-agent vazio. Use * ou o nome de um crawler.",
     "user-agent-version": "Só “{token}” de “{value}” é usado na correspondência. Escreva apenas o token.",
+    "user-agent-nonstandard": "“{value}” contém caracteres que a RFC 9309 não permite em um token de produto (apenas letras, “-” e “_”). O parser do Google o lê como “{token}”; o parser do próprio crawler pode ser diferente.",
     "user-agent-invalid": "“{value}” não começa com um token válido, então não corresponde a nenhum crawler.",
     "unknown-agent": "“{token}” não é um token de crawler conhecido. Você quis dizer “{suggestion}”?",
     "pattern-no-leading-slash": "“{pattern}” não começa com / nem com *, então nunca corresponde. Você quis dizer “/{pattern}”?",

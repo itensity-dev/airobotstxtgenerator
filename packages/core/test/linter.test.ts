@@ -70,6 +70,7 @@ describe('linter', () => {
       'User-agent: GPTBot/1.4\nDisallow: /x\n\nUser-agent: Foo\n\nUser-agent: *\nDisallow: /\n',
     );
     expect(c).toContain('user-agent-version');
+    expect(codes('User-agent: AI2Bot\nDisallow: /\n')).toContain('user-agent-nonstandard');
     expect(c).toContain('disallow-all-global');
   });
 

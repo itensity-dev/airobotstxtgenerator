@@ -13,7 +13,8 @@ describe('routes', () => {
   });
 
   it('slugs are lowercase ASCII with hyphens', () => {
-    for (const id of PAGE_IDS) for (const l of LOCALES) expect(ROUTES[id].slug[l]).toMatch(/^[a-z0-9-]*$/);
+    for (const id of PAGE_IDS)
+      for (const l of LOCALES) expect(ROUTES[id].slug[l]).toMatch(/^[a-z0-9-]*$/);
   });
 
   it('builds localized paths', () => {
@@ -39,12 +40,18 @@ describe('content links', () => {
     expect(resolveHref('page:server-rules#verify', 'en')).toBe('/server-rules/#verify');
     expect(resolveHref('https://example.com', 'en')).toBe('https://example.com');
     expect(() => resolveHref('page:nope', 'en')).toThrow();
-    expect(resolveLinksInHtml('<a href="page:bots">x</a>', 'nl')).toBe('<a href="/nl/ai-bots/">x</a>');
+    expect(resolveLinksInHtml('<a href="page:bots">x</a>', 'nl')).toBe(
+      '<a href="/nl/ai-bots/">x</a>',
+    );
   });
 
   it('renders inline markdown safely', () => {
-    expect(renderInline('Use `Disallow: /` and **bold** <script>', false, 'en')).toBe('Use <code>Disallow: /</code> and <strong>bold</strong> &lt;script&gt;');
-    expect(renderInline('[tester](page:tester)', false, 'pl')).toBe('<a href="/pl/tester-robots-txt/">tester</a>');
+    expect(renderInline('Use `Disallow: /` and **bold** <script>', false, 'en')).toBe(
+      'Use <code>Disallow: /</code> and <strong>bold</strong> &lt;script&gt;',
+    );
+    expect(renderInline('[tester](page:tester)', false, 'pl')).toBe(
+      '<a href="/pl/tester-robots-txt/">tester</a>',
+    );
     expect(plainText('A [link](page:x) and `code`')).toBe('A link and code');
   });
 });

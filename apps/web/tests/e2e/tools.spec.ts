@@ -4,7 +4,9 @@ import type { Page } from '@playwright/test';
 
 /** Wait until every island on the page has hydrated. */
 async function hydrated(page: Page) {
-  await page.waitForFunction(() => [...document.querySelectorAll('astro-island')].every((i) => !i.hasAttribute('ssr')));
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('astro-island')].every((i) => !i.hasAttribute('ssr')),
+  );
 }
 
 test('generator: goals change the file', async ({ page }) => {
@@ -31,7 +33,9 @@ test('merge mode keeps existing rules and proves it', async ({ page }) => {
   await page.goto('/');
   await hydrated(page);
   await page.getByRole('tab', { name: 'Add to my robots.txt' }).click();
-  await page.locator('#gen-existing').fill('User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n');
+  await page
+    .locator('#gen-existing')
+    .fill('User-agent: *\nDisallow: /wp-admin/\nAllow: /wp-admin/admin-ajax.php\n');
   await expect(page.locator('.callout--ok')).toContainText('Unchanged for existing agents');
   await expect(page.locator('.notice').first()).toContainText('Disallow: /wp-admin/');
 });
@@ -40,7 +44,9 @@ test('tester: paste mode shows verdicts and the deciding line', async ({ page })
   await page.goto('/robots-txt-tester/');
   await hydrated(page);
   await page.getByRole('tab', { name: 'Paste robots.txt' }).click();
-  await page.locator('#tester-paste').fill('User-agent: GPTBot\nDisallow: /\n\nUser-agent: *\nDisallow: /private/\n');
+  await page
+    .locator('#tester-paste')
+    .fill('User-agent: GPTBot\nDisallow: /\n\nUser-agent: *\nDisallow: /private/\n');
   const row = page.locator('tbody tr', { hasText: 'GPTBot' }).first();
   await expect(row).toContainText('Blocked');
   await expect(page.locator('.test-result')).toContainText('line 2');
@@ -77,7 +83,9 @@ test('tester: live check through the api (mocked)', async ({ page }) => {
 });
 
 test('tester: api errors are explained', async ({ page }) => {
-  await page.route('**/api/robots?**', (route) => route.fulfill({ status: 400, json: { error: 'ip-not-public' } }));
+  await page.route('**/api/robots?**', (route) =>
+    route.fulfill({ status: 400, json: { error: 'ip-not-public' } }),
+  );
   await page.goto('/robots-txt-tester/');
   await hydrated(page);
   await page.getByLabel('Website or URL').fill('http://169.254.169.254');
@@ -85,11 +93,22 @@ test('tester: api errors are explained', async ({ page }) => {
   await expect(page.locator('.callout--warn')).toContainText('Private, local and reserved');
 });
 
-for (const path of ['/', '/robots-txt-tester/', '/bots/', '/bots/gptbot/', '/server-rules/nginx/', '/guides/robots-txt-syntax/']) {
+for (const path of [
+  '/',
+  '/robots-txt-tester/',
+  '/bots/',
+  '/bots/gptbot/',
+  '/server-rules/nginx/',
+  '/guides/robots-txt-syntax/',
+]) {
   test(`accessibility: ${path}`, async ({ page }) => {
     await page.goto(path);
-    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
-    const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    const serious = results.violations.filter(
+      (v) => v.impact === 'serious' || v.impact === 'critical',
+    );
     expect(serious.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
   });
 }

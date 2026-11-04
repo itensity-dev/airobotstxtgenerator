@@ -126,6 +126,13 @@
    "author": ""
   },
   {
+   "name": "@axe-core/playwright",
+   "version": "4.14.0",
+   "license": "MPL-2.0",
+   "homepage": "https://github.com/dequelabs/axe-core-npm#readme",
+   "author": null
+  },
+  {
    "name": "@babel/code-frame",
    "version": "7.29.7",
    "license": "MIT",
@@ -532,6 +539,13 @@
    "author": null
   },
   {
+   "name": "@prettier/parse-srcset",
+   "version": "3.1.0",
+   "license": "MIT",
+   "homepage": "https://github.com/prettier/parse-srcset#readme",
+   "author": "Alex Bell"
+  },
+  {
    "name": "@resvg/resvg-js",
    "version": "2.6.2",
    "license": "MPL-2.0",
@@ -859,6 +873,13 @@
    "license": "MIT",
    "homepage": "https://astro.build",
    "author": "withastro"
+  },
+  {
+   "name": "axe-core",
+   "version": "4.14.0",
+   "license": "MPL-2.0",
+   "homepage": "https://www.deque.com/axe/",
+   "author": null
   },
   {
    "name": "axobject-query",
@@ -1855,6 +1876,13 @@
    "author": "James Long"
   },
   {
+   "name": "prettier-plugin-astro",
+   "version": "1.1.2",
+   "license": "MIT",
+   "homepage": "https://github.com/withastro/prettier-plugin-astro/",
+   "author": null
+  },
+  {
    "name": "prismjs",
    "version": "1.30.0",
    "license": "MIT",
@@ -1944,6 +1972,20 @@
    "license": "MIT",
    "homepage": "https://rolldown.rs/",
    "author": null
+  },
+  {
+   "name": "s.color",
+   "version": "0.0.15",
+   "license": "MIT",
+   "homepage": "https://github.com/TheRealSyler/s.color#readme",
+   "author": "Syler"
+  },
+  {
+   "name": "sass-formatter",
+   "version": "0.8.0",
+   "license": "MIT",
+   "homepage": "https://github.com/TheRealSyler/sass-formatter#readme",
+   "author": "Syler"
   },
   {
    "name": "satori",
@@ -2070,6 +2112,13 @@
    "license": "MIT",
    "homepage": "https://github.com/chalk/strip-ansi#readme",
    "author": "Sindre Sorhus"
+  },
+  {
+   "name": "suf-log",
+   "version": "2.5.3",
+   "license": "MIT",
+   "homepage": "https://github.com/TheRealSyler/suf-log#readme",
+   "author": "Syler"
   },
   {
    "name": "svgo",
@@ -2535,11 +2584,11 @@
   }
  ],
  "byLicense": {
-  "MIT": 300,
+  "MIT": 305,
+  "MPL-2.0": 9,
   "ISC": 17,
   "LGPL-3.0-or-later": 2,
   "Apache-2.0": 12,
-  "MPL-2.0": 7,
   "CC-BY-4.0": 1,
   "BlueOak-1.0.0": 3,
   "BSD-2-Clause": 8,

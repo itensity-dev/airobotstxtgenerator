@@ -198,7 +198,12 @@ export function buildCommunityList(
     } else {
       bot.uaMatch = [uaName];
     }
-    if (!UNCLEAR.test(op.name)) bot.operatorName = op.name;
+    // Some upstream "operator" fields are whole sentences; keep only the name.
+    const opName =
+      op.name.length > 50
+        ? op.name.split(/\s+(?:that|which|is|provides)\s+|[,.;(]/)[0]!.trim()
+        : op.name;
+    if (!UNCLEAR.test(opName) && opName.length <= 60) bot.operatorName = opName;
     if (op.url) bot.operatorUrl = op.url;
     if (!UNCLEAR.test(respectNote) && bot.respectsRobots !== 'unknown')
       bot.respectsNote = respectNote;

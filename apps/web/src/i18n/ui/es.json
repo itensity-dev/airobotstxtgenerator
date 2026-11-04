@@ -279,6 +279,7 @@
     "rule-before-user-agent": "Esta regla aparece antes de cualquier línea User-agent, así que ningún rastreador la aplica.",
     "empty-user-agent": "Valor de User-agent vacío. Usa * o el nombre de un rastreador.",
     "user-agent-version": "Para la coincidencia solo se usa «{token}» de «{value}». Escribe solo el token.",
+    "user-agent-nonstandard": "«{value}» contiene caracteres que la RFC 9309 no permite en un token de producto (solo letras, «-» y «_»). El parser de Google lo lee como «{token}»; el del rastreador puede diferir.",
     "user-agent-invalid": "«{value}» no empieza con un token válido, así que no coincide con ningún rastreador.",
     "unknown-agent": "«{token}» no es un token de rastreador conocido. ¿Querías decir «{suggestion}»?",
     "pattern-no-leading-slash": "«{pattern}» no empieza por / ni por *, así que nunca coincide. ¿Querías decir «/{pattern}»?",

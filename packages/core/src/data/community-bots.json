@@ -430,7 +430,7 @@
       "page": false,
       "summary": "bigsur.ai is a web crawler operated by Big Sur AI that fetches website content to enable AI-powered web agents, sales assistants, and content marketing solutions for busi… More info can be found at https://knownagents.com/agents/bigsur-ai",
       "aiRobotsTxtKey": "bigsur.ai",
-      "operatorName": "Big Sur AI that fetches website content to enable AI-powered web agents, sales assistants, and content marketing solutions for busi…"
+      "operatorName": "Big Sur AI"
     },
     {
       "id": "bixelbot",
@@ -469,7 +469,7 @@
       "page": false,
       "summary": "Bravebot is a web crawler by Brave that indexes pages for Brave Search, providing search data and AI-optimized context to power chatbots, agents, and RAG pipelines. More info can be found at https://knownagents.com/agents/bravebot",
       "aiRobotsTxtKey": "Bravebot",
-      "operatorName": "https://safe.search.brave.com/help/brave-search-crawler",
+      "operatorName": "https://safe",
       "respectsNote": "Yes"
     },
     {
@@ -530,7 +530,7 @@
       "page": false,
       "summary": "CartAI Agentic Commerce is a signed browser agent operated by CartAI that accesses online stores to support user-directed shopping and checkout workflows. More info can be found at https://knownagents.com/agents/cartai-agentic-commerce",
       "aiRobotsTxtKey": "CartAI Agentic Commerce",
-      "operatorName": "CartAI that accesses online stores to support user-directed shopping and checkout workflows"
+      "operatorName": "CartAI"
     },
     {
       "id": "channel3bot",
@@ -628,7 +628,7 @@
       "page": false,
       "summary": "CledaraBot is an AI agent operated by Cledara that visits SaaS providers to complete customer-approved administrative tasks, including invoice collection and user managem… More info can be found at https://knownagents.com/agents/cledarabot",
       "aiRobotsTxtKey": "CledaraBot",
-      "operatorName": "Cledara that visits SaaS providers to complete customer-approved administrative tasks, including invoice collection and user managem…"
+      "operatorName": "Cledara"
     },
     {
       "id": "cloudflare-autorag",
@@ -670,7 +670,7 @@
       "page": false,
       "summary": "CloudflareBrowserRenderingCrawler is a web crawler operated by Cloudflare that returns rendered website content for research, monitoring, and AI data workflows. More info can be found at https://knownagents.com/agents/cloudflarebrowserrenderingcrawler",
       "aiRobotsTxtKey": "CloudflareBrowserRenderingCrawler",
-      "operatorName": "Cloudflare that returns rendered website content for research, monitoring, and AI data workflows"
+      "operatorName": "Cloudflare"
     },
     {
       "id": "cloudvertexbot",
@@ -745,7 +745,7 @@
       "page": false,
       "summary": "cohere-training-data-crawler is a web crawler operated by Cohere to download training data for its LLMs (Large Language Models) that power its enterprise AI products. More info can be found at https://knownagents.com/agents/cohere-training-data-crawler",
       "aiRobotsTxtKey": "cohere-training-data-crawler",
-      "operatorName": "Cohere to download training data for its LLMs (Large Language Models) that power its enterprise AI products"
+      "operatorName": "Cohere to download training data for its LLMs"
     },
     {
       "id": "cotoyogi",
@@ -787,7 +787,7 @@
       "page": false,
       "summary": "CragCrawler is a web scraping bot operated by CragSoftware, a Brazil-based software company specializing in data engineering and AI web scraping services. The bot is used… More info can be found at https://knownagents.com/agents/cragcrawler",
       "aiRobotsTxtKey": "CragCrawler",
-      "operatorName": "CragSoftware, a Brazil-based software company specializing in data engineering and AI web scraping services"
+      "operatorName": "CragSoftware"
     },
     {
       "id": "crawl4ai",
@@ -1171,7 +1171,7 @@
       "page": false,
       "summary": "GeistHaus-PageFetcher is a web crawler operated by GeistHaus, a company developing AI systems for therapy and psychological assessment. This bot fetches web pages as part… More info can be found at https://knownagents.com/agents/geisthaus-pagefetcher",
       "aiRobotsTxtKey": "GeistHaus-PageFetcher",
-      "operatorName": "GeistHaus, a company developing AI systems for therapy and psychological assessment"
+      "operatorName": "GeistHaus"
     },
     {
       "id": "gemini-deep-research",
@@ -1269,7 +1269,7 @@
       "page": false,
       "summary": "GoogleAgent-URLContext is a web fetcher operated by Google that retrieves web content on behalf of Gemini API users. When a developer provides a URL as context in a Gemin… More info can be found at https://knownagents.com/agents/googleagent-urlcontext",
       "aiRobotsTxtKey": "GoogleAgent-URLContext",
-      "operatorName": "Google that retrieves web content on behalf of Gemini API users"
+      "operatorName": "Google"
     },
     {
       "id": "grok-bot",
@@ -1548,7 +1548,7 @@
       "page": false,
       "summary": "kagi-fetcher is an AI Assistant operated by Kagi that fetches web content to answer user queries through Kagi AI, their suite of AI-powered tools including Assistant, Res… More info can be found at https://knownagents.com/agents/kagi-fetcher",
       "aiRobotsTxtKey": "kagi-fetcher",
-      "operatorName": "Kagi that fetches web content to answer user queries through Kagi AI, their suite of AI-powered tools including Assistant, Res…"
+      "operatorName": "Kagi"
     },
     {
       "id": "kangaroo-bot",
@@ -1608,7 +1608,7 @@
       "page": false,
       "summary": "Kimi-Agent is a browser-enabled AI agent operated by Moonshot AI that browses websites while carrying out user-directed research and other tasks. More info can be found at https://knownagents.com/agents/kimi-agent",
       "aiRobotsTxtKey": "Kimi-Agent",
-      "operatorName": "Moonshot AI that browses websites while carrying out user-directed research and other tasks"
+      "operatorName": "Moonshot AI"
     },
     {
       "id": "kimi-searchbot",
@@ -1650,7 +1650,7 @@
       "page": false,
       "summary": "Kimi-User is a web crawler operated by Moonshot AI that fetches web content on behalf of users interacting with Kimi. When a user asks Kimi to summarize an article or ans… More info can be found at https://knownagents.com/agents/kimi-user",
       "aiRobotsTxtKey": "Kimi-User",
-      "operatorName": "Moonshot AI that fetches web content on behalf of users interacting with Kimi"
+      "operatorName": "Moonshot AI"
     },
     {
       "id": "kimibot",
@@ -1792,7 +1792,7 @@
       "page": false,
       "summary": "Lightpanda is a custom-built headless browser designed for AI and automation.",
       "aiRobotsTxtKey": "Lightpanda",
-      "operatorName": "Anyone who downloads the Lightpanda client. Possibly being used by a Grok-adjacent organization's botnet."
+      "operatorName": "Anyone who downloads the Lightpanda client"
     },
     {
       "id": "linerbot",
@@ -1913,7 +1913,7 @@
       "page": false,
       "summary": "Mozilla-Tabstack is an AI agent operated by Mozilla that performs programmatic, AI-driven interactions with web content through Tabstack. More info can be found at https://knownagents.com/agents/mozilla-tabstack",
       "aiRobotsTxtKey": "Mozilla-Tabstack",
-      "operatorName": "Mozilla that performs programmatic, AI-driven interactions with web content through Tabstack",
+      "operatorName": "Mozilla",
       "respectsNote": "Yes"
     },
     {
@@ -1971,7 +1971,7 @@
       "page": false,
       "summary": "'Naget revolutionizes content discovery through an AI-powered ecosystem that transforms how we generate, organize, share, and discover valuable content.' (https://naget.com/) User-agent string links https://naget.ai/bot which yields 404.",
       "aiRobotsTxtKey": "NagetBot",
-      "operatorName": "Naget Inc (founded by Chris Samarinas, headquarter in Amherst, Massachusetts)"
+      "operatorName": "Naget Inc"
     },
     {
       "id": "nbot",
@@ -2209,7 +2209,7 @@
       "page": false,
       "summary": "Payhawk Invoice Fetching Agent is a browser agent operated by Payhawk that retrieves invoices from supplier websites for users and attaches them to expense records. More info can be found at https://knownagents.com/agents/payhawk-invoice-fetching-agent",
       "aiRobotsTxtKey": "Payhawk Invoice Fetching Agent",
-      "operatorName": "Payhawk that retrieves invoices from supplier websites for users and attaches them to expense records"
+      "operatorName": "Payhawk"
     },
     {
       "id": "phindbot",
@@ -2250,7 +2250,7 @@
       "page": false,
       "summary": "Poggio-Citations is a web crawler operated by Poggio, a company that provides AI sales enablement tools for creating tailored narratives, business cases, and account plan… More info can be found at https://knownagents.com/agents/poggio-citations",
       "aiRobotsTxtKey": "Poggio-Citations",
-      "operatorName": "Poggio, a company that provides AI sales enablement tools for creating tailored narratives, business cases, and account plan…"
+      "operatorName": "Poggio"
     },
     {
       "id": "poseidon-research-crawler",
@@ -2291,7 +2291,7 @@
       "page": false,
       "summary": "qodercli is a command-line AI coding agent operated by Qoder that helps developers build, debug, and modify software from the terminal. More info can be found at https://knownagents.com/agents/qodercli",
       "aiRobotsTxtKey": "qodercli",
-      "operatorName": "Qoder that helps developers build, debug, and modify software from the terminal"
+      "operatorName": "Qoder"
     },
     {
       "id": "qualifiedbot",
@@ -2332,7 +2332,7 @@
       "page": false,
       "summary": "Querit-SearchBot is a web crawler operated by Querit that indexes web content for their search API service, which is designed to provide real-time search results for larg… More info can be found at https://knownagents.com/agents/querit-searchbot",
       "aiRobotsTxtKey": "Querit-SearchBot",
-      "operatorName": "Querit that indexes web content for their search API service, which is designed to provide real-time search results for larg…"
+      "operatorName": "Querit"
     },
     {
       "id": "queritbot",
@@ -2352,7 +2352,7 @@
       "page": false,
       "summary": "QueritBot is a web crawler operated by Querit, a company providing a search API for large language model integration. This bot indexes web content to power the real-time … More info can be found at https://knownagents.com/agents/queritbot",
       "aiRobotsTxtKey": "QueritBot",
-      "operatorName": "Querit, a company providing a search API for large language model integration"
+      "operatorName": "Querit"
     },
     {
       "id": "quillbot",
@@ -2745,7 +2745,7 @@
       "page": false,
       "summary": "TongyiBot is a web crawler operated by Alibaba that fetches web content for the Tongyi Qianwen assistant and related Qwen-generated answers. More info can be found at https://knownagents.com/agents/tongyibot",
       "aiRobotsTxtKey": "TongyiBot",
-      "operatorName": "Alibaba that fetches web content for the Tongyi Qianwen assistant and related Qwen-generated answers"
+      "operatorName": "Alibaba"
     },
     {
       "id": "trae",
@@ -2783,7 +2783,7 @@
       "page": false,
       "summary": "TwinAgent is operated by Twin, a platform that creates automated workers to perform tasks by integrating with APIs and controlling web applications through browser automa… More info can be found at https://knownagents.com/agents/twinagent",
       "aiRobotsTxtKey": "TwinAgent",
-      "operatorName": "Twin, a platform that creates automated workers to perform tasks by integrating with APIs and controlling web applications through browser automa…"
+      "operatorName": "Twin"
     },
     {
       "id": "useai",
@@ -3005,6 +3005,5 @@
       "summary": "Description unavailable from knownagents.com More info can be found at https://knownagents.com/agents/zanistabot",
       "aiRobotsTxtKey": "ZanistaBot"
     }
-  ],
-  "commit": "d8e8b77ca6f04ee132fd5dec0ce842b5d45e85da"
+  ]
 }

@@ -1,7 +1,12 @@
 import { expect, test } from '@playwright/test';
 
 test('HTML without JavaScript contains H1, description, steps and FAQ', async ({ request }) => {
-  for (const path of ['/', '/robots-txt-tester/', '/bots/gptbot/', '/guides/block-ai-training-keep-ai-search/']) {
+  for (const path of [
+    '/',
+    '/robots-txt-tester/',
+    '/bots/gptbot/',
+    '/guides/block-ai-training-keep-ai-search/',
+  ]) {
     const html = await (await request.get(path)).text();
     expect(html, path).toMatch(/<h1[^>]*>[^<]+<\/h1>/);
     expect(html, path).toMatch(/<meta name="description" content="[^"]{50,}"/);
@@ -11,7 +16,9 @@ test('HTML without JavaScript contains H1, description, steps and FAQ', async ({
 
 test('hreflang, canonical and markdown alternate', async ({ request }) => {
   const html = await (await request.get('/bots/gptbot/')).text();
-  expect(html).toContain('<link rel="canonical" href="https://airobotstxtgenerator.com/bots/gptbot/"');
+  expect(html).toContain(
+    '<link rel="canonical" href="https://airobotstxtgenerator.com/bots/gptbot/"',
+  );
   expect(html).toContain('hreflang="x-default"');
   expect(html).toContain('type="text/markdown"');
   const md = await request.get('/bots/gptbot.md');
@@ -34,7 +41,9 @@ test('machine-readable files', async ({ request }) => {
 
 test('JSON-LD is valid JSON with expected types', async ({ request }) => {
   const html = await (await request.get('/')).text();
-  const blocks = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map((m) => JSON.parse(m[1]!));
+  const blocks = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(
+    (m) => JSON.parse(m[1]!),
+  );
   const types = blocks.map((b) => b['@type']);
   expect(types).toContain('WebApplication');
   expect(types).toContain('FAQPage');

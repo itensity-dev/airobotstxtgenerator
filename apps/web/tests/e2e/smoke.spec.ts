@@ -11,7 +11,9 @@ test('home renders the tool with a verified example file', async ({ page }) => {
 test('no horizontal scrolling', async ({ page }) => {
   for (const path of ['/', '/robots-txt-tester/', '/bots/', '/bots/gptbot/']) {
     await page.goto(path);
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
     expect(overflow, path).toBeLessThanOrEqual(1);
   }
 });

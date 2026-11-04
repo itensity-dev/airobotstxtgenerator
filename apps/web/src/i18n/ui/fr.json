@@ -279,6 +279,7 @@
     "rule-before-user-agent": "Cette règle précède toute ligne User-agent : aucun robot ne l'applique.",
     "empty-user-agent": "Valeur User-agent vide. Utilisez * ou un nom de robot.",
     "user-agent-version": "Seul « {token} » est retenu dans « {value} » pour la correspondance. Écrivez uniquement le jeton.",
+    "user-agent-nonstandard": "« {value} » contient des caractères que la RFC 9309 n'autorise pas dans un jeton de produit (seulement des lettres, « - » et « _ »). Le parseur de Google le lit comme « {token} » ; celui du robot peut différer.",
     "user-agent-invalid": "« {value} » ne commence pas par un jeton valide : il ne correspond donc à aucun robot.",
     "unknown-agent": "« {token} » n'est pas un jeton de robot connu. Vouliez-vous dire « {suggestion} » ?",
     "pattern-no-leading-slash": "« {pattern} » ne commence ni par / ni par * : il ne correspond donc jamais. Vouliez-vous dire « /{pattern} » ?",

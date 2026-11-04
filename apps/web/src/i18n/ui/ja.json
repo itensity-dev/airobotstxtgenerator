@@ -279,6 +279,7 @@
     "rule-before-user-agent": "このルールはUser-agent行より前にあるため、どのクローラーにも適用されません。",
     "empty-user-agent": "User-agentの値が空です。* またはクローラー名を指定してください。",
     "user-agent-version": "「{value}」のうち照合に使われるのは「{token}」だけです。トークンだけを書いてください。",
+    "user-agent-nonstandard": "「{value}」には、RFC 9309 がプロダクトトークンに認めていない文字が含まれています（使えるのは英字、「-」、「_」のみ）。Google のパーサーは「{token}」として読みます。クローラー自身のパーサーは異なる場合があります。",
     "user-agent-invalid": "「{value}」は有効なトークンで始まっていないため、どのクローラーにも一致しません。",
     "unknown-agent": "「{token}」は既知のクローラートークンではありません。「{suggestion}」の間違いではありませんか？",
     "pattern-no-leading-slash": "「{pattern}」は / または * で始まっていないため、一致することはありません。「/{pattern}」の間違いではありませんか？",

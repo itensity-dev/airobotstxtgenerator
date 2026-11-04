@@ -28,6 +28,7 @@ export type LintCode =
   | 'rule-before-user-agent'
   | 'empty-user-agent'
   | 'user-agent-version'
+  | 'user-agent-nonstandard'
   | 'user-agent-invalid'
   | 'unknown-agent'
   | 'pattern-no-leading-slash'
@@ -411,7 +412,7 @@ export function lintRobotsTxt(input: string | Uint8Array, options: LintOptions =
         );
         continue;
       }
-      if (ua.token !== ua.value) {
+      if (ua.token !== ua.value && /[\s/;()]/.test(ua.value)) {
         add(
           'user-agent-version',
           'warning',
@@ -421,6 +422,15 @@ export function lintRobotsTxt(input: string | Uint8Array, options: LintOptions =
             value: ua.value,
             token: ua.token,
           },
+        );
+      } else if (ua.token !== ua.value) {
+        // e.g. "AI2Bot": a real crawler name with a character RFC 9309 does not allow in product tokens.
+        add(
+          'user-agent-nonstandard',
+          'info',
+          `"${ua.value}" contains characters RFC 9309 does not allow in a product token (only letters, "-" and "_"). Google's parser reads it as "${ua.token}"; the crawler's own parser may differ.`,
+          ua.line,
+          { value: ua.value, token: ua.token },
         );
       }
       const key = ua.token.toLowerCase();
